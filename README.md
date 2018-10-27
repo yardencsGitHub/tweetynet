@@ -7,8 +7,8 @@ A library that segments and labels birdsong and other vocalizations
 To install, run the following command at the command line:
 `pip install cnn_bilstm`
 
-Best practice is to use a separate environment. If you install from `pip` you can 
-use `virtualenv` or `pipenv`. In many cases it may be easier to install  
+Best practice is to use a virtual environment. If you install from `pip` you can 
+use `virtualenv` or `pipenv`. In many cases it may be easier to install 
 [Anaconda](https://www.anaconda.com/download), and use their `conda` command-line tool 
 to create environments and install the scientific libraries that this package 
 depends on. Here's how you'd set up a `conda` environment:  
