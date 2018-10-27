@@ -1,8 +1,8 @@
 import argparse
-from glob import glob
 import os
+from glob import glob
 
-import cnn_bilstm
+from src import cnn_bilstm
 
 parser = argparse.ArgumentParser(description='main script that generates '
                                              'learning curves')
