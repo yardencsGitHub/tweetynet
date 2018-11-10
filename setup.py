@@ -27,7 +27,7 @@ VERSION = '0.1.1a1'
 LICENSE='BSD'
 
 REQUIRED = [
-    'tensorflow', 'numpy', 'scipy', 'matplotlib', 'joblib',
+    'tensorflow', 'numpy', 'scipy', 'matplotlib', 'joblib', 'songdeck',
 ]
 
 # What packages are optional?
@@ -113,6 +113,7 @@ setup(
     scripts=['src/bin/tweetynet-cli.py'],
     entry_points={
         'console_scripts': ['tweetynet-cli=tweetynet.__main__:main'],
+        'songdeck.network': 'TweetyNet = tweetynet.model:TweetyNet'
     },
     install_requires=REQUIRED,
     extras_require=EXTRAS,
