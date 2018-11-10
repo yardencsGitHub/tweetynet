@@ -3,10 +3,10 @@
 # https://gist.github.com/danijar/8663d3bbfd586bffecf6a0094cd116f2
 from math import ceil
 import functools
-from collections import namedtuple
 
 import tensorflow as tf
 
+from songdeck.network import AbstractSongdeckNetwork
 
 def doublewrap(function):
     """
@@ -50,7 +50,7 @@ def out_width(in_width, filter_width, stride):
     return ceil(float(in_width - filter_width + 1) / float(stride))
 
 
-class TweetyNet:
+class TweetyNet(AbstractSongdeckNetwork):
     """hybrid convolutional neural network-bidirectional LSTM
     for segmentation of spectrograms
 
