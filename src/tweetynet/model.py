@@ -3,6 +3,7 @@
 # https://gist.github.com/danijar/8663d3bbfd586bffecf6a0094cd116f2
 from math import ceil
 import functools
+import typing
 
 import tensorflow as tf
 
@@ -68,10 +69,28 @@ class TweetyNet(AbstractSongdeckNetwork):
     add_summary_writer : adds tensorflow summary writer to model
     """
 
+    Config = typing.NamedTuple('Config',
+                               [('n_syllables', int),
+                                ('time_steps', int),
+                                ('input_vec_size', int),
+                                ('batch_size', int),
+                                ('conv1_filters', int),
+                                ('conv2_filters', int),
+                                ('pool1_size', tuple),
+                                ('pool1_strides', tuple),
+                                ('pool2_size', tuple),
+                                ('pool2_strides', tuple),
+                                ('learning_rate', float)
+                                ])
+
+    # assign defaults. there is a pretty way to do this in Python>=3.6.2 but we're keeping with 3.5
+    Config.__new__.__defaults__ = (None, None, 513, 11, 32, 54, (1, 8), (1, 8), (1, 8), (1, 8), 0.001)
+
     def __init__(self,
-                 n_syllables=None,
-                 batch_size=11,
+                 n_syllables,
+                 time_steps,
                  input_vec_size=513,
+                 batch_size=11,
                  conv1_filters=32,
                  conv2_filters=64,
                  pool1_size=(1, 8),
@@ -81,20 +100,19 @@ class TweetyNet(AbstractSongdeckNetwork):
                  learning_rate=0.001,
                  ):
         """__init__ method for TweetyNet
-        To instantiate a new CNN-BiLSTM model, call with all of the
-        model hyperparameters listed below, i.e. without the parameters
-        for loading, `sess`, `meta_file`, and `data_file`.
-        To load a previously trained CNN-BiLSTM model, call with
-        only the `sess`, `meta_file`, and `data_file` parameters.
+        To instantiate a new TweetyNet model, call with all of the
+        model hyperparameters listed below.
 
         Parameters
         ----------
         n_syllables : int
-
-        batch_size : int
-
+            number of syllables, i.e. number of classes to predict.
+        time_steps : int
+            number of time steps (i.e. bins) in window of spectrogram fed as input to network
         input_vec_size : int
-
+            number of frequency bins in spectrogram
+        batch_size : int
+            number of items in a batch (i.e., number of windows from spectrograms in stack used as input)
         conv1_filters : int
 
         conv2_filters : int
@@ -119,8 +137,9 @@ class TweetyNet(AbstractSongdeckNetwork):
                 raise ValueError('n_syllables must be a positive integer')
 
         self.n_syllables = n_syllables
-        self.batch_size = batch_size
+        self.time_steps = time_steps
         self.input_vec_size = input_vec_size
+        self.batch_size = batch_size
         self.conv1_filters = conv1_filters
         self.conv2_filters = conv2_filters
         self.pool1_size = pool1_size
