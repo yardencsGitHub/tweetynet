@@ -218,7 +218,7 @@ class TweetyNet(AbstractSongdeckNetwork):
         for each time bin in spectrogram"""
         conv1 = tf.layers.conv2d(
             inputs=tf.reshape(self.X, [self.batch_size, -1,
-                                       self.input_vec_size, 1]),
+                                       self.freq_bins, 1]),
             filters=self.conv1_filters,
             kernel_size=[5, 5],
             padding="same",
@@ -246,7 +246,7 @@ class TweetyNet(AbstractSongdeckNetwork):
         # Determine number of hidden units in bidirectional LSTM:
         # uniquely determined by number of filters and frequency bins
         # in output shape of pool2
-        freq_bins_after_pool1 = out_width(self.input_vec_size,
+        freq_bins_after_pool1 = out_width(self.freq_bins,
                                           self.pool1_size[1],
                                           self.pool1_strides[1])
         freq_bins_after_pool2 = out_width(freq_bins_after_pool1,
