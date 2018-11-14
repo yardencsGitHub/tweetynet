@@ -9,6 +9,7 @@ import tensorflow as tf
 
 from songdeck.network import AbstractSongdeckNetwork
 
+
 def doublewrap(function):
     """
     A decorator decorator, allowing to use the decorator to be used without
@@ -45,7 +46,9 @@ def define_scope(function, scope=None, *args, **kwargs):
         return getattr(self, attribute)
     return decorator
 
+
 xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits
+
 
 def out_width(in_width, filter_width, stride):
     return ceil(float(in_width - filter_width + 1) / float(stride))
@@ -71,9 +74,10 @@ class TweetyNet(AbstractSongdeckNetwork):
 
     Config = typing.NamedTuple('Config',
                                [('n_syllables', int),
-                                ('time_steps', int),
-                                ('input_vec_size', int),
                                 ('batch_size', int),
+                                ('time_bins', int),
+                                ('freq_bins', int),
+                                ('channels', int),
                                 ('conv1_filters', int),
                                 ('conv2_filters', int),
                                 ('pool1_size', tuple),
@@ -84,13 +88,14 @@ class TweetyNet(AbstractSongdeckNetwork):
                                 ])
 
     # assign defaults. there is a pretty way to do this in Python>=3.6.2 but we're keeping with 3.5
-    Config.__new__.__defaults__ = (None, None, 513, 11, 32, 54, (1, 8), (1, 8), (1, 8), (1, 8), 0.001)
+    Config.__new__.__defaults__ = (None, 11, 88, 513, 1, 32, 64, (1, 8), (1, 8), (1, 8), (1, 8), 0.001)
 
     def __init__(self,
                  n_syllables,
-                 time_steps,
-                 input_vec_size=513,
                  batch_size=11,
+                 time_bins=88,
+                 freq_bins=513,
+                 channels=1,
                  conv1_filters=32,
                  conv2_filters=64,
                  pool1_size=(1, 8),
@@ -107,27 +112,30 @@ class TweetyNet(AbstractSongdeckNetwork):
         ----------
         n_syllables : int
             number of syllables, i.e. number of classes to predict.
-        time_steps : int
-            number of time steps (i.e. bins) in window of spectrogram fed as input to network
-        input_vec_size : int
-            number of frequency bins in spectrogram
         batch_size : int
             number of items in a batch (i.e., number of windows from spectrograms in stack used as input)
+        time_bins : int
+            number of time steps (i.e. bins) in window of spectrogram fed as input to network.
+            Default is 88 (empirically, this works "well enough" for Bengalese finch song).
+        freq_bins : int
+            number of frequency bins in spectrogram. Default is 513 (because that was
+            the default for the spectrogram function we were using).
+        channels : int
+            number of color channels in "image" (spectrogram). Default is 1.
         conv1_filters : int
-
+            Number of filters in first convolutional layer. Default is 32.
         conv2_filters : int
-
+            Number of filters in second convolutional layer. Default is 64.
         pool1_size : two element tuple of ints
-            Default is (1, 8)
-
+            Size of sliding window for first max pooling layer. Default is (1, 8)
         pool1_strides : two element tuple of ints
-            Default is (1, 8)
+            Step size for sliding window of first max pooling layer. Default is (1, 8)
         pool2_size : two element tuple of ints
-            =(1, 8),
+            Size of sliding window for second max pooling layer. Default is (1, 8),
         pool2_strides : two element tuple of ints
-            =(1, 8),
+            Step size for sliding window of second max pooling layer. Default is (1, 8)
         learning_rate : float
-            Default is 0.001
+            Learning rate for training network. Default is 0.001.
         """
 
         if type(n_syllables) != int:
@@ -137,9 +145,10 @@ class TweetyNet(AbstractSongdeckNetwork):
                 raise ValueError('n_syllables must be a positive integer')
 
         self.n_syllables = n_syllables
-        self.time_steps = time_steps
-        self.input_vec_size = input_vec_size
         self.batch_size = batch_size
+        self.time_bins = time_bins
+        self.freq_bins = freq_bins
+        self.channels = channels
         self.conv1_filters = conv1_filters
         self.conv2_filters = conv2_filters
         self.pool1_size = pool1_size
@@ -152,7 +161,7 @@ class TweetyNet(AbstractSongdeckNetwork):
         with self.graph.as_default():
             # shape of X is batch_size, time_steps, frequency_bins
             self.X = tf.placeholder(dtype=tf.float32,
-                                    shape=[None, None, input_vec_size],
+                                    shape=[None, None, freq_bins],
                                     name='X')
             self.y = tf.placeholder(dtype=tf.int32,
                                     shape=[None, None],
@@ -166,7 +175,6 @@ class TweetyNet(AbstractSongdeckNetwork):
             self.error
             self.predict
             self.saver
-
 
             # Merge all summaries into a single op
             self.merged_summary_op = tf.summary.merge_all()
@@ -209,8 +217,8 @@ class TweetyNet(AbstractSongdeckNetwork):
         """inference method, that returns probability of each class
         for each time bin in spectrogram"""
         conv1 = tf.layers.conv2d(
-            inputs=tf.reshape(self.X,[self.batch_size, -1,
-                                      self.input_vec_size, 1]),
+            inputs=tf.reshape(self.X, [self.batch_size, -1,
+                                       self.input_vec_size, 1]),
             filters=self.conv1_filters,
             kernel_size=[5, 5],
             padding="same",
@@ -284,7 +292,7 @@ class TweetyNet(AbstractSongdeckNetwork):
                                   labels=tf.concat(
                                       tf.unstack(self.y,
                                                  axis=0,
-                                                 num=self.batch_size),0),
+                                                 num=self.batch_size), 0),
                                   name='xentropy')
         self.cost = tf.reduce_mean(xentropy_layer, name='cost')
         tf.summary.scalar("cost", self.cost)
