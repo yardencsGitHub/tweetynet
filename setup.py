@@ -110,9 +110,7 @@ setup(
     url=URL,
     packages=find_packages(where="src", exclude=('tests',)),
     package_dir={"": "src"},
-    scripts=['src/bin/tweetynet-cli.py'],
     entry_points={
-        'console_scripts': ['tweetynet-cli=tweetynet.__main__:main'],
         'vak.network': 'TweetyNet = tweetynet.model:TweetyNet'
     },
     install_requires=REQUIRED,
