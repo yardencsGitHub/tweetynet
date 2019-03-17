@@ -27,7 +27,7 @@ VERSION = '0.1.1a3'
 LICENSE='BSD'
 
 REQUIRED = [
-    'tensorflow>=1.12.0', 'numpy', 'scipy', 'matplotlib', 'joblib', 'vak',
+    'vak',
 ]
 
 # What packages are optional?
