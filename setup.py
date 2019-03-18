@@ -22,12 +22,12 @@ DESCRIPTION = 'neural network that segments and labels birdsong'
 URL = 'https://github.com/yardencsGitHub/tweetynet'
 EMAIL = 'yardenc@bu.edu'
 AUTHOR = 'Yarden Cohen, David Nicholson'
-REQUIRES_PYTHON = '>=3.5.0'
-VERSION = '0.1.1a1'
+REQUIRES_PYTHON = '>=3.6.0'
+VERSION = '0.1.1a4'
 LICENSE='BSD'
 
 REQUIRED = [
-    'tensorflow', 'numpy', 'scipy', 'matplotlib', 'joblib',
+    'vak',
 ]
 
 # What packages are optional?
@@ -110,9 +110,8 @@ setup(
     url=URL,
     packages=find_packages(where="src", exclude=('tests',)),
     package_dir={"": "src"},
-    scripts=['src/bin/tweetynet-cli.py'],
     entry_points={
-        'console_scripts': ['tweetynet-cli=tweetynet.__main__:main'],
+        'vak.network': 'TweetyNet = tweetynet.model:TweetyNet'
     },
     install_requires=REQUIRED,
     extras_require=EXTRAS,

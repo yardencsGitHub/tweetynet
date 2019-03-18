@@ -3,9 +3,12 @@
 # https://gist.github.com/danijar/8663d3bbfd586bffecf6a0094cd116f2
 from math import ceil
 import functools
-from collections import namedtuple
+import typing
 
 import tensorflow as tf
+
+from vak.network import AbstractVakNetwork
+
 
 
 def doublewrap(function):
@@ -44,13 +47,15 @@ def define_scope(function, scope=None, *args, **kwargs):
         return getattr(self, attribute)
     return decorator
 
+
 xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits
+
 
 def out_width(in_width, filter_width, stride):
     return ceil(float(in_width - filter_width + 1) / float(stride))
 
 
-class TweetyNet:
+class TweetyNet(AbstractVakNetwork):
     """hybrid convolutional neural network-bidirectional LSTM
     for segmentation of spectrograms
 
@@ -68,10 +73,30 @@ class TweetyNet:
     add_summary_writer : adds tensorflow summary writer to model
     """
 
+    Config = typing.NamedTuple('Config',
+                               [('n_syllables', int),
+                                ('batch_size', int),
+                                ('time_bins', int),
+                                ('freq_bins', int),
+                                ('channels', int),
+                                ('conv1_filters', int),
+                                ('conv2_filters', int),
+                                ('pool1_size', tuple),
+                                ('pool1_strides', tuple),
+                                ('pool2_size', tuple),
+                                ('pool2_strides', tuple),
+                                ('learning_rate', float)
+                                ])
+
+    # assign defaults. there is a pretty way to do this in Python>=3.6.2 but we're keeping with 3.5
+    Config.__new__.__defaults__ = (None, 11, 88, 513, 1, 32, 64, (1, 8), (1, 8), (1, 8), (1, 8), 0.001)
+
     def __init__(self,
-                 n_syllables=None,
+                 n_syllables,
                  batch_size=11,
-                 input_vec_size=513,
+                 time_bins=88,
+                 freq_bins=513,
+                 channels=1,
                  conv1_filters=32,
                  conv2_filters=64,
                  pool1_size=(1, 8),
@@ -81,35 +106,37 @@ class TweetyNet:
                  learning_rate=0.001,
                  ):
         """__init__ method for TweetyNet
-        To instantiate a new CNN-BiLSTM model, call with all of the
-        model hyperparameters listed below, i.e. without the parameters
-        for loading, `sess`, `meta_file`, and `data_file`.
-        To load a previously trained CNN-BiLSTM model, call with
-        only the `sess`, `meta_file`, and `data_file` parameters.
+        To instantiate a new TweetyNet model, call with all of the
+        model hyperparameters listed below.
 
         Parameters
         ----------
         n_syllables : int
-
+            number of syllables, i.e. number of classes to predict.
         batch_size : int
-
-        input_vec_size : int
-
+            number of items in a batch (i.e., number of windows from spectrograms in stack used as input)
+        time_bins : int
+            number of time steps (i.e. bins) in window of spectrogram fed as input to network.
+            Default is 88 (empirically, this works "well enough" for Bengalese finch song).
+        freq_bins : int
+            number of frequency bins in spectrogram. Default is 513 (because that was
+            the default for the spectrogram function we were using).
+        channels : int
+            number of color channels in "image" (spectrogram). Default is 1.
         conv1_filters : int
-
+            Number of filters in first convolutional layer. Default is 32.
         conv2_filters : int
-
+            Number of filters in second convolutional layer. Default is 64.
         pool1_size : two element tuple of ints
-            Default is (1, 8)
-
+            Size of sliding window for first max pooling layer. Default is (1, 8)
         pool1_strides : two element tuple of ints
-            Default is (1, 8)
+            Step size for sliding window of first max pooling layer. Default is (1, 8)
         pool2_size : two element tuple of ints
-            =(1, 8),
+            Size of sliding window for second max pooling layer. Default is (1, 8),
         pool2_strides : two element tuple of ints
-            =(1, 8),
+            Step size for sliding window of second max pooling layer. Default is (1, 8)
         learning_rate : float
-            Default is 0.001
+            Learning rate for training network. Default is 0.001.
         """
 
         if type(n_syllables) != int:
@@ -120,7 +147,9 @@ class TweetyNet:
 
         self.n_syllables = n_syllables
         self.batch_size = batch_size
-        self.input_vec_size = input_vec_size
+        self.time_bins = time_bins
+        self.freq_bins = freq_bins
+        self.channels = channels
         self.conv1_filters = conv1_filters
         self.conv2_filters = conv2_filters
         self.pool1_size = pool1_size
@@ -133,7 +162,7 @@ class TweetyNet:
         with self.graph.as_default():
             # shape of X is batch_size, time_steps, frequency_bins
             self.X = tf.placeholder(dtype=tf.float32,
-                                    shape=[None, None, input_vec_size],
+                                    shape=[None, None, freq_bins],
                                     name='X')
             self.y = tf.placeholder(dtype=tf.int32,
                                     shape=[None, None],
@@ -147,7 +176,6 @@ class TweetyNet:
             self.error
             self.predict
             self.saver
-
 
             # Merge all summaries into a single op
             self.merged_summary_op = tf.summary.merge_all()
@@ -190,8 +218,8 @@ class TweetyNet:
         """inference method, that returns probability of each class
         for each time bin in spectrogram"""
         conv1 = tf.layers.conv2d(
-            inputs=tf.reshape(self.X,[self.batch_size, -1,
-                                      self.input_vec_size, 1]),
+            inputs=tf.reshape(self.X, [self.batch_size, -1,
+                                       self.freq_bins, 1]),
             filters=self.conv1_filters,
             kernel_size=[5, 5],
             padding="same",
@@ -219,7 +247,7 @@ class TweetyNet:
         # Determine number of hidden units in bidirectional LSTM:
         # uniquely determined by number of filters and frequency bins
         # in output shape of pool2
-        freq_bins_after_pool1 = out_width(self.input_vec_size,
+        freq_bins_after_pool1 = out_width(self.freq_bins,
                                           self.pool1_size[1],
                                           self.pool1_strides[1])
         freq_bins_after_pool2 = out_width(freq_bins_after_pool1,
@@ -265,7 +293,7 @@ class TweetyNet:
                                   labels=tf.concat(
                                       tf.unstack(self.y,
                                                  axis=0,
-                                                 num=self.batch_size),0),
+                                                 num=self.batch_size), 0),
                                   name='xentropy')
         self.cost = tf.reduce_mean(xentropy_layer, name='cost')
         tf.summary.scalar("cost", self.cost)
