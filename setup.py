@@ -27,7 +27,7 @@ VERSION = '0.1.1a4'
 LICENSE='BSD'
 
 REQUIRED = [
-    'vak',
+    'vak', 'crowsetta>=1.0.0'
 ]
 
 # What packages are optional?
