@@ -27,7 +27,7 @@ VERSION = '0.1.1a4'
 LICENSE='BSD'
 
 REQUIRED = [
-    'vak',
+    'vak', 'crowsetta>=1.0.0'
 ]
 
 # What packages are optional?
@@ -111,7 +111,8 @@ setup(
     packages=find_packages(where="src", exclude=('tests',)),
     package_dir={"": "src"},
     entry_points={
-        'vak.network': 'TweetyNet = tweetynet.model:TweetyNet'
+        'vak.network': 'TweetyNet = tweetynet.model:TweetyNet',
+        'crowsetta.format': 'yarden = gardner.yarden2seq'
     },
     install_requires=REQUIRED,
     extras_require=EXTRAS,
