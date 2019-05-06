@@ -1,3 +1,6 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2667812.svg)](https://doi.org/10.5281/zenodo.2667812)
+[![PyPI version](https://badge.fury.io/py/tweetynet.svg)](https://badge.fury.io/py/tweetynet)
+
 # TweetyNet
 <p align="center"><img src="./doc/tweetynet.gif" alt="tweetynet image" width=400></p>
 
