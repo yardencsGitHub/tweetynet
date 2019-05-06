@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.2.0]
+### Added
 - add `gardner` package with `yarden2seq` module that converts `annotation.mat` files to 
   `crowsetta.Sequence` objects
   + will be installed along with TweetyNet so that `vak` knows how to use `yarden` format
