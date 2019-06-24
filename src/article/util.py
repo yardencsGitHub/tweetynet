@@ -90,19 +90,19 @@ def make_df(config_files, test_dirs, net_name='TweetyNet', csv_fname=None):
         # ------------ now unpack everything from test_dir -------------------------------------------------------------
         animal_ID = test_dir.stem  # assume stem (i.e. last part of directory) is animal ID #
         train_err = list(test_dir.glob('train_err'))
-        assert len(train_err) == 0, f"did not find only one train_err file: {train_err}"
+        assert len(train_err) == 1, f"did not find only one train_err file: {train_err}"
         train_err = train_err[0]
-        with open(train_err) as f:
+        with open(train_err, 'rb') as f:
             frame_err_train = pickle.load(f)
 
         test_err = list(test_dir.glob('test_err'))
-        assert len(test_err) == 0, f"did not find only one test_err file: {test_err}"
+        assert len(test_err) == 1, f"did not find only one test_err file: {test_err}"
         test_err = test_err[0]
-        with open(test_err) as f:
+        with open(test_err, 'rb') as f:
             frame_err_test = pickle.load(f)
 
         preds_and_err = list(test_dir.glob('y_preds_and_err_for_train_and_test'))
-        assert len(preds_and_err) == 0, f"did not find only one preds_and_err file: {preds_and_err}"
+        assert len(preds_and_err) == 1, f"did not find only one preds_and_err file: {preds_and_err}"
         preds_and_err = preds_and_err[0]
         preds_and_err = joblib.load(preds_and_err)
         syl_err_train = preds_and_err['train_syl_err_rate']
@@ -113,16 +113,17 @@ def make_df(config_files, test_dirs, net_name='TweetyNet', csv_fname=None):
             err_rows = [fe_tr_row, fe_te_row, se_tr_row, se_test_row]
             row_lengths = [len(row) for row in err_rows]
             assert len(set(row_lengths)) == 1, f"found different lengths of rows in error arrays: {row_lengths}"
-            for replicate, (fe_tr, fe_te, se_tr, se_te) in enumerate(zip(err_rows)):
+            for replicate, (fe_tr, fe_te, se_tr, se_te) in enumerate(zip(*err_rows)):
                 df_dict['animal_ID'].append(animal_ID)
                 df_dict['train_set_dur'].append(train_set_dur)
                 df_dict['replicate'].append(replicate)
+                df_dict['net_name'].append(net_name)
                 df_dict['time_bins'].append(time_bins)
                 df_dict['learning_rate'].append(learning_rate)
                 df_dict['frame_error_train'].append(fe_tr)
-                df_dict['frame_error_train'].append(fe_tr)
-                df_dict['frame_error_train'].append(fe_tr)
-                df_dict['frame_error_train'].append(fe_tr)
+                df_dict['frame_error_test'].append(fe_te)
+                df_dict['syllable_error_train'].append(se_tr)
+                df_dict['syllable_error_test'].append(se_te)
 
     df = pd.DataFrame.from_dict(df_dict)
 
