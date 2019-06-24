@@ -27,12 +27,12 @@ VERSION = '0.2.0'
 LICENSE='BSD'
 
 REQUIRED = [
-    'vak', 'crowsetta>=1.0.0'
+    'vak', 'crowsetta>=1.1.1'
 ]
 
 # What packages are optional?
 EXTRAS = {
-    # 'fancy feature': ['django'],
+    'article': ['snakemake', 'pandas', 'seaborn', 'jupyterlab'],
 }
 
 # The rest you shouldn't have to touch too much :)
