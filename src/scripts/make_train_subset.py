@@ -49,7 +49,6 @@ def main(train_dur=TRAIN_DUR,
 
         if labelset:
             if not set(seqs[seq_ctr].labels).issubset(set(labelset)):
-                import pdb;pdb.set_trace()
                 seq_ctr += 1
                 continue
 
