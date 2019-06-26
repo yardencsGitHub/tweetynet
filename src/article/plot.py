@@ -2,34 +2,23 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+plt.style.use('ggplot')
 
-def frame_error_rate(all_results_list):
-    all_mn_test_err = []
-    for el in all_results_list:
-        all_mn_test_err.append(el['mn_test_err'])
-    all_mn_test_err = np.asarray(all_mn_test_err)
 
-    plt.style.use('ggplot')
-    fig, ax = plt.subplots()
-    for el in all_results_list:
-        lbl = (el['bird_ID'])
-        ax.plot(el['train_set_durs'],
-                el['mn_test_err'],
-                label=lbl,
-                linestyle='--',
-                marker='o')
-    ax.plot(el['train_set_durs'], np.median(all_mn_test_err, axis=0),
-            linestyle='--', marker='o', linewidth=3, color='k', label='median across birds')
+def frame_error_test_mn_plot(df, save_as=None):
+    ax = sns.stripplot(x="train_set_dur", y="frame_error_test_mean", data=df, size=12, alpha=0.75)
+    sns.boxplot(x="train_set_dur", y="frame_error_test_mean", data=df, ax=ax, showfliers=False)
+#    ax.set_ylabel("frame error, test set")
+#    ax.set_xlabel("training set duration (s)")
 
-    fig.set_size_inches(16, 8)
-    plt.legend(fontsize=20)
-    plt.xticks(el['train_set_durs'])
-    plt.tick_params(axis='both', which='major', labelsize=20, rotation=45)
-    plt.title('Frame error rate as a function of training set size', fontsize=40)
-    plt.ylabel('Frame error rate\nas measured on test set', fontsize=32)
-    plt.xlabel('Training set size: duration in s', fontsize=32);
-    plt.tight_layout()
-    plt.savefig('frame-err-rate-v-train-set-size.png')
+    ax.set_title('Frame error rate as a function of training set size', fontsize=40)
+    ax.set_ylabel('Frame error rate\nas measured on test set', fontsize=32)
+    ax.set_xlabel('Training set size: duration in s', fontsize=32)
+
+    if save_as:
+        plt.savefig(save_as)
+
+    return ax
 
 
 def syllable_error_rate(all_results_list):
