@@ -131,3 +131,32 @@ def make_df(config_files, test_dirs, net_name='TweetyNet', csv_fname=None):
         df.to_csv(csv_fname)
 
     return df
+
+
+def agg_df(df, train_set_durs):
+    """filters dataframe of results by specified training set durations, then
+    groups by animal ID and training set duration, and for each group computes
+    the mean and standard deviation, i.e. aggregate statistics.
+
+    The index of each row becomes one animal ID, and this function makes mean
+    and standard deviations into columns, as well as the training set duration.
+    This way the dataframe is in "long" form (where "animal ID" and "training set
+    durations" are the conditions) for use with Seaborn.
+
+    Parameters
+    ----------
+    df : pandas.Dataframe
+    train_set_durs :
+
+    Returns
+    -------
+    df_agg : pandas.Dataframe
+    """
+    df = df[df.train_set_dur.isin(train_set_durs)]
+    df_agg = df.groupby(['animal_ID', 'train_set_dur']).agg({'frame_error_train': ['mean', 'std'],
+                                                             'frame_error_test': ['mean', 'std'],
+                                                             'syllable_error_train': ['mean', 'std'],
+                                                             'syllable_error_test': ['mean', 'std']})
+    df_agg.columns = ['_'.join(col).strip() for col in df_agg.columns.values]
+    df_agg = df_agg.reset_index(level='train_set_dur')
+    return df_agg
