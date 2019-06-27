@@ -158,5 +158,5 @@ def agg_df(df, train_set_durs):
                                                              'syllable_error_train': ['mean', 'std'],
                                                              'syllable_error_test': ['mean', 'std']})
     df_agg.columns = ['_'.join(col).strip() for col in df_agg.columns.values]
-    df_agg = df_agg.reset_index(level='train_set_dur')
+    df_agg = df_agg.reset_index()
     return df_agg
