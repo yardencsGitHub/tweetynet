@@ -2,18 +2,30 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-plt.style.use('ggplot')
 
+def frame_error_rate_test_mean(df, ax=None, figsize=(10, 7.5), save_as=None):
+    if ax is None:
+        fig, ax = plt.subplots()
+        fig.set_size_inches(figsize)
+    sns.pointplot(x="train_set_dur", y="frame_error_test_mean",
+                  hue="animal_ID", data=df,
+                  linestyles=['--' for _ in df.animal_ID.unique()],
+                  ax=ax)
 
-def frame_error_test_mn_plot(df, save_as=None):
-    ax = sns.stripplot(x="train_set_dur", y="frame_error_test_mean", data=df, size=12, alpha=0.75)
-    sns.boxplot(x="train_set_dur", y="frame_error_test_mean", data=df, ax=ax, showfliers=False)
-#    ax.set_ylabel("frame error, test set")
-#    ax.set_xlabel("training set duration (s)")
+    mean_fet_mn = df.groupby('train_set_dur')['frame_error_test_mean'].mean()
+    with plt.rc_context({'lines.linewidth': 2}):
+        mn_plot = sns.pointplot(mean_fet_mn.index,
+                                mean_fet_mn.values,
+                                color='black', ax=ax)
 
-    ax.set_title('Frame error rate as a function of training set size', fontsize=40)
-    ax.set_ylabel('Frame error rate\nas measured on test set', fontsize=32)
-    ax.set_xlabel('Training set size: duration in s', fontsize=32)
+    ax.set_ylabel("frame error,\ntest set", fontsize=28)
+    ax.set_xlabel("training set duration (s)", fontsize=28)
+    ax.tick_params(labelsize=20)
+    ax.legend(bbox_to_anchor=(1.01, 1), loc=2,
+              borderaxespad=0., fontsize=20)
+
+    max_zorder = max([_.zorder for _ in ax.get_children()])
+    mn_plot.set_zorder(max_zorder + 1)
 
     if save_as:
         plt.savefig(save_as)
@@ -21,28 +33,32 @@ def frame_error_test_mn_plot(df, save_as=None):
     return ax
 
 
-def syllable_error_rate(all_results_list):
-    plt.style.use('ggplot')
-    fig, ax = plt.subplots()
-    fig.set_size_inches(16, 8)
-    for el in all_results_list:
-        lbl = (el['bird_ID'])
-        ax.plot(el['train_set_durs'],
-                el['mn_test_syl_err'],
-                label=lbl,
-                linestyle=':',
-                marker='o')
+def syllable_error_rate_test_mean(df, ax=None, figsize=(10, 7.5), save_as=None):
+    if ax is None:
+        fig, ax = plt.subplots()
+        fig.set_size_inches(figsize)
 
-    plt.scatter(120, 0.84, s=75)
-    plt.text(75, 0.7, 'Koumura & Okanoya 2016,\n0.84 note error rate\nwith 120s training data', fontsize=20)
-    plt.scatter(480, 0.5, s=75)
-    plt.text(355, 0.35, 'Koumura & Okanoya 2016,\n0.46 note error rate\nwith 480s training data', fontsize=20)
+    sns.pointplot(x="train_set_dur", y="syllable_error_test_mean",
+                hue="animal_ID", data=df,
+                linestyles=['--' for _ in df.animal_ID.unique()],
+                ax=ax)
 
-    plt.legend(fontsize=20, loc='upper right');
-    plt.title('Syllable error rate as a function of training set size', fontsize=40)
-    plt.xticks(el['train_set_durs'])
-    plt.tick_params(axis='both', which='major', labelsize=20, rotation=45)
-    plt.ylabel('Syllable error rate\nas measured on test set', fontsize=32)
-    plt.xlabel('Training set size: duration in s', fontsize=32);
-    plt.tight_layout()
-    plt.savefig('syl-error-rate-v-train-set-size.png')
+    mean_sert_mn = df.groupby('train_set_dur')['syllable_error_test_mean'].mean()
+    with plt.rc_context({'lines.linewidth': 2}):
+        mn_plot = sns.pointplot(mean_sert_mn.index,
+                                mean_sert_mn.values,
+                                color='black', ax=ax)
+
+    ax.set_ylabel("syllable error rate,\ntest set", fontsize=28)
+    ax.set_xlabel("training set duration (s)", fontsize=28)
+    ax.tick_params(labelsize=20)
+    ax.legend(bbox_to_anchor=(1.01, 1), loc=2,
+              borderaxespad=0., fontsize=20)
+
+    max_zorder = max([_.zorder for _ in ax.get_children()])
+    mn_plot.set_zorder(max_zorder + 1)
+
+    if save_as:
+        plt.savefig(save_as)
+
+    return ax
