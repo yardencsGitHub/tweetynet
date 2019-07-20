@@ -8,10 +8,13 @@ import numpy as np
 import tqdm
 
 import vak
+from vak.utils.data import reshape_data_for_batching
 
 BIRDS = ['bl26lb16', 'gy6or6', 'or60yw70', 'gr41rd51']
 
-CONFIGS_DIR = Path('../../src/configs/')
+HERE = Path(__file__).parent
+CONFIGS_DIR = HERE.joinpath('../configs/')
+DATA_DIR = HERE.joinpath('../../data/BFSongRecognition')
 BF_CONFIGS = sorted(list(CONFIGS_DIR.glob('*BFSongRepository*ini')))
 
 configs_by_bird = {
@@ -79,6 +82,14 @@ NETWORKS = vak.network._load()
 def main():
     for bird in BIRDS:
         print(f'predicting segments and labels for bird: {bird}')
+        output_dir_this_bird = DATA_DIR.joinpath(bird)
+        output_dir_this_bird.mkdir()
+        print(f'saving output in: {output_dir_this_bird}')
+        output_dir_this_bird_vds = output_dir_this_bird.joinpath('vds')
+        output_dir_this_bird_vds.mkdir()
+        output_dir_this_bird_json = output_dir_this_bird.joinpath('json')
+        output_dir_this_bird_json.mkdir()
+
         config_ini = configs_by_bird[bird]
         config_obj = ConfigParser()
         config_obj.read(config_ini)
@@ -86,6 +97,7 @@ def main():
         data_config = vak.config.data.parse_data_config(config_obj, config_ini)
         train_config = vak.config.train.parse_train_config(config_obj, config_ini)
         net_config = vak.config.parse._get_nets_config(config_obj, train_config.networks)
+        tweetynet_name, tweetynet_config = list(net_config.items())[0]
 
         results_dir = config_obj['OUTPUT']['results_dir_made_by_main_script']
         checkpoint_path = str(Path(results_dir).joinpath('TweetyNet'))
@@ -108,28 +120,22 @@ def main():
             # transpose so rows are time bins
             X_train = X_train.T
             freq_bins = X_train.shape[-1]  # number of columns
-            
-            test_vds_fname = str(dir_to_predict.joinpath(
-                f'{stem}.test.vds.json'
-            ))
 
             test_vds = vak.dataset.prep(str(dir_to_predict),
                                         annot_format='notmat',
                                         labelset=data_config.labelset,
                                         output_dir=dir_to_predict,
                                         save_vds=False,
-                                        vds_fname=test_vds_fname,
                                         return_vds=True,
                                         return_path=False,
                                         audio_format='cbin',
                                         spect_params=sp_nt)
 
-            net_name, net_config = list(net_config.items())[0]
             n_classes = len(labelmap)
-            net_config_dict = net_config._asdict()
-            net_config_dict['n_syllables'] = n_classes
-            if 'freq_bins' in net_config_dict:
-                net_config_dict['freq_bins'] = freq_bins
+            tweetynet_config_dict = tweetynet_config._asdict()
+            tweetynet_config_dict['n_syllables'] = n_classes
+            if 'freq_bins' in tweetynet_config_dict:
+                tweetynet_config_dict['freq_bins'] = freq_bins
 
             X_test = test_vds.spects_list()
             X_test = np.concatenate(X_test, axis=1)
@@ -140,18 +146,18 @@ def main():
 
             (X_train,
              _,
-             num_batches_train) = vak.utils.data.reshape_data_for_batching(X_train,
-                                                                           net_config.batch_size,
-                                                                           net_config.time_bins,
-                                                                           Y_train)
+             num_batches_train) = reshape_data_for_batching(X_train,
+                                                            tweetynet_config.batch_size,
+                                                            tweetynet_config.time_bins,
+                                                            Y_train)
 
             # Notice we don't reshape Y_test
             (X_test,
              _,
-             num_batches_test) = vak.utils.data.reshape_data_for_batching(X_test,
-                                                                          net_config.batch_size,
-                                                                          net_config.time_bins,
-                                                                          Y_test)
+             num_batches_test) = reshape_data_for_batching(X_test,
+                                                           tweetynet_config.batch_size,
+                                                           tweetynet_config.time_bins,
+                                                           Y_test)
             
             
             print("running test on data from {dir_to_predict}")
@@ -164,18 +170,18 @@ def main():
              train_syl_err_rate,
              test_err,
              test_lev,
-             test_syl_err_rate) = vak.core.learncurve.test_one_model(net_name,
-                                                                          net_config_dict,
-                                                                          NETWORKS,
-                                                                          n_classes,
-                                                                          labelmap,
-                                                                          checkpoint_path,
-                                                                          X_train,
-                                                                          Y_train,
-                                                                          num_batches_train,
-                                                                          X_test,
-                                                                          Y_test,
-                                                                          num_batches_test)
+             test_syl_err_rate) = vak.core.learncurve.test_one_model(tweetynet_name,
+                                                                     tweetynet_config_dict,
+                                                                     NETWORKS,
+                                                                     n_classes,
+                                                                     labelmap,
+                                                                     checkpoint_path,
+                                                                     X_train,
+                                                                     Y_train,
+                                                                     num_batches_train,
+                                                                     X_test,
+                                                                     Y_test,
+                                                                     num_batches_test)
 
             print(f'error on training set: {train_err}')
             print(f'Levenstein distance on training set: {train_lev}')
@@ -192,10 +198,18 @@ def main():
                 'test_lev': int(test_lev),
                 'test_syl_err_rate': float(test_syl_err_rate),
             }
-            with open(str(dir_to_predict.joinpath('test.json')), 'w') as fp:
+            test_json_path = str(output_dir_this_bird_json.joinpath(f'{stem}.test.json'))
+            print(f'saving test results in {test_json_path}')
+            with open(test_json_path, 'w') as fp:
                 json.dump(err_dict, fp)
+            test_vds = test_vds.clear_spects()
+            test_vds_fname = str(output_dir_this_bird_vds.joinpath(
+                f'{stem}.test.vds.json'
+            ))
+            print(f'saving test Dataset as {test_vds_fname}')
+            test_vds.save(test_vds_fname)
             
-            predict_vds_fname = str(dir_to_predict.joinpath(
+            predict_vds_fname = str(output_dir_this_bird_vds.joinpath(
                 f'{stem}.predict.vds.json'
             ))
             print(f'\tmaking dataset for predictions from {dir_to_predict}')
@@ -209,7 +223,7 @@ def main():
 
             print(f'\trunning vak.core.predict on {dir_to_predict}')
             vak.core.predict(
-                predict_vds_path=vds_fname,
+                predict_vds_path=predict_vds_fname,
                 checkpoint_path=checkpoint_path,
                 networks=net_config,
                 labelmap=labelmap,
