@@ -103,6 +103,7 @@ def main():
         results_dir = config_obj['OUTPUT']['results_dir_made_by_main_script']
         checkpoint_path = str(Path(results_dir).joinpath('TweetyNet'))
         spect_scaler_path = str(Path(results_dir).joinpath('spect_scaler'))
+        spect_scaler = joblib.load(spect_scaler_path)
 
         # TODO: fix path
         print(f'\tgetting labelmap from {train_config.train_vds_path}')
@@ -121,8 +122,6 @@ def main():
             # transpose so rows are time bins
             X_train = X_train.T
             freq_bins = X_train.shape[-1]  # number of columns
-
-            spect_scaler = joblib.load(scaler_name)
             X_train = spect_scaler.transform(X_train)
 
 
