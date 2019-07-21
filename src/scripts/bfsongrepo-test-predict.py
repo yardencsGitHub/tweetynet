@@ -4,6 +4,7 @@ from pathlib import Path
 import json
 import shutil
 
+import joblib
 import numpy as np
 import tqdm
 
@@ -121,7 +122,7 @@ def main():
             X_train = X_train.T
             freq_bins = X_train.shape[-1]  # number of columns
 
-            spect_scaler = joblib.load(scaler_name))
+            spect_scaler = joblib.load(scaler_name)
             X_train = spect_scaler.transform(X_train)
 
 
@@ -182,6 +183,7 @@ def main():
                                                                      labelmap,
                                                                      checkpoint_path,
                                                                      X_train,
+                                                           
                                                                      Y_train,
                                                                      num_batches_train,
                                                                      X_test,
