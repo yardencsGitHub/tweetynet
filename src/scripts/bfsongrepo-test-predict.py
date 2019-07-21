@@ -121,6 +121,10 @@ def main():
             X_train = X_train.T
             freq_bins = X_train.shape[-1]  # number of columns
 
+            spect_scaler = joblib.load(scaler_name))
+            X_train = spect_scaler.transform(X_train)
+
+
             test_vds = vak.dataset.prep(str(dir_to_predict),
                                         annot_format='notmat',
                                         labelset=data_config.labelset,
@@ -143,6 +147,7 @@ def main():
             X_test = X_test.T
             Y_test = test_vds.lbl_tb_list()
             Y_test = np.concatenate(Y_test)
+            X_test = spect_scaler(X_test)
 
             (X_train,
              _,
