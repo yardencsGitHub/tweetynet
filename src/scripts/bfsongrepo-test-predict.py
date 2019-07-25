@@ -15,7 +15,7 @@ BIRDS = ['bl26lb16', 'gy6or6', 'or60yw70', 'gr41rd51']
 
 HERE = Path(__file__).parent
 CONFIGS_DIR = HERE.joinpath('../configs/')
-DATA_DIR = HERE.joinpath('../../data/BFSongRecognition')
+DATA_DIR = HERE.joinpath('../../data/BFSongRepository')
 BF_CONFIGS = sorted(list(CONFIGS_DIR.glob('*BFSongRepository*ini')))
 
 configs_by_bird = {
@@ -124,7 +124,6 @@ def main():
             freq_bins = X_train.shape[-1]  # number of columns
             X_train = spect_scaler.transform(X_train)
 
-
             test_vds = vak.dataset.prep(str(dir_to_predict),
                                         annot_format='notmat',
                                         labelset=data_config.labelset,
@@ -147,7 +146,7 @@ def main():
             X_test = X_test.T
             Y_test = test_vds.lbl_tb_list()
             Y_test = np.concatenate(Y_test)
-            X_test = spect_scaler(X_test)
+            X_test = spect_scaler.transform(X_test)
 
             (X_train,
              _,
@@ -182,7 +181,6 @@ def main():
                                                                      labelmap,
                                                                      checkpoint_path,
                                                                      X_train,
-                                                           
                                                                      Y_train,
                                                                      num_batches_train,
                                                                      X_test,
@@ -215,25 +213,25 @@ def main():
             print(f'saving test Dataset as {test_vds_fname}')
             test_vds.save(test_vds_fname)
             
-            predict_vds_fname = str(output_dir_this_bird_vds.joinpath(
-                f'{stem}.predict.vds.json'
-            ))
-            print(f'\tmaking dataset for predictions from {dir_to_predict}')
-            predict_vds = vak.dataset.prep(str(dir_to_predict),
-                                           audio_format='cbin',
-                                           spect_params=sp_nt,
-                                           return_vds=True,
-                                           return_path=False)
-            predict_vds = predict_vds.clear_spects()
-            predict_vds.save(json_fname=predict_vds_fname)
+#            predict_vds_fname = str(output_dir_this_bird_vds.joinpath(
+#                f'{stem}.predict.vds.json'
+#            ))
+#            print(f'\tmaking dataset for predictions from {dir_to_predict}')
+#            predict_vds = vak.dataset.prep(str(dir_to_predict),
+#                                           audio_format='cbin',
+#                                           spect_params=sp_nt,
+#                                           return_vds=True,
+#                                           return_path=False)
+#            predict_vds = predict_vds.clear_spects()
+#            predict_vds.save(json_fname=predict_vds_fname)
 
-            print(f'\trunning vak.core.predict on {dir_to_predict}')
-            vak.core.predict(
-                predict_vds_path=predict_vds_fname,
-                checkpoint_path=checkpoint_path,
-                networks=net_config,
-                labelmap=labelmap,
-                spect_scaler_path=spect_scaler_path)
+#            print(f'\trunning vak.core.predict on {dir_to_predict}')
+#            vak.core.predict(
+#                predict_vds_path=predict_vds_fname,
+#                checkpoint_path=checkpoint_path,
+#                networks=net_config,
+#                labelmap=labelmap,
+#                spect_scaler_path=spect_scaler_path)
 
 
 if __name__ == '__main__':
