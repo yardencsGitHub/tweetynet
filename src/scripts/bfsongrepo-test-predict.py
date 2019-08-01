@@ -11,7 +11,11 @@ import tqdm
 import vak
 from vak.utils.data import reshape_data_for_batching
 
-BIRDS = ['bl26lb16', 'gy6or6', 'or60yw70', 'gr41rd51']
+BIRDS = ['bl26lb16',
+#         'gy6or6',
+         'or60yw70',
+         'gr41rd51',
+         ]
 
 HERE = Path(__file__).parent
 CONFIGS_DIR = HERE.joinpath('../configs/')
@@ -69,14 +73,6 @@ for bird in BIRDS:
              for path in these]
     dirs_to_predict[bird] = these
 
-spect_params = {'fft_size': 512,
-                'step_size': 62,
-                'freq_cutoffs': [500, 10000],
-                'thresh': 6.25,
-                'transform_type': 'log_spect'}
-sp_nt = vak.config.spectrogram.SpectConfig(**spect_params)
-
-
 NETWORKS = vak.network._load()
 
 
@@ -98,16 +94,17 @@ def main():
         data_config = vak.config.data.parse_data_config(config_obj, config_ini)
         train_config = vak.config.train.parse_train_config(config_obj, config_ini)
         net_config = vak.config.parse._get_nets_config(config_obj, train_config.networks)
+        spect_params = vak.config.parse_spect_config(config_obj)
         tweetynet_name, tweetynet_config = list(net_config.items())[0]
 
-        results_dir = config_obj['OUTPUT']['results_dir_made_by_main_script']
-        checkpoint_path = str(Path(results_dir).joinpath('TweetyNet'))
-        spect_scaler_path = str(Path(results_dir).joinpath('spect_scaler'))
+        results_dir = Path(config_obj['OUTPUT']['results_dir_made_by_main_script']).expanduser()
+        checkpoint_path = str(results_dir.joinpath('TweetyNet'))
+        spect_scaler_path = str(results_dir.joinpath('spect_scaler'))
         spect_scaler = joblib.load(spect_scaler_path)
 
         # TODO: fix path
         print(f'\tgetting labelmap from {train_config.train_vds_path}')
-        train_vds = vak.dataset.VocalizationDataset.load(train_config.train_vds_path)
+        train_vds = vak.Dataset.load(train_config.train_vds_path)
         train_vds = train_vds.load_spects()
         labelmap = train_vds.labelmap
 
@@ -132,7 +129,7 @@ def main():
                                         return_vds=True,
                                         return_path=False,
                                         audio_format='cbin',
-                                        spect_params=sp_nt)
+                                        spect_params=spect_params)
 
             n_classes = len(labelmap)
             tweetynet_config_dict = tweetynet_config._asdict()
@@ -162,8 +159,7 @@ def main():
                                                            tweetynet_config.batch_size,
                                                            tweetynet_config.time_bins,
                                                            Y_test)
-            
-            
+
             print("running test on data from {dir_to_predict}")
             (Y_pred_train,
              Y_pred_test,
@@ -213,25 +209,25 @@ def main():
             print(f'saving test Dataset as {test_vds_fname}')
             test_vds.save(test_vds_fname)
             
-#            predict_vds_fname = str(output_dir_this_bird_vds.joinpath(
-#                f'{stem}.predict.vds.json'
-#            ))
-#            print(f'\tmaking dataset for predictions from {dir_to_predict}')
-#            predict_vds = vak.dataset.prep(str(dir_to_predict),
-#                                           audio_format='cbin',
-#                                           spect_params=sp_nt,
-#                                           return_vds=True,
-#                                           return_path=False)
-#            predict_vds = predict_vds.clear_spects()
-#            predict_vds.save(json_fname=predict_vds_fname)
+            predict_vds_fname = str(output_dir_this_bird_vds.joinpath(
+                f'{stem}.predict.vds.json'
+            ))
+            print(f'\tmaking dataset for predictions from {dir_to_predict}')
+            predict_vds = vak.dataset.prep(str(dir_to_predict),
+                                           audio_format='cbin',
+                                           spect_params=spect_params,
+                                           return_vds=True,
+                                           return_path=False)
+            predict_vds = predict_vds.clear_spects()
+            predict_vds.save(json_fname=predict_vds_fname)
 
-#            print(f'\trunning vak.core.predict on {dir_to_predict}')
-#            vak.core.predict(
-#                predict_vds_path=predict_vds_fname,
-#                checkpoint_path=checkpoint_path,
-#                networks=net_config,
-#                labelmap=labelmap,
-#                spect_scaler_path=spect_scaler_path)
+            print(f'\trunning vak.core.predict on {dir_to_predict}')
+            vak.core.predict(
+                predict_vds_path=predict_vds_fname,
+                checkpoint_path=checkpoint_path,
+                networks=net_config,
+                labelmap=labelmap,
+                spect_scaler_path=spect_scaler_path)
 
 
 if __name__ == '__main__':
