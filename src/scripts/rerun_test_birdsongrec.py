@@ -28,6 +28,8 @@ ROOTS_TO_REPLACE = [
     '~/Documents/data/birdsong/vak',
 ]
 
+TRAIN_SET_DURS = [60, 120, 480]
+
 timenow = datetime.now().strftime('%y%m%d_%H%M%S')
 logger = logging.getLogger('learncurve')
 if logging.getLevelName(logger.level) != 'INFO':
@@ -86,7 +88,7 @@ def main():
             test_vds_path=train_config.test_vds_path,
             train_vds_path=train_config.train_vds_path,
             networks=net_config,
-            train_set_durs=train_config.train_set_durs,
+            train_set_durs=TRAIN_SET_DURS,
             num_replicates=train_config.num_replicates,
             output_dir=str(output_dir),  # cuz it's a Path ... and we need it to be so below
             normalize_spectrograms=train_config.normalize_spectrograms,
