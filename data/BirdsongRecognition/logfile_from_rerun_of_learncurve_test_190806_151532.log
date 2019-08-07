@@ -3,114 +3,42 @@ Logging run of learncurve.test to 'data/BirdsongRecognition/Bird0/test'
 Loading training Dataset from /media/art/HD-LCU3/tweetynet_paper/BirdsongRecognition_copy_combined_backup/Bird0
 Size of each timebin in spectrogram, in seconds: {timebin_dur}
 Loading test Dataset from /media/art/HD-LCU3/tweetynet_paper/BirdsongRecognition_copy_combined_backup/Bird0
-getting train and test error for training set with duration of 30 seconds, replicate 1
+getting train and test error for training set with duration of 60 seconds, replicate 1
 calculating training set error
-train error was 0.0006666666666666666
-Levenshtein distance for train set was 4
-Syllable error rate for train set was 0.02666666666666667
+train error was 0.00036666666666666667
+Levenshtein distance for train set was 0
+Syllable error rate for train set was 0.0
 calculating test set error
-test error was 0.1083727852020535
-Levenshtein distance for test set was 2098
-Syllable error rate for test set was 0.9628269848554383
-getting train and test error for training set with duration of 30 seconds, replicate 2
-calculating training set error
-train error was 0.0005333333333333334
-Levenshtein distance for train set was 1
-Syllable error rate for train set was 0.006896551724137931
-calculating test set error
-test error was 0.03976648488843611
-Levenshtein distance for test set was 857
-Syllable error rate for test set was 0.39329967875172095
-getting train and test error for training set with duration of 30 seconds, replicate 3
-calculating training set error
-train error was 0.0009333333333333333
-Levenshtein distance for train set was 4
-Syllable error rate for train set was 0.025477707006369428
-calculating test set error
-test error was 0.07703102215297337
-Levenshtein distance for test set was 2306
-Syllable error rate for test set was 1.0582836163377696
-getting train and test error for training set with duration of 30 seconds, replicate 4
+test error was 0.06517049199976029
+Levenshtein distance for test set was 1254
+Syllable error rate for test set was 0.575493345571363
+getting train and test error for training set with duration of 60 seconds, replicate 2
 calculating training set error
 train error was 0.0002
-Levenshtein distance for train set was 0
-Syllable error rate for train set was 0.0
+Levenshtein distance for train set was 2
+Syllable error rate for train set was 0.006430868167202572
 calculating test set error
-test error was 0.0607309082918839
-Levenshtein distance for test set was 1362
-Syllable error rate for test set was 0.625057365764112
-getting train and test error for training set with duration of 45 seconds, replicate 1
+test error was 0.05751982581250874
+Levenshtein distance for test set was 1209
+Syllable error rate for test set was 0.5548416704910509
+getting train and test error for training set with duration of 60 seconds, replicate 3
 calculating training set error
-train error was 0.0007111111111111111
-Levenshtein distance for train set was 3
-Syllable error rate for train set was 0.01293103448275862
+train error was 0.00023333333333333333
+Levenshtein distance for train set was 2
+Syllable error rate for train set was 0.006134969325153374
 calculating test set error
-test error was 0.06334272187930724
-Levenshtein distance for test set was 1181
-Syllable error rate for test set was 0.5419917393299679
-getting train and test error for training set with duration of 45 seconds, replicate 2
+test error was 0.0736451529134456
+Levenshtein distance for test set was 1624
+Syllable error rate for test set was 0.7452960073428178
+getting train and test error for training set with duration of 60 seconds, replicate 4
 calculating training set error
-train error was 0.0009777777777777777
+train error was 0.0005666666666666667
 Levenshtein distance for train set was 4
-Syllable error rate for train set was 0.016666666666666666
+Syllable error rate for train set was 0.013937282229965157
 calculating test set error
-test error was 0.07865404206867621
-Levenshtein distance for test set was 1269
-Syllable error rate for test set was 0.5823772372648004
-getting train and test error for training set with duration of 45 seconds, replicate 3
-calculating training set error
-train error was 0.0004
-Levenshtein distance for train set was 1
-Syllable error rate for train set was 0.004545454545454545
-calculating test set error
-test error was 0.04053055272567468
-Levenshtein distance for test set was 784
-Syllable error rate for test set was 0.35979807251032586
-getting train and test error for training set with duration of 45 seconds, replicate 4
-calculating training set error
-train error was 0.0006666666666666666
-Levenshtein distance for train set was 3
-Syllable error rate for train set was 0.013157894736842105
-calculating test set error
-test error was 0.07531311799604483
-Levenshtein distance for test set was 1391
-Syllable error rate for test set was 0.6383662230380909
-getting train and test error for training set with duration of 75 seconds, replicate 1
-calculating training set error
-train error was 0.0008266666666666666
-Levenshtein distance for train set was 5
-Syllable error rate for train set was 0.01288659793814433
-calculating test set error
-test error was 0.034877449511595854
-Levenshtein distance for test set was 774
-Syllable error rate for test set was 0.3552088113813676
-getting train and test error for training set with duration of 75 seconds, replicate 2
-calculating training set error
-train error was 0.0002933333333333333
-Levenshtein distance for train set was 5
-Syllable error rate for train set was 0.012853470437017995
-calculating test set error
-test error was 0.053419827810071714
-Levenshtein distance for test set was 1327
-Syllable error rate for test set was 0.6089949518127582
-getting train and test error for training set with duration of 75 seconds, replicate 3
-calculating training set error
-train error was 0.0004533333333333333
-Levenshtein distance for train set was 3
-Syllable error rate for train set was 0.007853403141361256
-calculating test set error
-test error was 0.03980643614789956
-Levenshtein distance for test set was 991
-Syllable error rate for test set was 0.45479577787976133
-getting train and test error for training set with duration of 75 seconds, replicate 4
-calculating training set error
-train error was 0.00013333333333333334
-Levenshtein distance for train set was 0
-Syllable error rate for train set was 0.0
-calculating test set error
-test error was 0.03896745969916702
-Levenshtein distance for test set was 857
-Syllable error rate for test set was 0.39329967875172095
+test error was 0.036585365853658534
+Levenshtein distance for test set was 951
+Syllable error rate for test set was 0.4364387333639284
 getting train and test error for training set with duration of 120 seconds, replicate 1
 calculating training set error
 train error was 0.00018333333333333334
@@ -147,78 +75,6 @@ calculating test set error
 test error was 0.0460588082539302
 Levenshtein distance for test set was 1343
 Syllable error rate for test set was 0.6163377696190914
-getting train and test error for training set with duration of 180 seconds, replicate 1
-calculating training set error
-train error was 0.0003222222222222222
-Levenshtein distance for train set was 6
-Syllable error rate for train set was 0.006237006237006237
-calculating test set error
-test error was 0.046668064960747886
-Levenshtein distance for test set was 1395
-Syllable error rate for test set was 0.6402019274896742
-getting train and test error for training set with duration of 180 seconds, replicate 2
-calculating training set error
-train error was 0.0003333333333333333
-Levenshtein distance for train set was 5
-Syllable error rate for train set was 0.005488474204171241
-calculating test set error
-test error was 0.052750644214058846
-Levenshtein distance for test set was 1183
-Syllable error rate for test set was 0.5429095915557596
-getting train and test error for training set with duration of 180 seconds, replicate 3
-calculating training set error
-train error was 0.0006222222222222223
-Levenshtein distance for train set was 15
-Syllable error rate for train set was 0.016216216216216217
-calculating test set error
-test error was 0.028999620463035097
-Levenshtein distance for test set was 922
-Syllable error rate for test set was 0.4231298760899495
-getting train and test error for training set with duration of 180 seconds, replicate 4
-calculating training set error
-train error was 0.0005111111111111112
-Levenshtein distance for train set was 6
-Syllable error rate for train set was 0.006644518272425249
-calculating test set error
-test error was 0.03332933820738699
-Levenshtein distance for test set was 868
-Syllable error rate for test set was 0.398347865993575
-getting train and test error for training set with duration of 240 seconds, replicate 1
-calculating training set error
-train error was 0.00045
-Levenshtein distance for train set was 14
-Syllable error rate for train set was 0.011272141706924315
-calculating test set error
-test error was 0.051292423243642755
-Levenshtein distance for test set was 1207
-Syllable error rate for test set was 0.5539238182652593
-getting train and test error for training set with duration of 240 seconds, replicate 2
-calculating training set error
-train error was 0.00034166666666666666
-Levenshtein distance for train set was 12
-Syllable error rate for train set was 0.009933774834437087
-calculating test set error
-test error was 0.03953177123908831
-Levenshtein distance for test set was 1113
-Syllable error rate for test set was 0.5107847636530518
-getting train and test error for training set with duration of 240 seconds, replicate 3
-calculating training set error
-train error was 0.0006083333333333333
-Levenshtein distance for train set was 22
-Syllable error rate for train set was 0.01790073230268511
-calculating test set error
-test error was 0.03951678951678952
-Levenshtein distance for test set was 1154
-Syllable error rate for test set was 0.5296007342817807
-getting train and test error for training set with duration of 240 seconds, replicate 4
-calculating training set error
-train error was 0.00044166666666666665
-Levenshtein distance for train set was 12
-Syllable error rate for train set was 0.009917355371900827
-calculating test set error
-test error was 0.03159645232815964
-Levenshtein distance for test set was 638
-Syllable error rate for test set was 0.2927948600275356
 getting train and test error for training set with duration of 480 seconds, replicate 1
 calculating training set error
 train error was 0.0004625
@@ -259,114 +115,42 @@ Logging run of learncurve.test to 'data/BirdsongRecognition/Bird1/test'
 Loading training Dataset from /media/art/HD-LCU3/tweetynet_paper/BirdsongRecognition_copy_combined_backup/Bird1
 Size of each timebin in spectrogram, in seconds: {timebin_dur}
 Loading test Dataset from /media/art/HD-LCU3/tweetynet_paper/BirdsongRecognition_copy_combined_backup/Bird1
-getting train and test error for training set with duration of 30 seconds, replicate 1
+getting train and test error for training set with duration of 60 seconds, replicate 1
 calculating training set error
-train error was 0.0009333333333333333
+train error was 0.0007666666666666667
 Levenshtein distance for train set was 3
-Syllable error rate for train set was 0.014925373134328358
+Syllable error rate for train set was 0.007633587786259542
 calculating test set error
-test error was 0.03725418103405444
-Levenshtein distance for test set was 811
-Syllable error rate for test set was 0.30295106462457977
-getting train and test error for training set with duration of 30 seconds, replicate 2
+test error was 0.03405443542376755
+Levenshtein distance for test set was 654
+Syllable error rate for test set was 0.2443033246171087
+getting train and test error for training set with duration of 60 seconds, replicate 2
 calculating training set error
-train error was 0.001
-Levenshtein distance for train set was 2
-Syllable error rate for train set was 0.00966183574879227
+train error was 0.0010666666666666667
+Levenshtein distance for train set was 5
+Syllable error rate for train set was 0.01278772378516624
 calculating test set error
-test error was 0.0453131676487832
-Levenshtein distance for test set was 949
-Syllable error rate for test set was 0.35450130743369446
-getting train and test error for training set with duration of 30 seconds, replicate 3
+test error was 0.0404787693897628
+Levenshtein distance for test set was 752
+Syllable error rate for test set was 0.2809114680612626
+getting train and test error for training set with duration of 60 seconds, replicate 3
 calculating training set error
-train error was 0.00046666666666666666
+train error was 0.0005
+Levenshtein distance for train set was 5
+Syllable error rate for train set was 0.012437810945273632
+calculating test set error
+test error was 0.030124313098089096
+Levenshtein distance for test set was 455
+Syllable error rate for test set was 0.16996638027642882
+getting train and test error for training set with duration of 60 seconds, replicate 4
+calculating training set error
+train error was 0.0006333333333333333
 Levenshtein distance for train set was 1
-Syllable error rate for train set was 0.004901960784313725
+Syllable error rate for train set was 0.002512562814070352
 calculating test set error
-test error was 0.03478978068824342
-Levenshtein distance for test set was 639
-Syllable error rate for test set was 0.23870003735524842
-getting train and test error for training set with duration of 30 seconds, replicate 4
-calculating training set error
-train error was 0.0004
-Levenshtein distance for train set was 2
-Syllable error rate for train set was 0.010101010101010102
-calculating test set error
-test error was 0.03691135114723798
-Levenshtein distance for test set was 777
-Syllable error rate for test set was 0.2902502801643631
-getting train and test error for training set with duration of 45 seconds, replicate 1
-calculating training set error
-train error was 0.0006222222222222223
-Levenshtein distance for train set was 2
-Syllable error rate for train set was 0.006578947368421052
-calculating test set error
-test error was 0.03406437252193614
-Levenshtein distance for test set was 496
-Syllable error rate for test set was 0.18528203212551364
-getting train and test error for training set with duration of 45 seconds, replicate 2
-calculating training set error
-train error was 0.00044444444444444447
-Levenshtein distance for train set was 1
-Syllable error rate for train set was 0.003355704697986577
-calculating test set error
-test error was 0.036553615613168645
-Levenshtein distance for test set was 621
-Syllable error rate for test set was 0.23197609264101607
-getting train and test error for training set with duration of 45 seconds, replicate 3
-calculating training set error
-train error was 0.0009333333333333333
-Levenshtein distance for train set was 2
-Syllable error rate for train set was 0.006644518272425249
-calculating test set error
-test error was 0.03111305436586408
-Levenshtein distance for test set was 505
-Syllable error rate for test set was 0.1886440044826298
-getting train and test error for training set with duration of 45 seconds, replicate 4
-calculating training set error
-train error was 0.0004888888888888889
-Levenshtein distance for train set was 4
-Syllable error rate for train set was 0.013937282229965157
-calculating test set error
-test error was 0.03535122673476891
-Levenshtein distance for test set was 862
-Syllable error rate for test set was 0.32200224131490474
-getting train and test error for training set with duration of 75 seconds, replicate 1
-calculating training set error
-train error was 0.0006133333333333334
-Levenshtein distance for train set was 3
-Syllable error rate for train set was 0.006
-calculating test set error
-test error was 0.03189311657209862
-Levenshtein distance for test set was 564
-Syllable error rate for test set was 0.21068360104594697
-getting train and test error for training set with duration of 75 seconds, replicate 2
-calculating training set error
-train error was 0.00048
-Levenshtein distance for train set was 9
-Syllable error rate for train set was 0.018255578093306288
-calculating test set error
-test error was 0.03593254697763159
-Levenshtein distance for test set was 719
-Syllable error rate for test set was 0.26858423608516996
-getting train and test error for training set with duration of 75 seconds, replicate 3
-calculating training set error
-train error was 0.0005866666666666667
-Levenshtein distance for train set was 3
-Syllable error rate for train set was 0.005964214711729622
-calculating test set error
-test error was 0.03375135392962547
-Levenshtein distance for test set was 563
-Syllable error rate for test set was 0.21031004856182295
-getting train and test error for training set with duration of 75 seconds, replicate 4
-calculating training set error
-train error was 0.00056
-Levenshtein distance for train set was 4
-Syllable error rate for train set was 0.00819672131147541
-calculating test set error
-test error was 0.031147834209454155
-Levenshtein distance for test set was 575
-Syllable error rate for test set was 0.21479267837131116
+test error was 0.03806902308387904
+Levenshtein distance for test set was 683
+Syllable error rate for test set was 0.25513634665670526
 getting train and test error for training set with duration of 120 seconds, replicate 1
 calculating training set error
 train error was 0.00023333333333333333
@@ -403,78 +187,6 @@ calculating test set error
 test error was 0.028822553238003437
 Levenshtein distance for test set was 422
 Syllable error rate for test set was 0.1576391483003362
-getting train and test error for training set with duration of 180 seconds, replicate 1
-calculating training set error
-train error was 0.00047777777777777776
-Levenshtein distance for train set was 6
-Syllable error rate for train set was 0.005054759898904802
-calculating test set error
-test error was 0.032956386076138044
-Levenshtein distance for test set was 613
-Syllable error rate for test set was 0.2289876727680239
-getting train and test error for training set with duration of 180 seconds, replicate 2
-calculating training set error
-train error was 0.0015666666666666667
-Levenshtein distance for train set was 30
-Syllable error rate for train set was 0.024529844644317254
-calculating test set error
-test error was 0.034178649150874964
-Levenshtein distance for test set was 755
-Syllable error rate for test set was 0.28203212551363466
-getting train and test error for training set with duration of 180 seconds, replicate 3
-calculating training set error
-train error was 0.0003333333333333333
-Levenshtein distance for train set was 3
-Syllable error rate for train set was 0.0024793388429752068
-calculating test set error
-test error was 0.030198841334353542
-Levenshtein distance for test set was 633
-Syllable error rate for test set was 0.23645872245050428
-getting train and test error for training set with duration of 180 seconds, replicate 4
-calculating training set error
-train error was 0.0004111111111111111
-Levenshtein distance for train set was 6
-Syllable error rate for train set was 0.005012531328320802
-calculating test set error
-test error was 0.030293243766955174
-Levenshtein distance for test set was 604
-Syllable error rate for test set was 0.22562570041090774
-getting train and test error for training set with duration of 240 seconds, replicate 1
-calculating training set error
-train error was 0.00025
-Levenshtein distance for train set was 7
-Syllable error rate for train set was 0.004438807863031071
-calculating test set error
-test error was 0.029070980692218258
-Levenshtein distance for test set was 479
-Syllable error rate for test set was 0.1789316398954053
-getting train and test error for training set with duration of 240 seconds, replicate 2
-calculating training set error
-train error was 0.0003916666666666667
-Levenshtein distance for train set was 6
-Syllable error rate for train set was 0.0037476577139287947
-calculating test set error
-test error was 0.02988085419295857
-Levenshtein distance for test set was 564
-Syllable error rate for test set was 0.21068360104594697
-getting train and test error for training set with duration of 240 seconds, replicate 3
-calculating training set error
-train error was 0.00036666666666666667
-Levenshtein distance for train set was 8
-Syllable error rate for train set was 0.005040957781978576
-calculating test set error
-test error was 0.03036777200321962
-Levenshtein distance for test set was 527
-Syllable error rate for test set was 0.19686215913335825
-getting train and test error for training set with duration of 240 seconds, replicate 4
-calculating training set error
-train error was 0.0007166666666666667
-Levenshtein distance for train set was 9
-Syllable error rate for train set was 0.005653266331658292
-calculating test set error
-test error was 0.0321862609680721
-Levenshtein distance for test set was 645
-Syllable error rate for test set was 0.24094135225999253
 getting train and test error for training set with duration of 480 seconds, replicate 1
 calculating training set error
 train error was 0.0007958333333333333
