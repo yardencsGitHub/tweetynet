@@ -65,6 +65,11 @@ def syllable_error_rate_test_mean(df, ax=None, figsize=(10, 7.5), save_as=None):
               borderaxespad=0., fontsize=20)
     ax.set_title("mean syllable error rate per bird on test set\nv. training set duration", fontsize=30)
 
+    ax.scatter(1, 0.84, s=75, color='k', marker='s')
+    ax.text(0.75, 0.76, 'Koumura\nOkanoya 2016', fontsize=18)
+    ax.scatter(2, 0.5, s=75, color='k', marker='s')
+    ax.text(1.75, 0.52, 'Koumura\nOkanoya 2016', fontsize=18)
+
     if save_as:
         plt.savefig(save_as)
 
