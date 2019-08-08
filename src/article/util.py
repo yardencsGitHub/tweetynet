@@ -20,7 +20,8 @@ FIELDS = [
 ]
 
 
-def make_df(config_files, test_dirs, net_name='TweetyNet', csv_fname=None):
+def make_df(config_files, test_dirs, net_name='TweetyNet', csv_fname=None,
+            train_set_durs=None):
     """make Pandas dataframe of results from running vak.core.learning_curve,
     given list of config.ini files and lists of directories with results from
     vak.core.learning_curve.test
@@ -39,6 +40,12 @@ def make_df(config_files, test_dirs, net_name='TweetyNet', csv_fname=None):
     csv_fname : str
         filename used to save dataframe as a csv. Default is None, in which case no .csv is
         saved.
+    train_set_durs : list
+        of float, durations of training sets used, in seconds. Used to determine which
+        accuracies from the test directory correspond to which training set duration.
+        Default is None, in which case the values specified by the option 'train_set_durs'
+        in the config.ini file is used. Those values may be different from the values used
+        when running test.
 
     Returns
     -------
@@ -72,6 +79,17 @@ def make_df(config_files, test_dirs, net_name='TweetyNet', csv_fname=None):
     you used the same name (e.g. "Bird1") in both the config.ini file and the test directory
     (or one of its parent directories, e.g. "Bird1/learning_curve/test/").
     """
+    if train_set_durs is not None:
+        if type(train_set_durs) != list:
+            raise TypeError(
+                f"train_set_durs should be a list but was {type(train_set_durs)}"
+            )
+        try:
+            train_set_durs = [float(dur) for dur in train_set_durs]
+        except ValueError:
+            raise ValueError(
+                'could not convert all elements in train_set_durs to float'
+            )
     df_dict = {field: [] for field in FIELDS}
 
     for config_file, test_dir in zip(config_files, test_dirs):
@@ -80,9 +98,11 @@ def make_df(config_files, test_dirs, net_name='TweetyNet', csv_fname=None):
         config.read(config_file)
 
         # ------------ need train set durations to pair with error values ----------------------------------------------
-        train_set_durs = [int(element)
-                          for element in
-                          config['TRAIN']['train_set_durs'].split(',')]
+        if train_set_durs is None:
+            train_set_durs = [float(element)
+                              for element in
+                              config['TRAIN']['train_set_durs'].split(',')]
+
         # ------------ then need hyperparameters -----------------------------------------------------------------------
         time_bins = config[net_name]['time_bins']
         learning_rate = config[net_name]['learning_rate']
