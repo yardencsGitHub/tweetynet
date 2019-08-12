@@ -32,7 +32,7 @@ def frame_error_rate_test_mean(df, ax=None, figsize=(10, 7.5), save_as=None):
     ax.set_title("mean frame error per bird on test set\nv. training set duration", fontsize=30)
 
     if save_as:
-        plt.savefig(save_as)
+        plt.savefig(save_as, bbox_inches='tight')
 
     return ax
 
@@ -71,6 +71,6 @@ def syllable_error_rate_test_mean(df, ax=None, figsize=(10, 7.5), save_as=None):
     ax.text(1.75, 0.52, 'Koumura\nOkanoya 2016', fontsize=18)
 
     if save_as:
-        plt.savefig(save_as)
+        plt.savefig(save_as, bbox_inches='tight')
 
     return ax
