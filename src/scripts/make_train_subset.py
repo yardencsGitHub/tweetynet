@@ -2,6 +2,8 @@
 and move to a sub-directory called 'train_subset'. Execute in the directory where this should happen.
 Used for experiments to measure accuracy when just using first TRAIN_DUR seconds of song to label 
 the next n days of song.
+
+run this before running make_has_notmat_subdirs.py
 """
 import argparse
 from glob import glob
