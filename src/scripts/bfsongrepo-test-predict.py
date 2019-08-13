@@ -12,7 +12,7 @@ import vak
 from vak.utils.data import reshape_data_for_batching
 
 BIRDS = ['bl26lb16',
-#         'gy6or6',
+         'gy6or6',
          'or60yw70',
          'gr41rd51',
          ]
@@ -31,37 +31,6 @@ BFSongRepo = Path('~/Documents/data/BFSongRepository/').expanduser()
 
 all_notmats = list(BFSongRepo.glob('*/*/*.not.mat'))
 bird_date_dirs = set([notmat.parents[0] for notmat in all_notmats])
-
-
-# copy all .cbins with .not.mats into a sub-directory
-
-# In[10]:
-
-
-# for bird_date_dir in bird_date_dirs:
-#     has_notmat = bird_date_dir.joinpath('has_notmat')
-#     has_notmat.mkdir(exist_ok=True)
-#     notmats_this_date_dir = sorted(list(bird_date_dir.glob('*.not.mat')))
-#     print(f'\ncopying annotated songs in {bird_date_dir} into sub-directory')
-#     for notmat in tqdm.tqdm(notmats_this_date_dir):
-#         shutil.copy(notmat, dst=has_notmat)
-#         cbin = notmat.parent.joinpath(
-#             Path(notmat.stem).stem
-#         )
-#         shutil.copy(cbin, dst=has_notmat)  # cbin_file, stem.stem removes .not.mat
-#         rec = notmat.parent.joinpath(
-#             Path(Path(notmat.stem).stem).stem + '.rec'
-#         )
-#         shutil.copy(rec, dst=has_notmat)
-#         tmp = notmat.parent.joinpath(
-#             Path(Path(notmat.stem).stem).stem + '.tmp'
-#         )
-#         shutil.copy(tmp, dst=has_notmat)
-
-
-# get dirs to predict for each bird
-
-# In[4]:
 
 dirs_to_predict = {}
 for bird in BIRDS:
