@@ -1,12 +1,9 @@
 from configparser import ConfigParser
-import os
 from pathlib import Path
 import json
-import shutil
 
 import joblib
 import numpy as np
-import tqdm
 
 import vak
 from vak.utils.data import reshape_data_for_batching
