@@ -1,12 +1,20 @@
 """utility functions used to munge data for article"""
+from datetime import datetime
+import json
+from pathlib import Path
 import pickle
 from configparser import ConfigParser
 
 import joblib
 import pandas as pd
 
+import vak
 
-FIELDS = [
+
+HERE = Path(__file__).parent
+
+
+FIELDS_BIRDSONG_REC = [
     'animal_ID',
     'train_set_dur',
     'replicate',
@@ -20,8 +28,8 @@ FIELDS = [
 ]
 
 
-def make_df(config_files, test_dirs, net_name='TweetyNet', csv_fname=None,
-            train_set_durs=None):
+def make_df_birdsong_rec(config_files, test_dirs, net_name='TweetyNet', csv_fname=None,
+                         train_set_durs=None):
     """make Pandas dataframe of results from running vak.core.learning_curve,
     given list of config.ini files and lists of directories with results from
     vak.core.learning_curve.test
@@ -90,7 +98,7 @@ def make_df(config_files, test_dirs, net_name='TweetyNet', csv_fname=None,
             raise ValueError(
                 'could not convert all elements in train_set_durs to float'
             )
-    df_dict = {field: [] for field in FIELDS}
+    df_dict = {field: [] for field in FIELDS_BIRDSONG_REC}
 
     for config_file, test_dir in zip(config_files, test_dirs):
         # ------------ get what we need from config.ini ----------------------------------------------------------------
@@ -153,7 +161,7 @@ def make_df(config_files, test_dirs, net_name='TweetyNet', csv_fname=None,
     return df
 
 
-def agg_df(df, train_set_durs):
+def agg_df_birdsong_rec(df, train_set_durs):
     """filters dataframe of results by specified training set durations, then
     groups by animal ID and training set duration, and for each group computes
     the mean and standard deviation, i.e. aggregate statistics.
@@ -180,3 +188,121 @@ def agg_df(df, train_set_durs):
     df_agg.columns = ['_'.join(col).strip() for col in df_agg.columns.values]
     df_agg = df_agg.reset_index()
     return df_agg
+
+
+# for Pandas dataframe / csv
+FIELDS_BF_SONG_REPOSITORY = [
+    'animal_ID',
+    'test_dir_date',
+    'test_dir_daynum',
+    'test_set_dur',
+    'train_set_dur',
+    'net_name',
+    'frame_error_train',
+    'frame_error_test',
+    'syllable_error_train',
+    'syllable_error_test',
+]
+
+
+DEFAULT_DATA_DIR = HERE.joinpath('../../data/BFSongRepository')
+TRAIN_SET_DUR = 60
+
+
+def make_df_bf_song_repository(data_dir=DEFAULT_DATA_DIR, train_set_dur=TRAIN_SET_DUR,
+                               net_name='TweetyNet', csv_fname=None):
+    """make Pandas dataframe of results from running src/scripts/bfsongrepo-test-predict.py
+
+    Parameters
+    ----------
+    data_dir : str
+        path to directory with results from running bfsonrepo-test-predict.py.
+        Default is './data/BirdsongRecognition' (relative to TweetyNet repository root).
+    csv_fname : str
+        filename used to save dataframe as a csv. Default is None, in which case no .csv is
+        saved.
+
+    Returns
+    -------
+    results_df : Pandas.Dataframe
+        with the following columns:
+            animal_ID : str
+                identity of animal from which vocalizations were recorded. Assumed to be name of test_dir that contains
+                results. e.g. "data/BirdsongRecognition/Bird1/" would result in Bird1 being the animal_ID.
+            train_set_dur : float
+                duration of training data set. Determined from config.ini file.
+            replicate : int
+                training replicate, e.g. net number 1 of 5 trained with random subset
+                with total duration `train_set_dur` from a larger set of training data.
+                Determined from train_err file.
+            learning_rate : float
+                hyperparameter, update rate for weights in neural network. Determined
+                from config.ini file.
+            time_bins : int
+                hyperparameter, number of time bins from spectrogram in windows shown to
+                network. Determined from config.ini file.
+            frame_error : float
+                frame error rate, i.e. number of frames / time bins incorrectly classified
+            syllable_error : float
+                syllable error rate, i.e. Levenstein distance between original sequence of labels and sequence
+                of labels recovered from predicted
+    Notes
+    -----
+    This function assumes that config_files and test_dirs are in the same order, i.e. that
+    config_files[0] is the config.ini file that produced the results in test_dirs[0].
+    You can ensure this is the case by applying the `sorted` function to the lists, if
+    you used the same name (e.g. "Bird1") in both the config.ini file and the test directory
+    (or one of its parent directories, e.g. "Bird1/learning_curve/test/").
+    """
+    data_dir = Path(data_dir)
+    bird_subdirs = [subdir for subdir in data_dir.iterdir() if subdir.is_dir()]
+
+    df_dict = {field: [] for field in FIELDS_BF_SONG_REPOSITORY}
+
+    for bird_subdir in bird_subdirs:
+        animal_ID = bird_subdir.name
+
+        test_dataset_jsons = bird_subdir.joinpath('vds').glob('*.has_notmat.test.vds.json')
+        test_dataset_jsons = sorted(test_dataset_jsons)
+
+        test_results_jsons = bird_subdir.joinpath('json').glob('*.has_notmat.test.json')
+        test_results_jsons = sorted(test_results_jsons)
+        for json_ind, test_results_json in enumerate(test_results_jsons):
+            json_results_name = test_results_json.name
+            date_from_json_name = json_results_name.split('.')[0]
+
+            test_dataset_json = [test_dataset_json
+                                 for test_dataset_json in test_dataset_jsons
+                                 if date_from_json_name in str(test_dataset_json)]
+            if len(test_dataset_json) != 1:
+                raise ValueError(
+                    'did not find single test dataset matching results .json file,'
+                    f'instead found: {test_dataset_json}'
+                )
+            else:
+                test_dataset_json = test_dataset_json[0]
+            test_vds = vak.Dataset.load(test_dataset_json)
+            test_set_dur = sum([voc.duration for voc in test_vds.voc_list])
+
+            test_dir_date = datetime.strptime(date_from_json_name, '%m%d%y')
+            test_dir_daynum = json_ind + 1  # start numbering of days at 1
+            with open(test_results_json) as fp:
+                err_dict = json.load(fp)
+
+            df_dict['animal_ID'].append(animal_ID)
+            df_dict['test_dir_date'].append(test_dir_date)
+            df_dict['test_dir_daynum'].append(test_dir_daynum)
+            df_dict['train_set_dur'].append(train_set_dur)
+            df_dict['test_set_dur'].append(test_set_dur)
+            df_dict['net_name'].append(net_name)
+            df_dict['frame_error_train'].append(err_dict['train_err'])
+            df_dict['frame_error_test'].append(err_dict['test_err'])
+            df_dict['syllable_error_train'].append(err_dict['train_syl_err_rate'])
+            df_dict['syllable_error_test'].append(err_dict['test_syl_err_rate'])
+
+    df = pd.DataFrame.from_dict(df_dict)
+
+    if csv_fname:
+        df.to_csv(csv_fname)
+
+    return df
