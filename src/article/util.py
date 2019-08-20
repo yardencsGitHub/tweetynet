@@ -327,7 +327,7 @@ def date_from_cbin_filename(cbin_filename):
     animal_id_date = splitname[0]
     animal_id, date, time = animal_id_date.split('_')
     dt = date + '-' + time
-    dt = datetime.strptime(dt, '%y%m%d-%H%M')
+    dt = datetime.strptime(dt, '%d%m%y-%H%M')
     return dt
 
 
