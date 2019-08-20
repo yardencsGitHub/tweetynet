@@ -1,0 +1,211 @@
+"""functions used for syntax analysis"""
+from datetime import datetime
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+
+HERE = Path(__file__).parent
+
+
+def date_from_cbin_filename(cbin_filename):
+    """extracts date as a string from a .cbin filename
+    and converts to a datetime object
+
+    Parameters
+    ----------
+    cbin_filename : str
+        path to a .cbin file
+
+    Returns
+    -------
+    dt : datetime
+        convert from string using strptime function
+    """
+    name = Path(cbin_filename).name
+    splitname = name.split('.')
+    animal_id_date = splitname[0]
+    animal_id, date, time = animal_id_date.split('_')
+    dt = date + '-' + time
+    dt = datetime.strptime(dt, '%d%m%y-%H%M')
+    return dt
+
+
+FIELDS_SYNTAX = [
+    'date',
+    'time',
+    'cbin_filename',
+    'label',
+    'label_plus_one',
+    'label_minus_one',
+    'label_minus_two',
+]
+
+
+def make_df_trans_probs(vds_list, start_label='S', end_label='E'):
+    """make a dataframe that can be used to compute transition probabilities
+    between birdsong syllables.
+
+    Takes a list of vak Datasets; function expects each vocalization in the
+    dataset to be from .cbin audio files.
+
+
+    Parameters
+    ----------
+    vds_list : list
+        of vak.Dataset.
+    start_label : str
+        Label that represents start of a sequence, e.g. a song bout. Default is 'S'.
+    end_label : str
+        Label that represents end of a sequence. Default is 'E'.
+
+    Returns
+    -------
+    df : pandas.Dataframe
+        with the following columns
+            date : datetime
+                extracted from audio filename.
+                Used to determine transition probabilities on a certain day,
+                and for resampling analysis where the dates are shuffled.
+            cbin_filename : str
+                filename of audio file associated with annotation.
+            label : str
+                String label for current label of interest.
+                For example, label 'a' in transition 'a' -> 'b'.
+            label_plus_one : str
+                Label that follows current label.
+                For exapmle, label 'b' in transition 'a' -> 'b'.
+            label_minus_one : str
+                Label that preceded current label.
+            label_minus_two : str
+                Label that preceded label before current label.
+    """
+    df_dict = {field: [] for field in FIELDS_SYNTAX}
+    for vds in vds_list:
+        for voc in vds.voc_list:
+            cbin_filename = voc.audio_path
+            datetime = date_from_cbin_filename(cbin_filename)
+            labels = voc.annot.labels.tolist()
+            labels = [start_label] + labels + [end_label]
+            len_labels = len(labels)
+            for ind, label in enumerate(labels):
+                if ind == 0:
+                    label_minus_one = None
+                    label_minus_two = None
+                    label_plus_one = labels[ind + 1]
+                elif ind == 1:
+                    label_minus_one = labels[0]
+                    label_minus_two = None
+                    label_plus_one = labels[ind + 1]
+                elif ind == (len_labels - 1):  # i.e., last index
+                    label_minus_one = labels[ind - 1]
+                    label_minus_two = labels[ind - 2]
+                    label_plus_one = None
+                else:
+                    label_minus_one = labels[ind - 1]
+                    label_minus_two = labels[ind - 2]
+                    label_plus_one = labels[ind + 1]
+                df_dict['date'].append(datetime.date())
+                df_dict['time'].append(datetime.time())
+                df_dict['cbin_filename'].append(cbin_filename)
+                df_dict['label'].append(label)
+                df_dict['label_plus_one'].append(label_plus_one)
+                df_dict['label_minus_one'].append(label_minus_one)
+                df_dict['label_minus_two'].append(label_minus_two)
+    df = pd.DataFrame.from_dict(df_dict)
+    return df
+
+
+def get_trans_prob(df, date, label, label_plus_one):
+    """
+
+    Parameters
+    ----------
+    df
+    date
+    label
+    label_plus_one
+
+    Returns
+    -------
+
+    """
+    df_date = df[df['date'] == date]
+    label_count = len(
+        df_date[df_date['label'] == label].index
+    )
+    trans_count = len(
+        df_date[(df_date['label'] == label) & (df_date['label_plus_one'] == label_plus_one)].index
+    )
+    p = trans_count / label_count
+    return p
+
+
+def make_trans_mat(df, min_p=0.01):
+    """
+
+    Parameters
+    ----------
+    df
+    min_p
+
+    Returns
+    -------
+
+    """
+    labels = df['label'].unique()
+    num_labels = labels.shape[0]
+    trans_mat = np.zeros((num_labels, num_labels))
+    for row, label in enumerate(labels):
+        if label == 'E':
+            continue
+        else:
+            for col, label_plus_one in enumerate(labels):
+                p = get_trans_prob(df, day, label, label_plus_one)
+                if p > min_p:
+                    trans_mat[row, col] = p
+                else:
+                    trans_mat[row, col] = 0.
+    # adjust so all rows sum to 1
+    row_sums = trans_mat.sum(axis = 1)
+    trans_mat = trans_mat[row_sums != 0.0, :]
+    row_sums = trans_mat.sum(axis = 1)
+    trans_mat = trans_mat / row_sums[:, np.newaxis]
+    return trans_mat
+
+
+def find_branch_points(trans_mat, labels):
+    """given a 2-d transition matrix, find branch points, i.e. labels
+    that can transition to more than one label
+
+    Parameters
+    ----------
+    trans_mat : numpy.ndarray
+        2-d matrix where rows represent probabilities of transitioning
+        from some label to whichever label is indexed by the column
+        where the probability appears.
+    labels : list
+        of str, unique set of labels. The index of each label
+        must correspond to the row in trans_mat representing the
+        probabilities of transitioning from that label to others.
+
+    Returns
+    -------
+    branch_point_ind : numpy.ndarray
+        indices of rows that are branch points in trans_mat.
+    branch_point_lbl : list
+        of labels. Labels for indices in branch_point_ind.
+    """
+    branch_point_ind = []
+    branch_point_lbl = []
+    for ind, (row, label) in enumerate(zip(trans_mat, labels)):
+        ps = np.nonzero(row)[0]
+        if ps.shape[0] > 1:
+            branch_point_ind.append(ind)
+            branch_point_lbl.append(label)
+    if branch_point_ind:  # is not empty
+        branch_point_ind = np.asarray(branch_point_ind)
+    return branch_point_ind, branch_point_lbl
+
+
