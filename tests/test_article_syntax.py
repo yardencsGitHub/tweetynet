@@ -1,9 +1,15 @@
 from datetime import datetime
+from pathlib import Path
 import unittest
 
+import pandas as pd
 import numpy as np
 
+import vak
 import article.syntax
+
+HERE = Path(__file__).parent
+DATA_DIR = HERE.joinpath('test_data')
 
 
 class TestSyntax(unittest.TestCase):
@@ -19,6 +25,16 @@ class TestSyntax(unittest.TestCase):
         self.assertTrue(
             dt_from_cbin.time() == datetime(2012, 3, 22, 8, 36).time()
         )
+
+    def test_make_df_trans_probs(self):
+        vds_list = [str(path) for path in DATA_DIR.joinpath('vds').glob('*.vds.json')]
+        vds_list = [vak.Dataset.load(path) for path in vds_list]
+        df = article.syntax.make_df_trans_probs(vds_list)
+        self.assertTrue(
+            type(df) == pd.DataFrame
+        )
+        for field in article.syntax.FIELDS_SYNTAX:
+            self.assertTrue(field in df.columns)
 
     def test_find_branch_point(self):
         trans_mat = np.asarray(
