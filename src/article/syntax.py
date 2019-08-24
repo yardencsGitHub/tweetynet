@@ -22,11 +22,17 @@ def date_from_cbin_filename(cbin_filename):
     -------
     dt : datetime
         convert from string using strptime function
+
+    Examples
+    --------
+    >>> cbin_filename = 'gy6or6_baseline_220312_0836.3.cbin'
+    >>> dt = date_from_cbin_filename(cbin_filename)
     """
     name = Path(cbin_filename).name
-    splitname = name.split('.')
-    animal_id_date = splitname[0]
-    animal_id, date, time = animal_id_date.split('_')
+    splitname = name.split('.')  # splits into: stem, file number, extension
+    splitname = splitname[0]  # just keep the stem
+    splitname = splitname.split('_')  # further split stem; last two will be date + time
+    date, time = splitname[-2:]
     dt = date + '-' + time
     dt = datetime.strptime(dt, '%d%m%y-%H%M')
     return dt
