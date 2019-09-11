@@ -24,6 +24,11 @@ SUBSET_DIR = 'train_subset'
 parser = argparse.ArgumentParser(description='Move subset of training data to a sub-directory.')
 parser.add_argument('--labelset', dest='labelset', action='store', default=None,
                     help='set of labels each file in training subset should contain')
+parser.add_argument('--train_dur', dest='train_dur', action='store', default=TRAIN_DUR,
+                    help='duration of training set (in seconds)', type=int)
+parser.add_argument('--subset_dir', dest='subset_dir', action='store', default=SUBSET_DIR,
+                    help='name of directory in which to store subset for training data')
+
 
 def main(train_dur=TRAIN_DUR,
          val_dur=VAL_DUR,
@@ -31,7 +36,8 @@ def main(train_dur=TRAIN_DUR,
          voc_format=VOC_FORMAT,
          subset_dir=SUBSET_DIR,
          labelset=None):
-    """
+    """makes training set of specified duration by taking subset of files
+    in current directory and copying to a newly-created sub-directory
     """
     labelset = list(labelset)  # assumes single string
     annot_files = glob(f'*{annot_ext}')
@@ -64,10 +70,9 @@ def main(train_dur=TRAIN_DUR,
         seq_stem = Path(seq.file).stem
         seq_files = glob(f'{seq_stem}*')
         for seq_file in seq_files:
-    	    shutil.move(seq_file, subset_dir)
+            shutil.move(seq_file, subset_dir)
 
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    main(labelset=args.labelset)
-
+    main(train_dur=args.train_dur, subset_dir=args.subset_dir, labelset=args.labelset)
