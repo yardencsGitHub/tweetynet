@@ -161,7 +161,10 @@ def get_trans_prob(df, date, label, label_plus_one):
     trans_count = len(
         df_date[(df_date['label'] == label) & (df_date['label_plus_one'] == label_plus_one)].index
     )
-    p = trans_count / label_count
+    if label_count > 0:
+        p = trans_count / label_count
+    else:
+        p = 0.
     return p
 
 
