@@ -36,6 +36,24 @@ class TestSyntax(unittest.TestCase):
         for field in article.syntax.FIELDS_SYNTAX:
             self.assertTrue(field in df.columns)
 
+    def test_get_trans_prob(self):
+        vds_list = sorted(
+            [str(path) for path in DATA_DIR.joinpath('vds').glob('*.vds.json')]
+        )
+        vds_list = [vak.Dataset.load(path) for path in vds_list]
+        vds_list = vds_list[:1]  # just keep one
+        df = article.syntax.make_df_trans_probs(vds_list)
+        date = datetime(2012, 3, 22, 0, 0).date()
+        label = 'S'
+        label_plus_one = 'i'
+        p = article.syntax.get_trans_prob(df, date, label, label_plus_one)
+        self.assertTrue(
+            type(p) == float
+        )
+        self.assertTrue(
+            p > 0.99
+        )
+
     def test_find_branch_point(self):
         trans_mat = np.asarray(
             [
