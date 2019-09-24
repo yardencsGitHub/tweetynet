@@ -168,17 +168,34 @@ def get_trans_prob(df, date, label, label_plus_one):
     return p
 
 
-def make_trans_mat(df, min_p=0.01):
-    """
+def make_trans_mat(df, date, min_p=0.01):
+    """make transition matrix from a dataframe
+    (returned by the make_df_trans_probs function)
 
     Parameters
     ----------
-    df
-    min_p
+    df : pandas.Dataframe
+        returned by the make_df_trans_probs function
+    date : datetime.date
+        date to use to create the transition matrix.
+        Must occur in the 'date' column of the dataframe
+    min_p : float
+        minimum transition probability to keep.
+        Default is 0.01. Any values below that will be
+        set to 0.0, and the rows will be normalized so
+        that they sum to 1.0.
 
     Returns
     -------
+    trans_mat : numpy.ndarray
+        transition matrix
 
+    Notes
+    -----
+    Each row corresponds to one label from the unique set found
+    in the dataframe, and the values in that row represent the
+    probability of transitioning from that label to the label
+    that corresponds to the column in which the value is found.
     """
     labels = df['label'].unique()
     num_labels = labels.shape[0]
@@ -188,15 +205,15 @@ def make_trans_mat(df, min_p=0.01):
             continue
         else:
             for col, label_plus_one in enumerate(labels):
-                p = get_trans_prob(df, day, label, label_plus_one)
+                p = get_trans_prob(df, date, label, label_plus_one)
                 if p > min_p:
                     trans_mat[row, col] = p
                 else:
                     trans_mat[row, col] = 0.
     # adjust so all rows sum to 1
-    row_sums = trans_mat.sum(axis = 1)
+    row_sums = trans_mat.sum(axis=1)
     trans_mat = trans_mat[row_sums != 0.0, :]
-    row_sums = trans_mat.sum(axis = 1)
+    row_sums = trans_mat.sum(axis=1)
     trans_mat = trans_mat / row_sums[:, np.newaxis]
     return trans_mat
 
