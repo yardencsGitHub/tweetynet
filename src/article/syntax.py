@@ -50,11 +50,13 @@ FIELDS_SYNTAX = [
 
 
 def make_df_trans_probs(vds_list, start_label='S', end_label='E'):
-    """make a dataframe that can be used to compute transition probabilities
-    between birdsong syllables.
+    """make a dataframe where each row represents a transition
+    from one label to another, e.g. in annotated birdsong.
 
-    Takes a list of vak Datasets; function expects each vocalization in the
-    dataset to be from .cbin audio files.
+    Can be used to compute transition probabilities between birdsong syllables.
+
+    Takes a list of vak Datasets; as written now, the function expects each
+    vocalization in the dataset to be from .cbin audio files.
 
 
     Parameters
@@ -63,13 +65,18 @@ def make_df_trans_probs(vds_list, start_label='S', end_label='E'):
         of vak.Dataset.
     start_label : str
         Label that represents start of a sequence, e.g. a song bout. Default is 'S'.
+        The function adds a transition from this start state to the first labeled
+        segment for every sequence, i.e. every vocalization in a dataset.
     end_label : str
         Label that represents end of a sequence. Default is 'E'.
+        The function adds a transition from the first labeled segemtn to this end state
+        for every sequence, i.e. every vocalization in a dataset.
 
     Returns
     -------
     df : pandas.Dataframe
-        with the following columns
+        where each row represents one transition from one label to another
+        and has the following columns:
             date : datetime
                 extracted from audio filename.
                 Used to determine transition probabilities on a certain day,
@@ -124,18 +131,28 @@ def make_df_trans_probs(vds_list, start_label='S', end_label='E'):
 
 
 def get_trans_prob(df, date, label, label_plus_one):
-    """
+    """get probability of transition from one label to another,
+    given a dataframe where rows are transitions
 
     Parameters
     ----------
-    df
-    date
-    label
-    label_plus_one
+    df : pandas.Dataframe
+        returned by the make_df_trans_probs function
+    date : datetime.date
+        date to use to create the transition matrix.
+        Must occur in the 'date' column of the dataframe
+    label : str
+        we want to compute the probability of
+        transitioning from this label to label_plus_one
+    label_plus_one : str
+        label we want to compute the probability of
+        transitioning to, from label_plus_one
 
     Returns
     -------
-
+    p : float
+        probability of transitioning from label to label_plus_one on
+        the specified date, computed using the dataframe
     """
     df_date = df[df['date'] == date]
     label_count = len(
