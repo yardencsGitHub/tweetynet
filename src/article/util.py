@@ -255,6 +255,8 @@ def make_df_bf_song_repository(data_dir=DEFAULT_DATA_DIR, train_set_dur=TRAIN_SE
     (or one of its parent directories, e.g. "Bird1/learning_curve/test/").
     """
     data_dir = Path(data_dir)
+    # need to add sub-directory that is duration of training set to data_dir
+    data_dir = data_dir.joinpath(f'{train_set_dur}s')
     bird_subdirs = [subdir for subdir in data_dir.iterdir() if subdir.is_dir()]
 
     df_dict = {field: [] for field in FIELDS_BF_SONG_REPOSITORY}
