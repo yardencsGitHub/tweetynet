@@ -112,7 +112,7 @@ setup(
     package_dir={"": "src"},
     entry_points={
         'vak.network': 'TweetyNet = tweetynet.model:TweetyNet',
-        'crowsetta.format': 'yarden = gardner.yarden2seq'
+        'crowsetta.format': 'yarden = gardner.yarden2annot'
     },
     install_requires=REQUIRED,
     extras_require=EXTRAS,
