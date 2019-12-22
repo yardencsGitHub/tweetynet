@@ -1,9 +1,13 @@
 """module for converting Yarden's annotation.mat files into Crowsetta sequences"""
+import os
+from pathlib import Path
+
 import numpy as np
 from scipy.io import loadmat
 
 from crowsetta.sequence import Sequence
 from crowsetta.meta import Meta
+from crowsetta.annotation import Annotation
 
 
 def _cast_to_arr(val):
@@ -20,22 +24,49 @@ def _cast_to_arr(val):
         raise TypeError(f"Type {type(val)} not recognized.")
 
 
-def yarden2seq(file,
-               abspath=False,
-               basename=False,
-               round_times=True,
-               decimals=3,
-               fname_key='keys',
-               annot_key='elements',
-               onsets_key='segFileStartTimes',
-               offsets_key='segFileEndTimes',
-               labels_key='segType',
-               samp_freq_key='fs'):
+VALID_AUDIO_FORMATS = ['wav']
+
+
+def _recursive_stem(path_str):
+    """helper function that 'recursively' removes file extensions
+    to recover name of an audio file from the name of an array file
+
+    i.e. bird1_122213_1534.wav.mat -> i.e. bird1_122213_1534.wav
+    and i.e. bird1_122213_1534.cbin.not.mat -> i.e. bird1_122213_1534.cbin
+
+    copied from vak library (to avoid circular dependencies upon import)
+    """
+    name = Path(path_str).name
+    stem, ext = os.path.splitext(name)
+    ext = ext.replace('.', '')
+    while ext not in VALID_AUDIO_FORMATS:
+        new_stem, ext = os.path.splitext(stem)
+        ext = ext.replace('.', '')
+        if new_stem == stem:
+            raise ValueError(
+                f'unable to compute stem of {path_str}'
+            )
+        else:
+            stem = new_stem
+    return stem
+
+
+def yarden2annot(annot_file,
+                 abspath=False,
+                 basename=False,
+                 round_times=True,
+                 decimals=3,
+                 fname_key='keys',
+                 annot_key='elements',
+                 onsets_key='segFileStartTimes',
+                 offsets_key='segFileEndTimes',
+                 labels_key='segType',
+                 samp_freq_key='fs'):
     """unpack annotation.mat file into list of Sequence objects
 
     Parameters
     ----------
-    file : str
+    annot_file : str
         path to .mat file of annotations, containing 'keys' and 'elements'
         where 'keys' are filenames of audio files and 'elements'
         contains additional annotation not found in .mat files
@@ -75,8 +106,8 @@ def yarden2seq(file,
 
     Returns
     -------
-    seq : list
-        of Sequence objects
+    annot : list
+        of Annotations
 
     Notes
     -----
@@ -94,19 +125,18 @@ def yarden2seq(file,
                          'unclear whether absolute path should be saved or if no path '
                          'information (just base filename) should be saved.')
 
-    annot_mat = loadmat(file, squeeze_me=True)
-    filenames = annot_mat[fname_key]
+    annot_mat = loadmat(annot_file, squeeze_me=True)
+    audio_paths = annot_mat[fname_key]
     annotations = annot_mat[annot_key]
-    if len(filenames) != len(annotations):
-        raise ValueError(f'list of filenames and list of annotations in {file} do not have the same length')
+    if len(audio_paths) != len(annotations):
+        raise ValueError(f'list of filenames and list of annotations in {annot_file} do not have the same length')
 
-    seq_list = []
+    annot_list = []
     # annotation structure loads as a Python dictionary with two keys
     # one maps to a list of filenames,
     # and the other to a Numpy array where each element is the annotation
-    # coresponding to the filename at the same index in the list.
-    # We can iterate over both by using the zip() function.
-    for filename, annotation in zip(filenames, annotations):
+    # corresponding to the filename at the same index in the list.
+    for audio_path, annotation in zip(audio_paths, annotations):
         # below, .tolist() does not actually create a list,
         # instead gets ndarray out of a zero-length ndarray of dtype=object.
         # This is just weirdness that results from loading complicated data
@@ -118,7 +148,6 @@ def yarden2seq(file,
         seq_dict = dict((k, _cast_to_arr(seq_dict[k])) 
                         for k in ['onsets_s', 'offsets_s', 'labels'])
         # we want to wait to add file to seq dict until *after* casting all values in dict to numpy arrays
-        seq_dict['file'] = filename
         samp_freq = annotation[samp_freq_key].tolist()
         seq_dict['onsets_Hz'] = np.round(seq_dict['onsets_s'] * samp_freq).astype(int)
         seq_dict['offsets_Hz'] = np.round(seq_dict['offsets_s'] * samp_freq).astype(int)
@@ -130,13 +159,17 @@ def yarden2seq(file,
             seq_dict['offsets_Hz'] = np.around(seq_dict['offsets_Hz'], decimals=decimals)
 
         seq = Sequence.from_dict(seq_dict)
-        seq_list.append(seq)
+        annot = Annotation(seq=seq,
+                           annot_file=str(annot_file),
+                           audio_file=str(audio_path),
+                           )
+        annot_list.append(annot)
 
-    return seq_list
+    return annot_list
 
 
 meta = Meta(
     name='yarden',
     ext='.mat',
-    to_seq=yarden2seq
+    from_file=yarden2annot
 )
