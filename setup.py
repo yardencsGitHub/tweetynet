@@ -23,7 +23,7 @@ URL = 'https://github.com/yardencsGitHub/tweetynet'
 EMAIL = 'yardenc@bu.edu'
 AUTHOR = 'Yarden Cohen, David Nicholson'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '0.2.0'
+VERSION = '0.3.0'
 LICENSE='BSD'
 
 REQUIRED = [
