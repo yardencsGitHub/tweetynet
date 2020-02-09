@@ -3,8 +3,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-## [Unreleased]
+## [0.3.0]
+### Added
+- `network.py` module (see "Changed")
+- initial `tests/test_tweetynet.py` module, written for `pytest`
+
 ### Changed
+- convert to `PyTorch` model
+  + because Tensorflow 1.0 is deprecated.
+  + chose PyTorch over Tensorflow 2.0 for several reasons, see 
+    [NickleDave/vak#88](https://github.com/NickleDave/vak/pull/88)
+  + network is now implemented as `TweetyNet` class in `network.py`,
+    as a subclass of `torch.nn.Module`
+- make `vak` a dependency, since we use `vak.Model`
+    - rewrite `model.py` with `TweetyNetModel`, a `vak.Model` subclass
+      + that specifies optimizer, loss, and metrics for `TweetyNetModel`
 - `yarden2seq` re-written to work with `crowsetta 2.0`, renamed `yarden2annot`
 
 ## [0.2.0]
