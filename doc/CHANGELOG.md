@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [0.3.1]
+### Changed
+- make `yarden2annot` return labels as strings [#32](https://github.com/yardencsGitHub/tweetynet/pull/32)
+  + to be consistent with what `vak` expects
+
 ## [0.3.0]
 ### Added
 - `network.py` module (see "Changed")
