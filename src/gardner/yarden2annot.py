@@ -145,8 +145,13 @@ def yarden2annot(annot_file,
         seq_dict['onsets_s'] = annotation[onsets_key].tolist()
         seq_dict['offsets_s'] = annotation[offsets_key].tolist()
         seq_dict['labels'] = annotation[labels_key].tolist()
+        # cast all to numpy arrays
         seq_dict = dict((k, _cast_to_arr(seq_dict[k])) 
                         for k in ['onsets_s', 'offsets_s', 'labels'])
+        # after casting 'labels' to array, convert all values to string
+        seq_dict['labels'] = np.asarray(
+            [str(label) for label in seq_dict['labels']]
+        )
         # we want to wait to add file to seq dict until *after* casting all values in dict to numpy arrays
         samp_freq = annotation[samp_freq_key].tolist()
         seq_dict['onsets_Hz'] = np.round(seq_dict['onsets_s'] * samp_freq).astype(int)
