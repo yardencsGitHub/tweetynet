@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [0.4.0]
+### Added
+- add `logger` parameter to `TweetyNetModel.from_config` class method
+  [#34](https://github.com/yardencsGitHub/tweetynet/pull/34)
+  + to take advantage of `logger` attribute being added to `vak.Model` -- i.e. be able to log training
+
 ## [0.3.1]
 ### Changed
 - make `yarden2annot` return labels as strings [#32](https://github.com/yardencsGitHub/tweetynet/pull/32)
