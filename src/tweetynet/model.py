@@ -16,5 +16,7 @@ class TweetyNetModel(vak.Model):
         loss = torch.nn.CrossEntropyLoss(**config['loss'])
         optimizer = torch.optim.Adam(params=network.parameters(), **config['optimizer'])
         metrics = {'acc': vak.metrics.Accuracy(),
+                   'levenshtein': vak.metrics.Levenshtein(),
+                   'segment_error_rate': vak.metrics.SegmentErrorRate(),
                    'loss': torch.nn.CrossEntropyLoss()}
         return cls(network=network, optimizer=optimizer, loss=loss, metrics=metrics, logger=logger)
