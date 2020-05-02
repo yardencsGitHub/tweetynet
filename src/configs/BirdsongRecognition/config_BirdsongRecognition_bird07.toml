@@ -1,13 +1,13 @@
 [PREP]
 labelset = "0123456"
-data_dir = "~/Documents/data/BirdsongRecognition/Bird5/Wave"
-output_dir = "./data/BirdsongRecognition/Bird5"
+data_dir = "~/Documents/data/BirdsongRecognition/Bird7/Wave"
+output_dir = "./data/BirdsongRecognition/Bird7"
 audio_format = "wav"
 annot_format = "koumura"
-annot_file = "~/Documents/data/BirdsongRecognition/Bird5/Annotation.xml"
+annot_file = "~/Documents/data/BirdsongRecognition/Bird7/Annotation.xml"
 test_dur = 400
 train_dur = 900
-val_dur = 80
+val_dur = 200
 
 [SPECT_PARAMS]
 fft_size = 512
@@ -21,17 +21,18 @@ window_size = 88
 
 [LEARNCURVE]
 models = "TweetyNet"
-train_set_durs = [30, 45, 75, 120, 180, 480,]
+train_set_durs = [ 30, 45, 75, 120, 180, 480,]
 num_replicates = 4
 normalize_spectrograms = true
 batch_size = 8
 num_epochs = 50
-val_step = 1000
+val_step = 50
 ckpt_step = 200
 patience = 4
 num_workers = 4
 device = "cuda"
-root_results_dir = "./results/BirdsongRecognition/Bird5"
+root_results_dir = "./results/BirdsongRecognition/Bird7"
+csv_path = "/home/bart/Documents/repos/birdsong/tweetynet/data/BirdsongRecognition/Bird7/Wave_prep_200501_212913.csv"
 
 [TweetyNet.optimizer]
 lr = 0.001
