@@ -1,13 +1,20 @@
+# jupyter
 .ipynb_checkpoints/
-.idea
 *checkpoint.ipynb
-README.md
-results*/
+
+# IDE
+.idea
+
+# data + results
+data/
+results/
+
+# Python
 *__pycache__*
-.DS_Store
 *egg-info/
-/configs/old/
-*egg-info
 dist/
 build/
-results/
+
+# Mac
+.DS_Store
+/configs/old/
