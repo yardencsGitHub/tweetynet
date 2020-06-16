@@ -26,6 +26,8 @@ annot_format = "notmat"
 test_dur = 0
 train_dur = 60
 val_dur = 80
+root_results_dir = "./results/BFSongRepository/gy6or6/"
+csv_path = "/home/art/Documents/data/BFSongRepository/vak/gy6or6/train_subset_prep_200608_095745.csv"
 
 [DATALOADER]
 window_size = 88

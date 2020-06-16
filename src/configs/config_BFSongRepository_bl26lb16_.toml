@@ -26,10 +26,11 @@ annot_format = "notmat"
 test_dur = 0
 train_dur = 60
 val_dur = 80
+root_results_dir = "./results/BFSongRepository/bl26lb16/"
+csv_path = "/home/art/Documents/data/BFSongRepository/vak/bl26lb16/train_subset_prep_200608_095113.csv"
 
 [DATALOADER]
 window_size = 88
 
 [TweetyNet.optimizer]
 lr = 0.001
-
