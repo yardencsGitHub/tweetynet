@@ -1,0 +1,34 @@
+[PREP]
+labelset = "range: 1-27"
+spect_format = "mat"
+annot_file = "D:\\YardenBirds\\llb11\\llb11_annotation_Apr_2019_Vika_4TF.mat"
+annot_format = "yarden"
+data_dir = "D:\\YardenBirds\\llb11\\annotated"
+test_dur = 5000
+train_dur = 6000
+val_dur = 250
+output_dir = "D:\\YardenBirds\\llb11\\train"
+
+[SPECT_PARAMS]
+fft_size = 1024
+step_size = 64
+freq_cutoffs = [ 500, 10000,]
+thresh = 6.25
+
+[DATALOADER]
+window_size = 370
+
+[TRAIN]
+models = "TweetyNet"
+normalize_spectrograms = false
+batch_size = 8
+num_epochs = 1
+val_step = 5000
+ckpt_step = 10000
+num_workers = 16
+device = "cuda"
+root_results_dir = "D:\\YardenBirds\\llb11\\results"
+csv_path = "D:\\YardenBirds\\llb11\\train\\annotated_prep_200608_221003.csv"
+
+[TweetyNet.optimizer]
+lr = 0.001
