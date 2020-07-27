@@ -1,0 +1,30 @@
+[PREP]
+labelset = "iabcdefghjk"
+data_dir = "D:\\BengaleseFinches\\gy6or6\\032212"
+output_dir = "C:\\Users\\Yarden Cohen\\repos\\tweetynet\\doc\\notebooks\\BF_Example_Train_Predict"
+audio_format = "cbin"
+annot_format = "notmat"
+
+[SPECT_PARAMS]
+fft_size = 512
+step_size = 64
+freq_cutoffs = [ 500, 10000,]
+thresh = 6.25
+transform_type = "log_spect"
+
+[DATALOADER]
+window_size = 88
+
+[EVAL]
+checkpoint_path = "C:\\Users\\Yarden Cohen\\repos\\tweetynet\\doc\\notebooks\\BF_Example_Train_Predict\\TweetyNet\\checkpoints\\max-val-acc-checkpoint.pt"
+labelmap_path = "C:\\Users\\Yarden Cohen\\repos\\tweetynet\\doc\\notebooks\\BF_Example_Train_Predict\\labelmap.json"
+models = "TweetyNet"
+batch_size = 8
+num_workers = 16
+device = "cuda"
+spect_scaler_path = "C:\\Users\\Yarden Cohen\\repos\\tweetynet\\doc\\notebooks\\BF_Example_Train_Predict\\StandardizeSpect"
+output_dir = "D:\\BengaleseFinches\\gy6or6\\eval"
+csv_path = "C:\\Users\\Yarden Cohen\\repos\\tweetynet\\doc\\notebooks\\BF_Example_Train_Predict\\gy6or6_032212_example_prep.csv"
+
+[TweetyNet.optimizer]
+lr = 0.001
