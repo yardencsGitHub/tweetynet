@@ -1,9 +1,8 @@
 [PREP]
-labelset = "iabcdef"
 data_dir = "~/Documents/data/BFSongRepository/bl26lb16/041912/has_notmat/"
 output_dir = "results/BFSongRepository/bl26lb16/predict"
 audio_format = "cbin"
-annot_format = "notmat"
+
 
 [SPECT_PARAMS]
 fft_size = 512

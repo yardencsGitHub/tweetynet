@@ -24,3 +24,5 @@ batch_size = 11
 num_workers = 4
 device = "cuda"
 spect_scaler_path = "~/Documents/repos/coding/birdsong/tweetynet/results/BFSongRepository/gr41rd51/results_200620_165008/StandardizeSpect"
+output_dir = "results/BFSongRepository/gr41rd51/predict"
+annot_csv_filename = "gr41rd51.062212.annot.csv"
