@@ -13,9 +13,6 @@ transform_type = "log_spect"
 [DATALOADER]
 window_size = 88
 
-[TweetyNet.optimizer]
-lr = 0.001
-
 [PREDICT]
 checkpoint_path = "~/Documents/repos/coding/birdsong/tweetynet/results/BFSongRepository/or60yw70/results_200620_165532/TweetyNet/checkpoints/max-val-acc-checkpoint.pt"
 labelmap_path = "~/Documents/repos/coding/birdsong/tweetynet/results/BFSongRepository/or60yw70/results_200620_165532/labelmap.json"
@@ -26,3 +23,7 @@ device = "cuda"
 spect_scaler_path = "~/Documents/repos/coding/birdsong/tweetynet/results/BFSongRepository/or60yw70/results_200620_165532/StandardizeSpect"
 output_dir = "results/BFSongRepository/or60yw70/predict"
 annot_csv_filename = "or60yw70.092712.annot.csv"
+csv_path = "/home/art/Documents/repos/coding/birdsong/tweetynet/results/BFSongRepository/or60yw70/predict/has_notmat_prep_200801_192730.csv"
+
+[TweetyNet.optimizer]
+lr = 0.001
