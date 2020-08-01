@@ -1,4 +1,3 @@
-from argparse import ArgumentParser
 from collections import defaultdict
 import json
 from pathlib import Path
@@ -14,7 +13,6 @@ import vak.files
 import vak.labels as labelfuncs
 from vak import config, io, models, transforms
 from vak.datasets.vocal_dataset import VocalDataset
-from vak.datasets.unannotated_dataset import UnannotatedDataset
 
 
 def compute_metrics(metrics, y_true, y_pred, y_true_labels, y_pred_labels):
@@ -79,27 +77,6 @@ def metrics_df_from_toml_path(toml_path,
 
     spect_standardizer = joblib.load(cfg.eval.spect_scaler_path)
 
-    # ---- make pred dataset to actually do predictions
-    # will call model.predict() and get back dict with predictions and spect paths
-    transform, target_transform = transforms.get_defaults('predict',
-                                                          spect_standardizer,
-                                                          window_size=cfg.dataloader.window_size,
-                                                          return_padding_mask=False,
-                                                          )
-
-    pred_dataset = UnannotatedDataset.from_csv(csv_path=cfg.eval.csv_path,
-                                               split='test',
-                                               window_size=cfg.dataloader.window_size,
-                                               spect_key=spect_key,
-                                               timebins_key=timebins_key,
-                                               transform=transform,
-                                               )
-
-    pred_data = torch.utils.data.DataLoader(dataset=pred_dataset,
-                                            shuffle=False,
-                                            batch_size=1,  # hard coding to make this work for now
-                                            num_workers=cfg.eval.num_workers)
-
     # ---- make eval dataset that we'll use to compute metrics
     # each batch will give us dict with 'spect', 'annot' and 'spect_path'
     # we can use 'spect_path' to find prediction in pred_dict and then compare to target
@@ -127,10 +104,34 @@ def metrics_df_from_toml_path(toml_path,
                                             batch_size=1,
                                             num_workers=cfg.eval.num_workers)
 
+    df = pd.read_csv(cfg.eval.csv_path)  # load because we use below for spect_paths as well
     # get timebin dur to use when converting labeled timebins to labels, onsets and offsets
-    timebin_dur = io.dataframe.validate_and_get_timebin_dur(
-        pd.read_csv(cfg.eval.csv_path)
-    )
+    timebin_dur = io.dataframe.validate_and_get_timebin_dur(df)
+
+    # ---- make pred dataset to actually do predictions
+    # will call model.predict() and get back dict with predictions and spect paths
+    pred_transform = transforms.get_defaults('predict',
+                                             spect_standardizer,
+                                             window_size=cfg.dataloader.window_size,
+                                             return_padding_mask=False,
+                                             )
+
+    # can't use classmethod because we use 'test' split instead of 'predict' with no annotation
+    # so we instantiate directly
+    df_test = df[df['split'] == 'test']
+    pred_dataset = VocalDataset(csv_path=cfg.eval.csv_path,
+                                spect_paths=df_test['spect_path'],
+                                annots=None,
+                                labelmap=labelmap,
+                                spect_key=spect_key,
+                                timebins_key=timebins_key,
+                                item_transform=pred_transform,
+                                )
+
+    pred_data = torch.utils.data.DataLoader(dataset=pred_dataset,
+                                            shuffle=False,
+                                            batch_size=1,  # hard coding to make this work for now
+                                            num_workers=cfg.eval.num_workers)
 
     input_shape = pred_dataset.shape
     # if dataset returns spectrogram reshaped into windows,
@@ -160,9 +161,7 @@ def metrics_df_from_toml_path(toml_path,
         progress_bar = tqdm(eval_data)
         for ind, batch in enumerate(progress_bar):
             y_true, padding_mask, spect_path = batch['annot'], batch['padding_mask'], batch['spect_path']
-            # need to convert spect_path to tuple for match in call to index() below
-            spect_path = tuple(spect_path)
-            records['spect_path'].append(spect_path[0])  # remove str from tuple
+            records['spect_path'].append(spect_path)  # remove str from tuple
             y_true = y_true.to(device)
             y_true_np = np.squeeze(y_true.cpu().numpy())
             y_true_labels, _, _ = labelfuncs.lbl_tb2segments(y_true_np,
@@ -170,8 +169,7 @@ def metrics_df_from_toml_path(toml_path,
                                                              timebin_dur=timebin_dur)
             y_true_labels = ''.join(y_true_labels.tolist())
 
-            y_pred_ind = pred_dict['y'].index(spect_path)
-            y_pred = pred_dict['y_pred'][y_pred_ind]
+            y_pred = pred_dict[spect_path]
             y_pred = torch.argmax(y_pred, dim=1)  # assumes class dimension is 1
             y_pred = torch.flatten(y_pred)
             y_pred = y_pred.unsqueeze(0)[padding_mask]
