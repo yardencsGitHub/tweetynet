@@ -9,14 +9,13 @@ import numpy as np
 import pandas as pd
 import torch
 from tqdm import tqdm
+import scipy.io as cpio
 
 import vak.device
 import vak.files
-import vak.labels as labelfuncs
+import vak.labeled_timebins as labelfuncs
 from vak import config, io, models, transforms
 from vak.datasets.vocal_dataset import VocalDataset
-from vak.datasets.unannotated_dataset import UnannotatedDataset
-
 
 def compute_metrics(metrics, y_true, y_pred, y_true_labels, y_pred_labels):
     """helper function to compute metrics
@@ -73,33 +72,15 @@ def metrics_df_from_toml_path(toml_path,
     -------
     df : pandas.Dataframe
     """
+
+    Alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
     toml_path = Path(toml_path)
     cfg = config.parse.from_toml(toml_path)
-
-    model_config_map = config.models.map_from_path(toml_path, cfg.eval.models)
-
     #spect_standardizer = joblib.load(cfg.eval.spect_scaler_path)
-
-    # ---- make pred dataset to actually do predictions
-    # will call model.predict() and get back dict with predictions and spect paths
-    transform, target_transform = transforms.get_defaults('predict',
-                                                          spect_standardizer=None,
-                                                          window_size=cfg.dataloader.window_size,
-                                                          return_padding_mask=False,
-                                                          )
-
-    pred_dataset = UnannotatedDataset.from_csv(csv_path=cfg.eval.csv_path,
-                                               split='test',
-                                               window_size=cfg.dataloader.window_size,
-                                               spect_key=spect_key,
-                                               timebins_key=timebins_key,
-                                               transform=transform,
-                                               )
-
-    pred_data = torch.utils.data.DataLoader(dataset=pred_dataset,
-                                            shuffle=False,
-                                            batch_size=1,  # hard coding to make this work for now
-                                            num_workers=cfg.eval.num_workers)
+    with cfg.eval.labelmap_path.open('r') as f:
+            labelmap = json.load(f)
+    model_config_map = config.models.map_from_path(toml_path, cfg.eval.models)
 
     # ---- make eval dataset that we'll use to compute metrics
     # each batch will give us dict with 'spect', 'annot' and 'spect_path'
@@ -111,16 +92,13 @@ def metrics_df_from_toml_path(toml_path,
                                              return_padding_mask=True,
                                              )
 
-    with cfg.eval.labelmap_path.open('r') as f:
-        labelmap = json.load(f)
-
     eval_dataset = VocalDataset.from_csv(csv_path=cfg.eval.csv_path,
-                                         split='test',
-                                         labelmap=labelmap,
-                                         spect_key=spect_key,
-                                         timebins_key=timebins_key,
-                                         item_transform=item_transform,
-                                         )
+                                        split='test',
+                                        labelmap=labelmap,
+                                        spect_key=spect_key,
+                                        timebins_key=timebins_key,
+                                        item_transform=item_transform,
+                                        )
 
     eval_data = torch.utils.data.DataLoader(dataset=eval_dataset,
                                             shuffle=False,
@@ -133,7 +111,7 @@ def metrics_df_from_toml_path(toml_path,
         pd.read_csv(cfg.eval.csv_path)
     )
 
-    input_shape = pred_dataset.shape
+    input_shape = eval_dataset.shape
     # if dataset returns spectrogram reshaped into windows,
     # throw out the window dimension; just want to tell network (channels, height, width) shape
     if len(input_shape) == 4:
@@ -155,7 +133,7 @@ def metrics_df_from_toml_path(toml_path,
         model.load(cfg.eval.checkpoint_path)
         metrics = model.metrics  # metric name -> callable map we use below in loop
 
-        pred_dict = model.predict(pred_data=pred_data,
+        pred_dict = model.predict(pred_data=eval_data,
                                   device=device)
 
         progress_bar = tqdm(eval_data)
@@ -166,23 +144,28 @@ def metrics_df_from_toml_path(toml_path,
             records['spect_path'].append(spect_path[0])  # remove str from tuple
             y_true = y_true.to(device)
             y_true_np = np.squeeze(y_true.cpu().numpy())
+            t_vec = cpio.loadmat(str(spect_path[0]),struct_as_record=False, squeeze_me=True)['t']
             y_true_labels, _, _ = labelfuncs.lbl_tb2segments(y_true_np,
-                                                             labelmap=labelmap,
-                                                             timebin_dur=timebin_dur)
-            y_true_labels = ''.join(y_true_labels.tolist())
+                                                             labelmap,
+                                                             t_vec)
+            y_true_labels = ''.join([Alphanumeric[int(x)] for x in y_true_labels])
 
-            y_pred_ind = pred_dict['y'].index(spect_path)
-            y_pred = pred_dict['y_pred'][y_pred_ind]
+            #y_pred_ind = pred_dict['y'].index(spect_path)
+            #y_pred = pred_dict['y_pred'][y_pred_ind]
+            #y_pred = torch.argmax(y_pred, dim=1)  # assumes class dimension is 1
+            y_pred_ind = spect_path[0] #pred_dict['y'].index(spect_path)
+            y_pred = pred_dict[y_pred_ind] #pred_dict['y_pred'][y_pred_ind]
             y_pred = torch.argmax(y_pred, dim=1)  # assumes class dimension is 1
             y_pred = torch.flatten(y_pred)
             y_pred = y_pred.unsqueeze(0)[padding_mask]
             y_pred_np = np.squeeze(y_pred.cpu().numpy())
             y_pred_labels, _, _ = labelfuncs.lbl_tb2segments(y_pred_np,
-                                                             labelmap=labelmap,
-                                                             timebin_dur=timebin_dur,
+                                                             labelmap,
+                                                             t_vec,
                                                              min_segment_dur=None,
                                                              majority_vote=False)
-            y_pred_labels = ''.join(y_pred_labels.tolist())
+            y_pred_labels = ''.join([Alphanumeric[int(x)] for x in y_pred_labels])
+            #''.join(y_pred_labels.tolist())
 
             metric_vals_batch = compute_metrics(metrics, y_true, y_pred, y_true_labels, y_pred_labels)
             for metric_name, metric_val in metric_vals_batch.items():
@@ -197,11 +180,12 @@ def metrics_df_from_toml_path(toml_path,
             y_pred_np_mv = labelfuncs.majority_vote_transform(y_pred_np, segment_inds_list)
             y_pred_mv = to_long_tensor(y_pred_np_mv).to(device)
             y_pred_mv_labels, _, _ = labelfuncs.lbl_tb2segments(y_pred_np_mv,
-                                                                labelmap=labelmap,
-                                                                timebin_dur=timebin_dur,
+                                                                labelmap,
+                                                                t_vec,
                                                                 min_segment_dur=None,
                                                                 majority_vote=False)
-            y_pred_mv_labels = ''.join(y_pred_mv_labels.tolist())
+            y_pred_mv_labels = ''.join([Alphanumeric[int(x)] for x in y_pred_mv_labels])
+            #.tolist())
             metric_vals_batch_mv = compute_metrics(metrics, y_true, y_pred_mv,
                                                    y_true_labels, y_pred_mv_labels)
             for metric_name, metric_val in metric_vals_batch_mv.items():
@@ -215,11 +199,12 @@ def metrics_df_from_toml_path(toml_path,
                                                                    unlabeled_label=labelmap['unlabeled'])
             y_pred_mindur = to_long_tensor(y_pred_np_mindur).to(device)
             y_pred_mindur_labels, _, _ = labelfuncs.lbl_tb2segments(y_pred_np_mindur,
-                                                                    labelmap=labelmap,
-                                                                    timebin_dur=timebin_dur,
+                                                                    labelmap,
+                                                                    t_vec,
                                                                     min_segment_dur=None,
                                                                     majority_vote=False)
-            y_pred_mindur_labels = ''.join(y_pred_mindur_labels.tolist())
+            y_pred_mindur_labels = ''.join([Alphanumeric[int(x)] for x in y_pred_mindur_labels])
+            #.tolist())
             metric_vals_batch_mindur = compute_metrics(metrics, y_true, y_pred_mindur,
                                                        y_true_labels, y_pred_mindur_labels)
             for metric_name, metric_val in metric_vals_batch_mindur.items():
@@ -236,11 +221,12 @@ def metrics_df_from_toml_path(toml_path,
                                                                      segment_inds_list)
             y_pred_mindur_mv = to_long_tensor(y_pred_np_mindur_mv).to(device)
             y_pred_mindur_mv_labels, _, _ = labelfuncs.lbl_tb2segments(y_pred_np_mindur_mv,
-                                                                       labelmap=labelmap,
-                                                                       timebin_dur=timebin_dur,
+                                                                       labelmap,
+                                                                       t_vec,
                                                                        min_segment_dur=None,
                                                                        majority_vote=False)
-            y_pred_mindur_mv_labels = ''.join(y_pred_mindur_mv_labels.tolist())
+            y_pred_mindur_mv_labels = ''.join([Alphanumeric[int(x)] for x in y_pred_mindur_mv_labels])
+            #.tolist())
             metric_vals_batch_mindur_mv = compute_metrics(metrics, y_true, y_pred_mindur_mv,
                                                           y_true_labels, y_pred_mindur_mv_labels)
             for metric_name, metric_val in metric_vals_batch_mindur_mv.items():
@@ -251,10 +237,10 @@ def metrics_df_from_toml_path(toml_path,
 
 
 CONFIG_ROOT = Path('src\\configs\\Canaries')
-BIRD_ID_MIN_SEGMENT_DUR_MAP = {
-    'llb3': 0.005,
-    'llb11': 0.005,
-    'llb16': 0.005}
+BIRD_ID_MIN_SEGMENT_DUR_MAP = {'llb16': 0.005}
+
+# 'llb3': 0.005,
+#     'llb11': 0.005,
     #'or60yw70': 0.02,
 #}
 
