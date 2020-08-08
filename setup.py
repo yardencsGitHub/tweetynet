@@ -23,18 +23,18 @@ URL = 'https://github.com/yardencsGitHub/tweetynet'
 EMAIL = 'yardenc@bu.edu'
 AUTHOR = 'Yarden Cohen, David Nicholson'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '0.4.2'
+VERSION = '0.4.3'
 LICENSE='BSD'
 
 REQUIRED = [
     'torch',
-    'vak',
+    'vak>=0.3.0',
 ]
 
 # What packages are optional?
 EXTRAS = {
     'tests': ['pytest'],
-    'article': ['vak', 'crowsetta>=2.1.0', 'joblib', 'pandas', 'seaborn', 'jupyterlab'],
+    'article': ['vak>=0.3.0', 'crowsetta>=2.1.0', 'joblib', 'pandas', 'seaborn', 'jupyterlab'],
 }
 
 # The rest you shouldn't have to touch too much :)
