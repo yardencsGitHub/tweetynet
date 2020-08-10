@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - fix script for running `eval` on `BFSongRepo` models
   [#49](https://github.com/yardencsGitHub/tweetynet/pull/49)
+- fix bug in BFRepository-results/all-birds.ipynb -- wrong variable name
 
 ## [0.4.4]
 ### Changed
