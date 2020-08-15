@@ -17,6 +17,8 @@ import vak.labeled_timebins as labelfuncs
 from vak import config, io, models, transforms
 from vak.datasets.vocal_dataset import VocalDataset
 
+import matplotlib.pyplot as plt
+
 def compute_metrics(metrics, y_true, y_pred, y_true_labels, y_pred_labels):
     """helper function to compute metrics
 
@@ -136,6 +138,8 @@ def metrics_df_from_toml_path(toml_path,
         pred_dict = model.predict(pred_data=eval_data,
                                   device=device)
 
+        error_position_distribution = [] # will accumulate error time differences from syllable edges
+        num_err_bin = []
         progress_bar = tqdm(eval_data)
         for ind, batch in enumerate(progress_bar):
             y_true, padding_mask, spect_path = batch['annot'], batch['padding_mask'], batch['spect_path']
@@ -144,8 +148,9 @@ def metrics_df_from_toml_path(toml_path,
             records['spect_path'].append(spect_path[0])  # remove str from tuple
             y_true = y_true.to(device)
             y_true_np = np.squeeze(y_true.cpu().numpy())
-            t_vec = cpio.loadmat(str(spect_path[0]),struct_as_record=False, squeeze_me=True)['t']
-            y_true_labels, _, _ = labelfuncs.lbl_tb2segments(y_true_np,
+            #t_vec = cpio.loadmat(str(spect_path[0]),struct_as_record=False, squeeze_me=True)['t']
+            t_vec = vak.files.spect.load(spect_path[0])['t']
+            y_true_labels, t_ons_s, t_offs_s = labelfuncs.lbl_tb2segments(y_true_np,
                                                              labelmap,
                                                              t_vec)
             y_true_labels = ''.join([Alphanumeric[int(x)] for x in y_true_labels])
@@ -220,11 +225,13 @@ def metrics_df_from_toml_path(toml_path,
             y_pred_np_mindur_mv = labelfuncs.majority_vote_transform(y_pred_np_mindur_mv,
                                                                      segment_inds_list)
             y_pred_mindur_mv = to_long_tensor(y_pred_np_mindur_mv).to(device)
-            y_pred_mindur_mv_labels, _, _ = labelfuncs.lbl_tb2segments(y_pred_np_mindur_mv,
+            y_pred_mindur_mv_labels, ons_s, offs_s = labelfuncs.lbl_tb2segments(y_pred_np_mindur_mv,
                                                                        labelmap,
                                                                        t_vec,
                                                                        min_segment_dur=None,
                                                                        majority_vote=False)
+            
+            
             y_pred_mindur_mv_labels = ''.join([Alphanumeric[int(x)] for x in y_pred_mindur_mv_labels])
             #.tolist())
             metric_vals_batch_mindur_mv = compute_metrics(metrics, y_true, y_pred_mindur_mv,
@@ -232,12 +239,22 @@ def metrics_df_from_toml_path(toml_path,
             for metric_name, metric_val in metric_vals_batch_mindur_mv.items():
                 records[f'{metric_name}_min_dur_maj_vote'].append(metric_val)
 
+            # ---- accumulate error distances from true segment edges
+            num_err_bin.append(sum(y_true_np-y_pred_np_mindur_mv != 0))
+            err = (y_true_np-y_pred_np_mindur_mv != 0) & ((y_true_np == 0) | (y_pred_np_mindur_mv==0))
+            error_position_distribution.append([min(np.abs(np.concatenate((t_ons_s,t_offs_s))-tm)) for tm in t_vec[err==True]])
+        
+        error_position_distribution = np.concatenate(error_position_distribution)
+
         df = pd.DataFrame.from_records(records)
-        return df
+        t1 = t_vec[1]
+        return df,error_position_distribution,num_err_bin,t1
 
 
 CONFIG_ROOT = Path('src\\configs\\Canaries')
-BIRD_ID_MIN_SEGMENT_DUR_MAP = {'llb16': 0.005}
+BIRD_ID_MIN_SEGMENT_DUR_MAP = {'llb3': 0.005,
+    'llb11': 0.005,
+    'llb16': 0.005}
 
 # 'llb3': 0.005,
 #     'llb11': 0.005,
@@ -246,6 +263,8 @@ BIRD_ID_MIN_SEGMENT_DUR_MAP = {'llb16': 0.005}
 
 
 def main():
+    plt.figure()
+    err_stat = []
     for bird_id, min_segment_dur in BIRD_ID_MIN_SEGMENT_DUR_MAP.items():
         toml_root = CONFIG_ROOT.joinpath(bird_id)
         eval_toml_paths = sorted(toml_root.glob('**/*eval*toml'))
@@ -253,11 +272,14 @@ def main():
         all_dfs = []
         for eval_toml_path in eval_toml_paths:
             print(f'computing metrics from dataset in .toml file: {eval_toml_path.name}')
-            toml_df = metrics_df_from_toml_path(eval_toml_path, min_segment_dur)
+            toml_df,error_dist,num_err_bin,t1 = metrics_df_from_toml_path(eval_toml_path, min_segment_dur)
             #date = eval_toml_path.parents[0].name  # directory name is date
             #print(f'date for this .toml file: {date}')
             #toml_df['date'] = date
             all_dfs.append(toml_df)
+            bins = np.histogram(error_dist,bins = np.arange(0.0,1.0,t1))
+            plt.plot(bins[0])
+            err_stat.append(sum(bins[0][:2])/sum(num_err_bin))
 
         output_df = pd.concat(all_dfs)
         output_df['bird_id'] = bird_id
@@ -266,7 +288,7 @@ def main():
         csv_path = Path('results\\Canaries').joinpath(csv_fname)
         print(f'saving csv as: {csv_path}')
         output_df.to_csv(csv_path, index=False)
-
+    plt.show()
 
 if __name__ == '__main__':
     main()
