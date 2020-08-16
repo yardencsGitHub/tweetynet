@@ -13,10 +13,11 @@ import scipy.io as cpio
 
 import vak.device
 import vak.files
-import vak.labeled_timebins as labelfuncs
+#import vak.labeled_timebins as labelfuncs
+from vak.labeled_timebins import lbl_tb2segments, majority_vote_transform, lbl_tb_segment_inds_list, remove_short_segments
 from vak import config, io, models, transforms
 from vak.datasets.vocal_dataset import VocalDataset
-
+# In this script we also calculate the distribution of error distance from syllable edges
 import matplotlib.pyplot as plt
 
 def compute_metrics(metrics, y_true, y_pred, y_true_labels, y_pred_labels):
@@ -52,6 +53,18 @@ def compute_metrics(metrics, y_true, y_pred, y_true_labels, y_pred_labels):
 
     return metric_vals
 
+Alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
+def remap(labelmap):
+    """map integer labels to alphanumeric characters so we can compute edit distance metrics.
+    The mapping can be arbitrary as long as it is constant across all times we compute the metric.
+    """
+    return {Alphanumeric[ind]: val for ind, (key, val) in enumerate(labelmap.items())}
+
+def map_number_labels_to_alphanumeric(labelvec):
+    """Take a vector of 'str' labels that are all numbers and replace them with a string of characters 
+    """
+    return ''.join([Alphanumeric[int(x)] for x in labelvec])
 
 def metrics_df_from_toml_path(toml_path,
                               min_segment_dur,
@@ -75,13 +88,12 @@ def metrics_df_from_toml_path(toml_path,
     df : pandas.Dataframe
     """
 
-    Alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-
     toml_path = Path(toml_path)
     cfg = config.parse.from_toml(toml_path)
     #spect_standardizer = joblib.load(cfg.eval.spect_scaler_path)
     with cfg.eval.labelmap_path.open('r') as f:
-            labelmap = json.load(f)
+        labelmap = json.load(f)
+
     model_config_map = config.models.map_from_path(toml_path, cfg.eval.models)
 
     # ---- make eval dataset that we'll use to compute metrics
@@ -139,7 +151,8 @@ def metrics_df_from_toml_path(toml_path,
                                   device=device)
 
         error_position_distribution = [] # will accumulate error time differences from syllable edges
-        num_err_bin = []
+        num_err_bin = [] # will accumulate total number of error frames for normalization 
+        
         progress_bar = tqdm(eval_data)
         for ind, batch in enumerate(progress_bar):
             y_true, padding_mask, spect_path = batch['annot'], batch['padding_mask'], batch['spect_path']
@@ -148,29 +161,23 @@ def metrics_df_from_toml_path(toml_path,
             records['spect_path'].append(spect_path[0])  # remove str from tuple
             y_true = y_true.to(device)
             y_true_np = np.squeeze(y_true.cpu().numpy())
-            #t_vec = cpio.loadmat(str(spect_path[0]),struct_as_record=False, squeeze_me=True)['t']
             t_vec = vak.files.spect.load(spect_path[0])['t']
-            y_true_labels, t_ons_s, t_offs_s = labelfuncs.lbl_tb2segments(y_true_np,
+            y_true_labels, t_ons_s, t_offs_s = lbl_tb2segments(y_true_np,
                                                              labelmap,
                                                              t_vec)
-            y_true_labels = ''.join([Alphanumeric[int(x)] for x in y_true_labels])
-
-            #y_pred_ind = pred_dict['y'].index(spect_path)
-            #y_pred = pred_dict['y_pred'][y_pred_ind]
-            #y_pred = torch.argmax(y_pred, dim=1)  # assumes class dimension is 1
+            y_true_labels = map_number_labels_to_alphanumeric(y_true_labels)
             y_pred_ind = spect_path[0] #pred_dict['y'].index(spect_path)
             y_pred = pred_dict[y_pred_ind] #pred_dict['y_pred'][y_pred_ind]
             y_pred = torch.argmax(y_pred, dim=1)  # assumes class dimension is 1
             y_pred = torch.flatten(y_pred)
             y_pred = y_pred.unsqueeze(0)[padding_mask]
             y_pred_np = np.squeeze(y_pred.cpu().numpy())
-            y_pred_labels, _, _ = labelfuncs.lbl_tb2segments(y_pred_np,
+            y_pred_labels, _, _ = lbl_tb2segments(y_pred_np,
                                                              labelmap,
                                                              t_vec,
                                                              min_segment_dur=None,
                                                              majority_vote=False)
-            y_pred_labels = ''.join([Alphanumeric[int(x)] for x in y_pred_labels])
-            #''.join(y_pred_labels.tolist())
+            y_pred_labels = map_number_labels_to_alphanumeric(y_pred_labels)
 
             metric_vals_batch = compute_metrics(metrics, y_true, y_pred, y_true_labels, y_pred_labels)
             for metric_name, metric_val in metric_vals_batch.items():
@@ -178,62 +185,62 @@ def metrics_df_from_toml_path(toml_path,
 
             # --- apply majority vote and min segment dur transforms separately
             # need segment_inds_list for both transforms
-            segment_inds_list = labelfuncs.lbl_tb_segment_inds_list(y_pred_np,
+            segment_inds_list = lbl_tb_segment_inds_list(y_pred_np,
                                                                     unlabeled_label=labelmap['unlabeled'])
 
             # ---- majority vote transform
-            y_pred_np_mv = labelfuncs.majority_vote_transform(y_pred_np, segment_inds_list)
+            y_pred_np_mv = majority_vote_transform(y_pred_np, segment_inds_list)
             y_pred_mv = to_long_tensor(y_pred_np_mv).to(device)
-            y_pred_mv_labels, _, _ = labelfuncs.lbl_tb2segments(y_pred_np_mv,
+            y_pred_mv_labels, _, _ = lbl_tb2segments(y_pred_np_mv,
                                                                 labelmap,
                                                                 t_vec,
                                                                 min_segment_dur=None,
                                                                 majority_vote=False)
-            y_pred_mv_labels = ''.join([Alphanumeric[int(x)] for x in y_pred_mv_labels])
-            #.tolist())
+            y_pred_mv_labels = map_number_labels_to_alphanumeric(y_pred_mv_labels)
+
             metric_vals_batch_mv = compute_metrics(metrics, y_true, y_pred_mv,
                                                    y_true_labels, y_pred_mv_labels)
             for metric_name, metric_val in metric_vals_batch_mv.items():
                 records[f'{metric_name}_majority_vote'].append(metric_val)
 
             # ---- min segment dur transform
-            y_pred_np_mindur, _ = labelfuncs.remove_short_segments(y_pred_np,
+            y_pred_np_mindur, _ = remove_short_segments(y_pred_np,
                                                                    segment_inds_list,
                                                                    timebin_dur=timebin_dur,
                                                                    min_segment_dur=min_segment_dur,
                                                                    unlabeled_label=labelmap['unlabeled'])
             y_pred_mindur = to_long_tensor(y_pred_np_mindur).to(device)
-            y_pred_mindur_labels, _, _ = labelfuncs.lbl_tb2segments(y_pred_np_mindur,
+            y_pred_mindur_labels, _, _ = lbl_tb2segments(y_pred_np_mindur,
                                                                     labelmap,
                                                                     t_vec,
                                                                     min_segment_dur=None,
                                                                     majority_vote=False)
-            y_pred_mindur_labels = ''.join([Alphanumeric[int(x)] for x in y_pred_mindur_labels])
-            #.tolist())
+            y_pred_mindur_labels = map_number_labels_to_alphanumeric(y_pred_mindur_labels)
+    
             metric_vals_batch_mindur = compute_metrics(metrics, y_true, y_pred_mindur,
                                                        y_true_labels, y_pred_mindur_labels)
             for metric_name, metric_val in metric_vals_batch_mindur.items():
                 records[f'{metric_name}_min_segment_dur'].append(metric_val)
 
             # ---- and finally both transforms, in same order we apply for prediction
-            y_pred_np_mindur_mv, segment_inds_list = labelfuncs.remove_short_segments(y_pred_np,
+            y_pred_np_mindur_mv, segment_inds_list = remove_short_segments(y_pred_np,
                                                                                       segment_inds_list,
                                                                                       timebin_dur=timebin_dur,
                                                                                       min_segment_dur=min_segment_dur,
                                                                                       unlabeled_label=labelmap[
                                                                                           'unlabeled'])
-            y_pred_np_mindur_mv = labelfuncs.majority_vote_transform(y_pred_np_mindur_mv,
+            y_pred_np_mindur_mv = majority_vote_transform(y_pred_np_mindur_mv,
                                                                      segment_inds_list)
             y_pred_mindur_mv = to_long_tensor(y_pred_np_mindur_mv).to(device)
-            y_pred_mindur_mv_labels, ons_s, offs_s = labelfuncs.lbl_tb2segments(y_pred_np_mindur_mv,
+            y_pred_mindur_mv_labels, _, _ = lbl_tb2segments(y_pred_np_mindur_mv,
                                                                        labelmap,
                                                                        t_vec,
                                                                        min_segment_dur=None,
                                                                        majority_vote=False)
             
             
-            y_pred_mindur_mv_labels = ''.join([Alphanumeric[int(x)] for x in y_pred_mindur_mv_labels])
-            #.tolist())
+            y_pred_mindur_mv_labels = map_number_labels_to_alphanumeric(y_pred_mindur_mv_labels)
+        
             metric_vals_batch_mindur_mv = compute_metrics(metrics, y_true, y_pred_mindur_mv,
                                                           y_true_labels, y_pred_mindur_mv_labels)
             for metric_name, metric_val in metric_vals_batch_mindur_mv.items():
@@ -256,12 +263,6 @@ BIRD_ID_MIN_SEGMENT_DUR_MAP = {'llb3': 0.005,
     'llb11': 0.005,
     'llb16': 0.005}
 
-# 'llb3': 0.005,
-#     'llb11': 0.005,
-    #'or60yw70': 0.02,
-#}
-
-
 def main():
     plt.figure()
     err_stat = []
@@ -273,9 +274,6 @@ def main():
         for eval_toml_path in eval_toml_paths:
             print(f'computing metrics from dataset in .toml file: {eval_toml_path.name}')
             toml_df,error_dist,num_err_bin,t1 = metrics_df_from_toml_path(eval_toml_path, min_segment_dur)
-            #date = eval_toml_path.parents[0].name  # directory name is date
-            #print(f'date for this .toml file: {date}')
-            #toml_df['date'] = date
             all_dfs.append(toml_df)
             bins = np.histogram(error_dist,bins = np.arange(0.0,1.0,t1))
             plt.plot(bins[0])
