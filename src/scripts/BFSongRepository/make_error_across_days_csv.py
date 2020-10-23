@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-"""makes error-across-days.csv, source data for figure that plots error across days for Bengalese Finch Song Repository dataset"""
+"""makes error_across_days.csv, source data for figure that plots error across days for Bengalese Finch Song Repository dataset"""
 from collections import defaultdict
 from pathlib import Path
 
