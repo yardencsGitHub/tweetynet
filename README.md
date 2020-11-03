@@ -6,7 +6,7 @@
 
 repository for the paper:  
 "TweetyNet: A neural network that enables high-throughput, automated annotation of birdsong"  
-https://www.biorxiv.org/content/10.1101/2020.08.28.272088v1.full
+https://www.biorxiv.org/content/10.1101/2020.08.28.272088v2
 
 ## What is `tweetynet`?
 A neural network architecture, shown below:  
