@@ -5,9 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.5.0]
 ### Changed
 - rewrite README.md 
   [#56](https://github.com/yardencsGitHub/tweetynet/pull/56)
+- rename `yarden2annot` parameter `annot_file` to `annot_path` 
+  to work with `crowsetta` version 3.0.0
 
 ### Fixed
 - fix script for running `eval` on `BFSongRepo` models
