@@ -34,7 +34,7 @@ REQUIRED = [
 # What packages are optional?
 EXTRAS = {
     'tests': ['pytest'],
-    'article': ['vak>=0.3.1', 'crowsetta>=2.1.0', 'joblib', 'pandas', 'seaborn', 'jupyterlab'],
+    'article': ['vak>=0.3.1', 'crowsetta>=3.0.0', 'joblib', 'pandas', 'seaborn', 'jupyterlab'],
 }
 
 # The rest you shouldn't have to touch too much :)
