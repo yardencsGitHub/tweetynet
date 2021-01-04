@@ -51,7 +51,7 @@ def _recursive_stem(path_str):
     return stem
 
 
-def yarden2annot(annot_file,
+def yarden2annot(annot_path,
                  abspath=False,
                  basename=False,
                  round_times=True,
@@ -66,7 +66,7 @@ def yarden2annot(annot_file,
 
     Parameters
     ----------
-    annot_file : str
+    annot_path : str
         path to .mat file of annotations, containing 'keys' and 'elements'
         where 'keys' are filenames of audio files and 'elements'
         contains additional annotation not found in .mat files
@@ -125,11 +125,11 @@ def yarden2annot(annot_file,
                          'unclear whether absolute path should be saved or if no path '
                          'information (just base filename) should be saved.')
 
-    annot_mat = loadmat(annot_file, squeeze_me=True)
+    annot_mat = loadmat(annot_path, squeeze_me=True)
     audio_paths = annot_mat[fname_key]
     annotations = annot_mat[annot_key]
     if len(audio_paths) != len(annotations):
-        raise ValueError(f'list of filenames and list of annotations in {annot_file} do not have the same length')
+        raise ValueError(f'list of filenames and list of annotations in {annot_path} do not have the same length')
 
     annot_list = []
     # annotation structure loads as a Python dictionary with two keys
@@ -165,8 +165,8 @@ def yarden2annot(annot_file,
 
         seq = Sequence.from_dict(seq_dict)
         annot = Annotation(seq=seq,
-                           annot_file=str(annot_file),
-                           audio_file=str(audio_path),
+                           annot_path=str(annot_path),
+                           audio_path=str(audio_path),
                            )
         annot_list.append(annot)
 
