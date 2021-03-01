@@ -33,6 +33,7 @@ num_workers = 4
 device = "cuda"
 root_results_dir = "./results/BirdsongRecognition/window_size_176/Bird5"
 csv_path = "/home/art/Documents/repos/coding/birdsong/tweetynet/data/BirdsongRecognition/Bird5/Wave_prep_200503_204034.csv"
+previous_run_path = "results/BirdsongRecognition/Bird5/results_200503_204100"
 
 [TweetyNet.optimizer]
 lr = 0.001
