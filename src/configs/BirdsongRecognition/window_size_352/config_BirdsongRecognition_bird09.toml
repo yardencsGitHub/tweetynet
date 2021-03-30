@@ -31,7 +31,7 @@ ckpt_step = 200
 patience = 4
 num_workers = 4
 device = "cuda"
-root_results_dir = "./results/BirdsongRecognition/window_size_88_rerun/Bird9"
+root_results_dir = "./results/BirdsongRecognition/window_size_352/Bird9"
 previous_run_path = "/home/bart/Documents/repos/birdsong/tweetynet/results/BirdsongRecognition/window_size_88/Bird9/results_200505_113243"
 csv_path = "/home/bart/Documents/repos/birdsong/tweetynet/data/BirdsongRecognition/Bird9/Wave_prep_210327_124430.csv"
 
