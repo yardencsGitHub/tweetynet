@@ -1,0 +1,39 @@
+[PREP]
+labelset = "012345"
+data_dir = "~/Documents/data/BirdsongRecognition/Bird9/Wave"
+output_dir = "./data/BirdsongRecognition/Bird9"
+audio_format = "wav"
+annot_format = "koumura"
+annot_file = "~/Documents/data/BirdsongRecognition/Bird9/Annotation.xml"
+test_dur = 400
+train_dur = 900
+val_dur = 80
+
+[SPECT_PARAMS]
+fft_size = 512
+step_size = 64
+freq_cutoffs = [ 500, 10000,]
+thresh = 6.25
+transform_type = "log_spect"
+
+[DATALOADER]
+window_size = 704
+
+[LEARNCURVE]
+models = "TweetyNet"
+train_set_durs = [ 30, 45, 75, 120, 180, 480,]
+num_replicates = 10
+normalize_spectrograms = true
+batch_size = 8
+num_epochs = 50
+val_step = 50
+ckpt_step = 200
+patience = 4
+num_workers = 4
+device = "cuda"
+root_results_dir = "./results/BirdsongRecognition/window_size_704/Bird9"
+previous_run_path = "/home/bart/Documents/repos/birdsong/tweetynet/results/BirdsongRecognition/window_size_88/Bird9/results_200505_113243"
+csv_path = "/home/bart/Documents/repos/birdsong/tweetynet/data/BirdsongRecognition/Bird9/Wave_prep_210327_124430.csv"
+
+[TweetyNet.optimizer]
+lr = 0.001
