@@ -2,16 +2,12 @@
 # coding: utf-8
 """makes error_across_birds.csv, source data for figure that plots error across birds for Birdsong Recognition dataset"""
 from argparse import ArgumentParser
-from collections import defaultdict
 from pathlib import Path
 import re
 
-import numpy as np
 import pandas as pd
 import pyprojroot
-import seaborn as sns
 
-import tqdm
 
 COLUMNS = [
     'bird', 
@@ -26,6 +22,7 @@ COLUMNS = [
 ]
 
 re_int = re.compile(r'[0-9]+')
+
 
 def int_from_dir_path(dir_path):
     name = dir_path.name
