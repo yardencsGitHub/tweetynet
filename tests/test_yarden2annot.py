@@ -20,7 +20,7 @@ class TestYarden2Annot(unittest.TestCase):
         self.test_mat = DATA_DIR.joinpath('mat').joinpath('llb3_annot_subset.mat')
 
     def test_yarden2annot(self):
-        annot_list = self.yarden2annot.yarden2annot(annot_file=self.test_mat)
+        annot_list = self.yarden2annot.yarden2annot(annot_path=self.test_mat)
         self.assertTrue(
             type(annot_list) == list
         )
