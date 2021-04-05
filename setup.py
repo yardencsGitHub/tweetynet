@@ -28,13 +28,14 @@ LICENSE = 'BSD'
 
 REQUIRED = [
     'torch',
-    'vak>=0.3.1',
+    'vak>=0.4.0b2',
 ]
 
 # What packages are optional?
 EXTRAS = {
-    'tests': ['pytest'],
-    'article': ['vak>=0.3.1', 'crowsetta>=3.0.0', 'joblib', 'pandas', 'seaborn', 'jupyterlab'],
+    'article': [
+        'seaborn',
+        'jupyterlab'],
 }
 
 # The rest you shouldn't have to touch too much :)
@@ -124,10 +125,12 @@ setup(
         # Trove classifiers
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
         'License :: OSI Approved :: BSD License',
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: Implementation :: CPython',
     ],
     # $ setup.py publish support.
