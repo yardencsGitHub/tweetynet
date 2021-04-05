@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- add hyperparameters for RNN component of `TweetyNet` architecture
+  to its `__init__` function, including size of hidden state
+  [#73](https://github.com/yardencsGitHub/tweetynet/pull/73).
+  Fixes [#70](https://github.com/yardencsGitHub/tweetynet/issues/70).
 
 ## [0.5.0]
 ### Changed
