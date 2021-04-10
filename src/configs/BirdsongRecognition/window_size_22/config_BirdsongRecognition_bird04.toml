@@ -31,9 +31,9 @@ ckpt_step = 200
 patience = 4
 num_workers = 4
 device = "cuda"
-root_results_dir = "./results/BirdsongRecognition/window_size_22/Bird4"
-previous_run_path = "/home/art/Documents/repos/coding/birdsong/tweetynet/results/BirdsongRecognition/window_size_88/Bird4/results_210301_011845"
-csv_path = "data/BirdsongRecognition/Bird4/Wave_prep_210301_011802.csv"
+root_results_dir = "./results/BirdsongRecognition/window_size_88_rerun/Bird4"
+previous_run_path = "/home/bart/Documents/repos/birdsong/tweetynet/results/BirdsongRecognition/window_size_88/Bird4/results_200503_175826"
+csv_path = "/home/bart/Documents/repos/birdsong/tweetynet/data/BirdsongRecognition/Bird4/Wave_prep_210327_124256.csv"
 
 [TweetyNet.optimizer]
 lr = 0.001
