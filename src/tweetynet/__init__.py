@@ -1,2 +1,2 @@
 from .network import TweetyNet
-from .model import TweetyNetModel
+from .model import TweetyNetModel, TweetyNetDiceLossModel
