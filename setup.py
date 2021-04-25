@@ -28,7 +28,7 @@ LICENSE = 'BSD'
 
 REQUIRED = [
     'torch',
-    'vak>=0.4.0b2',
+    'vak>=0.4.0b4',
 ]
 
 # What packages are optional?
