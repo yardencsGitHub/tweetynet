@@ -114,7 +114,10 @@ setup(
     packages=find_packages(where="src", exclude=('tests',)),
     package_dir={"": "src"},
     entry_points={
-        'vak.models': 'TweetyNetModel = tweetynet:TweetyNetModel',
+        'vak.models': [
+            'TweetyNetModel = tweetynet:TweetyNetModel',
+            'TweetyNetDiceLossModel = tweetynet:TweetyNetDiceLossModel',
+        ],
         'crowsetta.format': 'yarden = gardner.yarden2annot'
     },
     install_requires=REQUIRED,
