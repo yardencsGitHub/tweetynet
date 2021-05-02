@@ -34,6 +34,7 @@ REQUIRED = [
 # What packages are optional?
 EXTRAS = {
     'article': [
+        'hybrid-vocal-classifier>=0.3.0',
         'seaborn',
         'jupyterlab'],
 }
