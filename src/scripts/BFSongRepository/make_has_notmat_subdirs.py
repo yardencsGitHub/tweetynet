@@ -4,6 +4,7 @@ copy all .cbins with .not.mats into a sub-directory
 
 run this before running bfsongrepo-test-predict.py
 """
+import argparse
 from pathlib import Path
 import shutil
 
@@ -16,23 +17,18 @@ BIRDS = ['bl26lb16',
          'gr41rd51',
          ]
 
-HERE = Path(__file__).parent
-CONFIGS_DIR = HERE.joinpath('../configs/')
-DATA_DIR = HERE.joinpath('../../data/BFSongRepository')
-BF_CONFIGS = sorted(list(CONFIGS_DIR.glob('*BFSongRepository*ini')))
 
-configs_by_bird = {
-    bird: [bf_config for bf_config in BF_CONFIGS if bird in str(bf_config)][0]
-    for bird in BIRDS
-}
+def main(bfsongrepo_root):
+    bfsongrepo_root = Path(bfsongrepo_root).expanduser().resolve()
 
-BFSongRepo = Path('~/Documents/data/BFSongRepository/').expanduser()
+    bird_dirs = [bfsongrepo_root / bird for bird in BIRDS]
+    bird_date_dirs = [
+        subdir
+        for bird_dir in bird_dirs
+        for subdir in bird_dir.iterdir()
+        if subdir.is_dir() and subdir.name.isnumeric()
+    ]
 
-all_notmats = list(BFSongRepo.glob('*/*/*.not.mat'))
-bird_date_dirs = set([notmat.parents[0] for notmat in all_notmats])
-
-
-def main():
     for bird_date_dir in bird_date_dirs:
         has_notmat = bird_date_dir.joinpath('has_notmat')
         has_notmat.mkdir(exist_ok=True)
@@ -54,5 +50,17 @@ def main():
             shutil.copy(tmp, dst=has_notmat)
 
 
+DEFAULT_BFSONGREPO_ROOT = '~/Documents/data/BFSongRepository/'
+
+
+def get_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--bfsongrepo_root',
+                        default=DEFAULT_BFSONGREPO_ROOT)
+    return parser
+
+
 if __name__ == '__main__':
-    main()
+    parser = get_parser()
+    args = parser.parse_args()
+    main(bfsongrepo_root=args.bfsongrepo_root)
