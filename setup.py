@@ -34,8 +34,10 @@ REQUIRED = [
 # What packages are optional?
 EXTRAS = {
     'article': [
+        'pyprojroot',
         'seaborn',
-        'jupyterlab'],
+        'jupyterlab'
+    ],
 }
 
 # The rest you shouldn't have to touch too much :)
