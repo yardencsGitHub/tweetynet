@@ -1,0 +1,38 @@
+[PREP]
+labelset = "iabcdefg"
+data_dir = "~/Documents/data/BFSongRepository/or60yw70/0927_092812"
+output_dir = "./data/BFSongRepository/learncurve/or60yw70"
+spect_output_dir = "./data/BFSongRepository/learncurve/or60yw70"
+audio_format = "cbin"
+annot_format = "notmat"
+test_dur = 400
+train_dur = 900
+val_dur = 80
+
+[SPECT_PARAMS]
+fft_size = 512
+step_size = 64
+
+[LEARNCURVE]
+models = "TweetyNet"
+train_set_durs = [ 30, 45, 75, 120, 180, 480, 600]
+num_replicates = 10
+normalize_spectrograms = "Yes"
+batch_size = 8
+num_epochs = 50
+val_step = 400
+ckpt_step = 200
+patience = 4
+num_workers = 4
+device = "cuda"
+root_results_dir = "./results/BFSongRepository/learncurve/or60yw70"
+csv_path = "data/BFSongRepository/learncurve/or60yw70/0927_092812_prep_210423_095512.csv"
+
+[DATALOADER]
+window_size = 176
+
+[TweetyNet.optimizer]
+lr = 0.001
+
+[TweetyNet.network]
+hidden_size = 256
