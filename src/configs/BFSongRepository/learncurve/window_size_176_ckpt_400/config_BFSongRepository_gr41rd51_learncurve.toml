@@ -15,7 +15,7 @@ step_size = 64
 
 [LEARNCURVE]
 models = "TweetyNet"
-train_set_durs = [ 30, 45, 75, 120, 180, 480, 600]
+train_set_durs = [ 30, 45, 75, 120, 180, 480, 600,]
 num_replicates = 10
 normalize_spectrograms = "Yes"
 batch_size = 8
@@ -26,7 +26,7 @@ patience = 4
 num_workers = 4
 device = "cuda"
 root_results_dir = "./results/BFSongRepository/learncurve/gr41rd51"
-csv_path = "data/BFSongRepository/learncurve/gr41rd51/has_notmat_prep_210423_100311.csv"
+csv_path = "data/BFSongRepository/learncurve/gr41rd51/has_notmat_gaps_cleaned_prep_210521_212334.csv"
 
 [DATALOADER]
 window_size = 176
