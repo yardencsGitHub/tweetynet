@@ -1,0 +1,39 @@
+[PREP]
+labelset = "iabcdefgjkm"
+data_dir = "~/Documents/data/BFSongRepository/gr41rd51/062112/has_notmat_gaps_cleaned"
+output_dir = "./data/BFSongRepository/learncurve/gr41rd51"
+spect_output_dir = "./data/BFSongRepository/learncurve/gr41rd51"
+audio_format = "cbin"
+annot_format = "notmat"
+test_dur = 400
+train_dur = 900
+val_dur = 80
+
+[SPECT_PARAMS]
+fft_size = 512
+step_size = 64
+
+[LEARNCURVE]
+models = "TweetyNet"
+train_set_durs = [ 30, 45, 75, 120, 180, 480, 600,]
+num_replicates = 10
+normalize_spectrograms = "Yes"
+batch_size = 8
+num_epochs = 50
+val_step = 400
+ckpt_step = 200
+patience = 4
+num_workers = 4
+device = "cuda"
+root_results_dir = "./results/BFSongRepository/hidden_size/hidden_size_64/gr41rd51"
+csv_path = "data/BFSongRepository/learncurve/gr41rd51/has_notmat_gaps_cleaned_prep_210521_212334.csv"
+previous_run_path = "results/BFSongRepository/learncurve/gr41rd51/results_210521_213108/"
+
+[DATALOADER]
+window_size = 176
+
+[TweetyNet.optimizer]
+lr = 0.001
+
+[TweetyNet.network]
+hidden_size = 64
