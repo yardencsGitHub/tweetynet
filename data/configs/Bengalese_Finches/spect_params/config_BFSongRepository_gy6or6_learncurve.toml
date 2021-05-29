@@ -1,0 +1,40 @@
+[PREP]
+labelset = "iabcdefghjk"
+data_dir = "~/Documents/data/BFSongRepository/gy6or6/032212"
+output_dir = "./data/BFSongRepository/learncurve/gy6or6/"
+spect_output_dir = "./data/BFSongRepository/learncurve/gy6or6/"
+audio_format = "cbin"
+annot_format = "notmat"
+test_dur = 400
+train_dur = 900
+val_dur = 80
+
+[SPECT_PARAMS]
+fft_size = 512
+step_size = 64
+freq_cutoffs = [ 500, 10000,]
+thresh = 6.25
+transform_type = "log_spect"
+
+[LEARNCURVE]
+models = "TweetyNet"
+train_set_durs = [ 30, 45, 75, 120, 180, 480, 600]
+num_replicates = 10
+normalize_spectrograms = "Yes"
+batch_size = 8
+num_epochs = 50
+val_step = 400
+ckpt_step = 200
+patience = 4
+num_workers = 4
+device = "cuda"
+root_results_dir = "./results/Bengalese_Finches/spect_params/gy6or6/"
+
+[DATALOADER]
+window_size = 176
+
+[TweetyNet.optimizer]
+lr = 0.001
+
+[TweetyNet.network]
+hidden_size = 256
