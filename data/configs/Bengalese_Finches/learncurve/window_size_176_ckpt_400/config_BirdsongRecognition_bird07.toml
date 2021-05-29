@@ -15,7 +15,7 @@ step_size = 64
 
 [LEARNCURVE]
 models = "TweetyNet"
-train_set_durs = [ 30, 45, 75, 120, 180, 480, 600]
+train_set_durs = [ 30, 45, 75, 120, 180, 480, 600,]
 num_replicates = 10
 normalize_spectrograms = true
 batch_size = 8
@@ -26,6 +26,7 @@ patience = 4
 num_workers = 4
 device = "cuda"
 root_results_dir = "./results/Bengalese_Finches/learncurve/BirdsongRecognition/Bird7"
+csv_path = "data/BirdsongRecognition/Bird7/Wave_prep_210527_213331.csv"
 
 [DATALOADER]
 window_size = 176
