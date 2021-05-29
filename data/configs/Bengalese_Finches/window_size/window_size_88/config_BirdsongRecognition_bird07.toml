@@ -1,0 +1,39 @@
+[PREP]
+labelset = "0123456"
+data_dir = "~/Documents/data/BirdsongRecognition/Bird7/Wave"
+output_dir = "./data/BirdsongRecognition/Bird7"
+audio_format = "wav"
+annot_format = "yarden"
+annot_file = "~/Documents/data/BirdsongRecognition/Bird7/Wave/tweetynet-Bird7_annotation.mat"
+test_dur = 400
+train_dur = 900
+val_dur = 200
+
+[SPECT_PARAMS]
+fft_size = 512
+step_size = 64
+
+[LEARNCURVE]
+models = "TweetyNet"
+train_set_durs = [ 30, 45, 75, 120, 180, 480, 600,]
+num_replicates = 10
+normalize_spectrograms = true
+batch_size = 8
+num_epochs = 50
+val_step = 400
+ckpt_step = 200
+patience = 4
+num_workers = 4
+device = "cuda"
+root_results_dir = "./results/Bengalese_Finches/window_size/window_size_88/Bird7"
+csv_path = "data/BirdsongRecognition/Bird7/Wave_prep_210527_213331.csv"
+previous_run_path = "results/Bengalese_Finches/learncurve/Bird7/results_210527_213421/"
+
+[DATALOADER]
+window_size = 88
+
+[TweetyNet.optimizer]
+lr = 0.001
+
+[TweetyNet.network]
+hidden_size = 256
