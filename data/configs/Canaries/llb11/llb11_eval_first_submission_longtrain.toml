@@ -1,0 +1,29 @@
+[PREP]
+labelset = "range: 1-27"
+data_dir = "D:\\Users\\yarde\\vak_project\\llb11\\annotated"
+output_dir = "D:\\Users\\yarde\\vak_project\\llb11\\eval"
+spect_format = "npz"
+annot_format = "yarden"
+
+[SPECT_PARAMS]
+fft_size = 1024
+step_size = 64
+freq_cutoffs = [ 500, 10000,]
+thresh = 6.25
+transform_type = "log_spect"
+
+[DATALOADER]
+window_size = 370
+
+[EVAL]
+checkpoint_path = "D:\\Users\\yarde\\vak_project\\llb11\\results\\results_210529_112150\\TweetyNet\\checkpoints\\max-val-acc-checkpoint.pt"
+labelmap_path = "D:\\Users\\yarde\\vak_project\\llb11\\results\\results_210529_112150\\labelmap.json"
+models = "TweetyNet"
+batch_size = 8
+num_workers = 12
+device = "cuda"
+output_dir = "D:\\Users\\yarde\\vak_project\\llb11\\eval"
+csv_path = "D:\\Users\\yarde\\vak_project\\llb11\\train\\annotated_prep_210529_110926.csv"
+
+[TweetyNet.optimizer]
+lr = 0.001
