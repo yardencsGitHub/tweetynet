@@ -452,6 +452,7 @@ def main(results_root,
 
     # get minimum segment durations to use for clean up. Fail early if they're not there.
     config = configparser.ConfigParser()
+    config.optionxform = lambda option: option  # monkeypatch optionxform so it doesn't lowercase animal IDs
     config.read(Path(min_segment_dur_ini).expanduser().resolve())
     min_segment_durs = {k: float(v) for k, v in config['min_segment_dur'].items()}
     for indiv_root in indiv_roots:

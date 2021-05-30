@@ -29,6 +29,7 @@ patience = 4
 num_workers = 4
 device = "cuda"
 root_results_dir = "./results/Bengalese_Finches/spect_params/gr41rd51"
+csv_path = "data/BFSongRepository/learncurve/gr41rd51/has_notmat_gaps_cleaned_prep_210531_093340.csv"
 
 [DATALOADER]
 window_size = 176
