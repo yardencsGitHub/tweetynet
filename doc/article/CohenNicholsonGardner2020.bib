@@ -1,0 +1,1284 @@
+
+@article{otchy_acute_2015,
+	title = {Acute off-target effects of neural circuit manipulations},
+	volume = {528},
+	copyright = {2015 Nature Publishing Group},
+	issn = {1476-4687},
+	url = {https://www.nature.com/articles/nature16442},
+	doi = {10.1038/nature16442},
+	abstract = {Rapid and reversible manipulations of neural activity in behaving animals are transforming our understanding of brain function. An important assumption underlying much of this work is that evoked behavioural changes reflect the function of the manipulated circuits. We show that this assumption is problematic because it disregards indirect effects on the independent functions of downstream circuits. Transient inactivations of motor cortex in rats and nucleus interface (Nif) in songbirds severely degraded task-specific movement patterns and courtship songs, respectively, which are learned skills that recover spontaneously after permanent lesions of the same areas. We resolve this discrepancy in songbirds, showing that Nif silencing acutely affects the function of HVC, a downstream song control nucleus. Paralleling song recovery, the off-target effects resolved within days of Nif lesions, a recovery consistent with homeostatic regulation of neural activity in HVC. These results have implications for interpreting transient circuit manipulations and for understanding recovery after brain lesions.},
+	language = {en},
+	number = {7582},
+	urldate = {2019-04-25},
+	journal = {Nature},
+	author = {Otchy, Timothy M. and Wolff, Steffen B. E. and Rhee, Juliana Y. and Pehlevan, Cengiz and Kawai, Risa and Kempf, Alexandre and Gobes, Sharon M. H. and Ölveczky, Bence P.},
+	month = dec,
+	year = {2015},
+	note = {tex.ids: otchy\_acute\_2015
+tex.copyright: 2015 Nature Publishing Group},
+	pages = {358--363},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/Y9SXPXMT/Otchy et al. - 2015 - Acute off-target effects of neural circuit manipul.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/589D78M6/nature16442.html:text/html}
+}
+
+@misc{david_nicholson_nickledave/vak:_2019,
+	title = {{NickleDave}/vak: sparrows-gathering},
+	shorttitle = {{NickleDave}/vak},
+	url = {https://zenodo.org/record/3247001},
+	abstract = {Added add helper function to TestLearncurve that multiple unit tests can use to assert all outputs were generated. Now being used to make sure bug fixed in 0.1.0a8 stays fixed. error checking in cli that raises ValueError when cli command is learncurve and the option 'results\_dir\_made\_by\_main\_script' is already defined in [OUTPUT] section, since running 'learncurve' would overwrite it. dataset subpackage that houses VocalizationDataset and related classes that facilitate creating data sets for training neural networks from heterogeneous data: audio files, files of arrays containing spectrograms, different annotation types, etc. also includes modules for handling each data source e.g. audio.to\_spect creates spectrograms from audio files spect.from\_files creates a VocalizationDataset from spectrogram files core sub-package that contains / will contain functions that do heavy lifting: learning\_curve, train, predict learning\_curve is a sub-sub-module that does both train and test of models, instead of having a separate learncurve and summary function (i.e. train and test). Still will confuse some ML/AI people that this "learning curve" has a test data step but whatevs cli sub-package calls / will call these functions and handle any command-line-interface specific logic (e.g. making changes to config.ini files) Changed change name of vak.cli.make\_data to vak.cli.prep structure of config.ini file now specify either audio\_format or spect\_format in [DATA] section and annot\_format for annotations refactor utils sub-package move several functions from data and general into a labels module Removed remove unused options from command-line interface: --glob, --txt, --dataset skip\_files\_with\_labels\_not\_in\_labelset option now happens whenever labelset is specified; if no labelset is given then no filtering is done summary command-line option, since learncurve now runs trains models and also tests them on separate data set silent\_label\_gap option, because VocalizationDataset class determines if a label for unlabeled segments between other segments is needed, and if so automatically assigns this a label of 0 when mapping user labels to consecutive integers this way user does not have to think about it and program doesn't have to keep track of a labels\_mapping file that saves what user specified},
+	urldate = {2019-08-17},
+	publisher = {Zenodo},
+	author = {David Nicholson and yardencsGitHub},
+	month = jun,
+	year = {2019},
+	doi = {10.5281/zenodo.3247001},
+	file = {Zenodo Snapshot:/Users/yardenc/Zotero/storage/FBZPUD9F/3247001.html:text/html}
+}
+
+@misc{david_nicholson_yardencsgithub/tweetynet_2019,
+	title = {{yardencsGitHub}/tweetynet 0.2.0},
+	url = {https://zenodo.org/record/2667818},
+	abstract = {Added add gardner package with yarden2seq module that converts annotation.mat files to crowsetta.Sequence objects will be installed along with TweetyNet so that vak knows how to use yarden format},
+	urldate = {2019-08-17},
+	publisher = {Zenodo},
+	author = {David Nicholson and yardencsGitHub},
+	month = may,
+	year = {2019},
+	doi = {10.5281/zenodo.2667818},
+	file = {Zenodo Snapshot:/Users/yardenc/Zotero/storage/5G56L3R2/2667818.html:text/html}
+}
+
+@misc{yardencsgithub_hybrid_2019,
+	title = {Hybrid convolutional-recurrent neural networks for segmentation of birdsong and classification of elements: {yardencsGitHub}/tweetynet},
+	copyright = {BSD-3-Clause},
+	shorttitle = {Hybrid convolutional-recurrent neural networks for segmentation of birdsong and classification of elements},
+	url = {https://github.com/yardencsGitHub/tweetynet},
+	urldate = {2019-08-17},
+	author = {yardencsGitHub},
+	month = aug,
+	year = {2019},
+	note = {original-date: 2017-06-05T13:42:05Z}
+}
+
+@article{walt_numpy_2011,
+	title = {The {NumPy} {Array}: {A} {Structure} for {Efficient} {Numerical} {Computation}},
+	volume = {13},
+	issn = {1521-9615},
+	shorttitle = {The {NumPy} {Array}},
+	doi = {10.1109/MCSE.2011.37},
+	abstract = {In the Python world, NumPy arrays are the standard representation for numerical data and enable efficient implementation of numerical computations in a high-level language. As this effort shows, NumPy performance can be improved through three techniques: vectorizing calculations, avoiding copying data in memory, and minimizing operation counts.},
+	number = {2},
+	journal = {Computing in Science Engineering},
+	author = {Walt, S. van der and Colbert, S. C. and Varoquaux, G.},
+	month = mar,
+	year = {2011},
+	note = {tex.ids: walt\_numpy\_2011},
+	keywords = {Arrays, Computational efficiency, data structures, Finite element methods, high level language, high level languages, mathematics computing, numerical analysis, Numerical analysis, numerical computation, numerical computations, numerical data, NumPy, numpy array, Performance evaluation, programming libraries, Python, Python programming language, Resource management, scientific programming, Vector quantization},
+	pages = {22--30},
+	file = {IEEE Xplore Abstract Record:/Users/yardenc/Zotero/storage/F3I4NFFR/5725236.html:text/html}
+}
+
+@article{virtanen_scipy_2019,
+	title = {{SciPy} 1.0--{Fundamental} {Algorithms} for {Scientific} {Computing} in {Python}},
+	url = {http://arxiv.org/abs/1907.10121},
+	abstract = {SciPy is an open source scientific computing library for the Python programming language. SciPy 1.0 was released in late 2017, about 16 years after the original version 0.1 release. SciPy has become a de facto standard for leveraging scientific algorithms in the Python programming language, with more than 600 unique code contributors, thousands of dependent packages, over 100,000 dependent repositories, and millions of downloads per year. This includes usage of SciPy in almost half of all machine learning projects on GitHub, and usage by high profile projects including LIGO gravitational wave analysis and creation of the first-ever image of a black hole (M87). The library includes functionality spanning clustering, Fourier transforms, integration, interpolation, file I/O, linear algebra, image processing, orthogonal distance regression, minimization algorithms, signal processing, sparse matrix handling, computational geometry, and statistics. In this work, we provide an overview of the capabilities and development practices of the SciPy library and highlight some recent technical developments.},
+	urldate = {2019-08-17},
+	journal = {arXiv:1907.10121 [physics]},
+	author = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and Haberland, Matt and Reddy, Tyler and Cournapeau, David and Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and Bright, Jonathan and van der Walt, Stéfan J. and Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and Kern, Robert and Larson, Eric and Carey, C. J. and Polat, İlhan and Feng, Yu and Moore, Eric W. and VanderPlas, Jake and Laxalde, Denis and Perktold, Josef and Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and Harris, Charles R. and Archibald, Anne M. and Ribeiro, Antônio H. and Pedregosa, Fabian and van Mulbregt, Paul and Contributors, SciPy 1 0},
+	month = jul,
+	year = {2019},
+	note = {arXiv: 1907.10121},
+	keywords = {Computer Science - Data Structures and Algorithms, Computer Science - Mathematical Software, Computer Science - Software Engineering, Physics - Computational Physics},
+	annote = {Comment: Article source data is available here: https://github.com/scipy/scipy-articles},
+	file = {arXiv\:1907.10121 PDF:/Users/yardenc/Zotero/storage/YLK3BXWU/Virtanen et al. - 2019 - SciPy 1.0--Fundamental Algorithms for Scientific C.pdf:application/pdf;arXiv.org Snapshot:/Users/yardenc/Zotero/storage/XEGKFVEW/1907.html:text/html}
+}
+
+@article{wohlgemuth_linked_2010,
+	title = {Linked {Control} of {Syllable} {Sequence} and {Phonology} in {Birdsong}},
+	volume = {30},
+	issn = {0270-6474, 1529-2401},
+	url = {http://www.jneurosci.org/content/30/39/12936},
+	doi = {10.1523/JNEUROSCI.2690-10.2010},
+	abstract = {The control of sequenced behaviors, including human speech, requires that the brain coordinate the production of discrete motor elements with their concatenation into complex patterns. In birdsong, another sequential vocal behavior, the acoustic structure (phonology) of individual song elements, or “syllables,” must be coordinated with the sequencing of syllables into a song. However, it is unknown whether syllable phonology is independent of the sequence in which a syllable is produced. We quantified interactions between phonology and sequence in Bengalese finch song by examining both convergent syllables, which can be preceded by at least two different syllables and divergent syllables, which can be followed by at least two different syllables. Phonology differed significantly based on the identity of the preceding syllable for 97\% of convergent syllables and differed significantly with the identity of the upcoming syllable for 92\% of divergent syllables. Furthermore, sequence-dependent phonological differences extended at least two syllables away from the convergent or divergent syllable. To determine whether these phenomena reflect differences in central control, we analyzed premotor neural activity in the robust nucleus of the arcopallium (RA). Activity associated with a syllable varied significantly depending on the sequence in which the syllable was produced, suggesting that sequence-dependent variations in premotor activity contribute to sequence-dependent differences in phonology. Moreover, these data indicate that RA activity could contribute to the sequencing of syllables. Together, these results suggest that, rather than being controlled independently, the sequence and phonology of birdsong are intimately related, as is the case for human speech.},
+	language = {English},
+	number = {39},
+	urldate = {2019-04-25},
+	journal = {Journal of Neuroscience},
+	author = {Wohlgemuth, Melville J. and Sober, Samuel J. and Brainard, Michael S.},
+	month = sep,
+	year = {2010},
+	pmid = {20881112},
+	note = {tex.ids: wohlgemuthLinkedControlSyllable2010
+tex.copyright: Copyright © 2010 the authors 0270-6474/10/3012936-14\$15.00/0
+tex.pmid: 20881112},
+	pages = {12936--12949},
+	annote = {bibtex*[copyright=Copyright © 2010 the authors 0270-6474/10/3012936-14\$15.00/0;pmid=20881112]},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/LI48HV76/Wohlgemuth et al. - 2010 - Linked Control of Syllable Sequence and Phonology .pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/B5XCH63M/12936.html:text/html}
+}
+
+@article{warren_variable_2012,
+	title = {Variable {Sequencing} {Is} {Actively} {Maintained} in a {Well} {Learned} {Motor} {Skill}},
+	volume = {32},
+	issn = {0270-6474},
+	url = {http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3752123/},
+	doi = {10.1523/JNEUROSCI.1254-12.2012},
+	abstract = {Variation in sequencing of actions occurs in many natural behaviors, yet how such variation is maintained is poorly understood. We investigated maintenance of sequence variation in adult Bengalese finch song, a learned skill with rendition-to-rendition variation in the sequencing of discrete syllables (i.e., syllable “b” might transition to “c” with 70\% probability and to “d” with 30\% probability). We found that probabilities of transitions ordinarily remain stable but could be modified by delivering aversive noise bursts following one transition (e.g., “b→c”) but not the alternative (e.g., “b→d”). Such differential reinforcement induced gradual, adaptive decreases in probabilities of targeted transitions and compensatory increases in alternative transitions. Thus, the normal stability of transition probabilities does not reflect hardwired premotor circuitry. While all variable transitions could be modified by differential reinforcement, some were less readily modified than others; these were cases that exhibited more alternation between possible transitions than predicted by chance (i.e., “b→d ” would tend to follow “b→c ” and vice versa). These history-dependent transitions were less modifiable than more stochastic transitions. Similarly, highly stereotyped transitions (which are completely predictable) were not modifiable. This suggests that stochastically generated variability is crucial for sequence modification. Finally, we found that, when reinforcement ceased, birds gradually restored transition probabilities to their baseline values. Hence, the nervous system retains a representation of baseline probabilities and has the impetus to restore them. Together, our results indicate that variable sequencing in a motor skill can reflect an end point of learning that is stably maintained via continual self-monitoring.},
+	number = {44},
+	urldate = {2017-05-17},
+	journal = {The Journal of Neuroscience},
+	author = {Warren, Timothy L. and Charlesworth, Jonathan D. and Tumer, Evren C. and Brainard, Michael S.},
+	month = oct,
+	year = {2012},
+	pmcid = {PMC3752123},
+	pmid = {23115179},
+	note = {tex.ids: warrenVariableSequencingActively2012
+tex.pmcid: PMC3752123
+tex.pmid: 23115179},
+	pages = {15414--15425},
+	annote = {bibtex*[pmid=23115179;pmcid=PMC3752123]}
+}
+
+@book{goodfellow_deep_2016,
+	title = {Deep learning},
+	publisher = {MIT press},
+	author = {Goodfellow, Ian and Bengio, Yoshua and Courville, Aaron},
+	year = {2016},
+	file = {Full Text:/Users/yardenc/Zotero/storage/7T2U3JUV/Goodfellow et al. - 2016 - Deep learning.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/VR2X9MV8/books.html:text/html}
+}
+
+@article{tchernichovski_procedure_2000,
+	title = {A procedure for an automated measurement of song similarity},
+	volume = {59},
+	number = {6},
+	journal = {Animal behaviour},
+	author = {Tchernichovski, Ofer and Nottebohm, Fernando and Ho, Ching Elizabeth and Pesaran, Bijan and Mitra, Partha Pratim},
+	year = {2000},
+	pages = {1167--1176},
+	file = {Full Text:/Users/yardenc/Zotero/storage/868629RX/Tchernichovski et al. - 2000 - A procedure for an automated measurement of song s.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/3RPJGAAU/S0003347299914161.html:text/html}
+}
+
+@article{tchernichovski_dynamics_2001,
+	title = {Dynamics of the vocal imitation process: how a zebra finch learns its song},
+	volume = {291},
+	shorttitle = {Dynamics of the vocal imitation process},
+	number = {5513},
+	journal = {Science},
+	author = {Tchernichovski, Ofer and Mitra, Partha P. and Lints, Thierry and Nottebohm, Fernando},
+	year = {2001},
+	pages = {2564--2569},
+	file = {Full Text:/Users/yardenc/Zotero/storage/DC89ZZIN/Tchernichovski et al. - 2001 - Dynamics of the vocal imitation process how a zeb.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/GPGUHG5C/2564.html:text/html}
+}
+
+@article{mooney_neurobiology_2009,
+	title = {Neurobiology of song learning},
+	volume = {19},
+	number = {6},
+	journal = {Current opinion in neurobiology},
+	author = {Mooney, Richard},
+	year = {2009},
+	pages = {654--660},
+	file = {Full Text:/Users/yardenc/Zotero/storage/2TJNWXUN/PMC5066577.html:text/html;Snapshot:/Users/yardenc/Zotero/storage/PC5X7ASJ/S095943880900141X.html:text/html}
+}
+
+@article{olveczky_vocal_2005,
+	title = {Vocal experimentation in the juvenile songbird requires a basal ganglia circuit.},
+	volume = {3},
+	number = {5},
+	journal = {PLoS biology},
+	author = {Olveczky, Bence P. and Andalman, Aaron S. and Fee, Michale S.},
+	year = {2005},
+	pages = {e153--e153},
+	file = {Full Text:/Users/yardenc/Zotero/storage/WIHLW6LK/Olveczky et al. - 2005 - Vocal experimentation in the juvenile songbird req.pdf:application/pdf}
+}
+
+@article{mets_learning_2019,
+	title = {Learning is enhanced by tailoring instruction to individual genetic differences},
+	volume = {8},
+	journal = {eLife},
+	author = {Mets, David G. and Brainard, Michael S.},
+	year = {2019},
+	file = {Full Text:/Users/yardenc/Zotero/storage/DFNK94BY/PMC6748825.html:text/html}
+}
+
+@article{mets_genetic_2018,
+	title = {Genetic variation interacts with experience to determine interindividual differences in learned song},
+	volume = {115},
+	number = {2},
+	journal = {Proceedings of the National Academy of Sciences},
+	author = {Mets, David G. and Brainard, Michael S.},
+	year = {2018},
+	pages = {421--426},
+	file = {Full Text:/Users/yardenc/Zotero/storage/GNDQM9D5/Mets and Brainard - 2018 - Genetic variation interacts with experience to det.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/S4L3XN3F/421.html:text/html}
+}
+
+@article{long_support_2010,
+	title = {Support for a synaptic chain model of neuronal sequence generation},
+	volume = {468},
+	number = {7322},
+	journal = {Nature},
+	author = {Long, Michael A. and Jin, Dezhe Z. and Fee, Michale S.},
+	year = {2010},
+	pages = {394--399},
+	file = {Full Text:/Users/yardenc/Zotero/storage/MQU7KBUV/PMC2998755.html:text/html;Snapshot:/Users/yardenc/Zotero/storage/NQPEE3KK/nature09514.html:text/html}
+}
+
+@article{long_using_2008,
+	title = {Using temperature to analyse temporal dynamics in the songbird motor pathway},
+	volume = {456},
+	number = {7219},
+	journal = {Nature},
+	author = {Long, Michael A. and Fee, Michale S.},
+	year = {2008},
+	pages = {189--194},
+	file = {Full Text:/Users/yardenc/Zotero/storage/AZMEE6PZ/PMC2723166.html:text/html;Snapshot:/Users/yardenc/Zotero/storage/RSBAI9IC/nature07448.html:text/html}
+}
+
+@article{hahnloser_ultra-sparse_2002,
+	title = {An ultra-sparse code underliesthe generation of neural sequences in a songbird},
+	volume = {419},
+	number = {6902},
+	journal = {Nature},
+	author = {Hahnloser, Richard HR and Kozhevnikov, Alexay A. and Fee, Michale S.},
+	year = {2002},
+	pages = {65--70},
+	file = {Full Text:/Users/yardenc/Zotero/storage/UHPGDAF3/Hahnloser et al. - 2002 - An ultra-sparse code underliesthe generation of ne.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/35FFRA2Z/nature00974.html:text/html}
+}
+
+@article{fee_songbird_2010,
+	title = {The songbird as a model for the generation and learning of complex sequential behaviors},
+	volume = {51},
+	number = {4},
+	journal = {ILAR journal},
+	author = {Fee, Michale S. and Scharff, Constance},
+	year = {2010},
+	pages = {362--377},
+	file = {Full Text:/Users/yardenc/Zotero/storage/6NL2X4Y7/Fee and Scharff - 2010 - The songbird as a model for the generation and lea.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/QJ8UQU9L/676057.html:text/html}
+}
+
+@article{deregnaucourt_how_2005,
+	title = {How sleep affects the developmental learning of bird song},
+	volume = {433},
+	number = {7027},
+	journal = {Nature},
+	author = {Derégnaucourt, Sébastien and Mitra, Partha P. and Fehér, Olga and Pytte, Carolyn and Tchernichovski, Ofer},
+	year = {2005},
+	pages = {710--716},
+	file = {Full Text:/Users/yardenc/Zotero/storage/B8A4TC8D/Derégnaucourt et al. - 2005 - How sleep affects the developmental learning of bi.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/6JIYCB6X/nature03275.html:text/html}
+}
+
+@article{brainard_what_2002,
+	title = {What songbirds teach us about learning},
+	volume = {417},
+	number = {6886},
+	journal = {Nature},
+	author = {Brainard, Michael S. and Doupe, Allison J.},
+	year = {2002},
+	pages = {351--358},
+	file = {Full Text:/Users/yardenc/Zotero/storage/A6YWX6TD/Brainard and Doupe - 2002 - What songbirds teach us about learning.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/PESBYWFS/417351a.html:text/html}
+}
+
+@article{mets_automated_2018,
+	title = {An automated approach to the quantitation of vocalizations and vocal learning in the songbird},
+	volume = {14},
+	number = {8},
+	journal = {PLoS computational biology},
+	author = {Mets, David G. and Brainard, Michael S.},
+	year = {2018},
+	pages = {e1006437},
+	file = {Full Text:/Users/yardenc/Zotero/storage/58GGFZ95/article.html:text/html}
+}
+
+@article{aronov_specialized_2008,
+	title = {A specialized forebrain circuit for vocal babbling in the juvenile songbird},
+	volume = {320},
+	number = {5876},
+	journal = {Science},
+	author = {Aronov, Dmitriy and Andalman, Aaron S. and Fee, Michale S.},
+	year = {2008},
+	pages = {630--634},
+	file = {Full Text:/Users/yardenc/Zotero/storage/7SUWBETM/Aronov et al. - 2008 - A specialized forebrain circuit for vocal babbling.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/QMAEK339/630.html:text/html}
+}
+
+@inproceedings{bock_polyphonic_2012-1,
+	title = {Polyphonic piano note transcription with recurrent neural networks},
+	doi = {10.1109/ICASSP.2012.6287832},
+	abstract = {In this paper a new approach for polyphonic piano note onset transcription is presented. It is based on a recurrent neural network to simultaneously detect the onsets and the pitches of the notes from spectral features. Long Short-Term Memory units are used in a bidirectional neural network to model the context of the notes. The use of a single regression output layer instead of the often used one-versus-all classification approach enables the system to significantly lower the number of erroneous note detections. Evaluation is based on common test sets and shows exceptional temporal precision combined with a significant boost in note transcription performance compared to current state-of-the-art approaches. The system is trained jointly with various synthesized piano instruments and real piano recordings and thus generalizes much better than existing systems.},
+	booktitle = {2012 {IEEE} {International} {Conference} on {Acoustics}, {Speech} and {Signal} {Processing} ({ICASSP})},
+	author = {Böck, S. and Schedl, M.},
+	month = mar,
+	year = {2012},
+	note = {tex.ids: bockPolyphonicPianoNote2012, bockPolyphonicPianoNote2012a, bock\_polyphonic\_2012},
+	keywords = {Hidden Markov models, Training, recurrent neural networks, Recurrent neural networks, Accuracy, bidirectional neural network, common test sets, erroneous note detections, exceptional temporal precision, information retrieval, Instruments, long short-term memory units, music, music information retrieval, musical instruments, neural networks, note transcription performance, one-versus-all classification approach, piano recordings, polyphonic piano note onset transcription, polyphonic piano note transcription, recurrent neural nets, regression analysis, signal classification, single regression output layer, spectral analysis, spectral features, Spectrogram, synthesized piano instruments},
+	pages = {121--124},
+	file = {IEEE Xplore Abstract Record:/Users/yardenc/Zotero/storage/DXG3WYSJ/6287832.html:text/html;IEEE Xplore Abstract Record:/Users/yardenc/Zotero/storage/RRZ2G9XR/6287832.html:text/html;IEEE Xplore Full Text PDF:/Users/yardenc/Zotero/storage/2433GN2E/Böck and Schedl - 2012 - Polyphonic piano note transcription with recurrent.pdf:application/pdf;IEEE Xplore Full Text PDF:/Users/yardenc/Zotero/storage/LTMFT85M/Böck and Schedl - 2012 - Polyphonic piano note transcription with recurrent.pdf:application/pdf}
+}
+
+@article{ron_power_1996,
+	title = {The power of amnesia: {Learning} probabilistic automata with variable memory length},
+	volume = {25},
+	issn = {1573-0565},
+	shorttitle = {The power of amnesia},
+	url = {https://doi.org/10.1007/BF00114008},
+	doi = {10.1007/BF00114008},
+	abstract = {We propose and analyze a distribution learning algorithm for variable memory length Markov processes. These processes can be described by a subclass of probabilistic finite automata which we name Probabilistic Suffix Automata (PSA). Though hardness results are known for learning distributions generated by general probabilistic automata, we prove that the algorithm we present can efficiently learn distributions generated by PSAs. In particular, we show that for any target PSA, the KL-divergence between the distribution generated by the target and the distribution generated by the hypothesis the learning algorithm outputs, can be made small with high confidence in polynomial time and sample complexity. The learning algorithm is motivated by applications in human-machine interaction. Here we present two applications of the algorithm. In the first one we apply the algorithm in order to construct a model of the English language, and use this model to correct corrupted text. In the second application we construct a simple stochastic model for E.coli DNA.},
+	language = {English},
+	number = {2},
+	urldate = {2019-08-26},
+	journal = {Machine Learning},
+	author = {Ron, Dana and Singer, Yoram and Tishby, Naftali},
+	month = nov,
+	year = {1996},
+	note = {tex.ids: ronPowerAmnesiaLearning1996},
+	keywords = {Markov models, Learning distributions, probabilistic automata, suffix trees, text correction},
+	pages = {117--149},
+	file = {Springer Full Text PDF:/Users/yardenc/Zotero/storage/P4IH6U6C/Ron et al. - 1996 - The power of amnesia Learning probabilistic autom.pdf:application/pdf}
+}
+
+@article{parascandolo_recurrent_2016,
+	title = {Recurrent {Neural} {Networks} for {Polyphonic} {Sound} {Event} {Detection} in {Real} {Life} {Recordings}},
+	url = {http://arxiv.org/abs/1604.00861},
+	doi = {10.1109/ICASSP.2016.7472917},
+	abstract = {In this paper we present an approach to polyphonic sound event detection in real life recordings based on bi-directional long short term memory (BLSTM) recurrent neural networks (RNNs). A single multilabel BLSTM RNN is trained to map acoustic features of a mixture signal consisting of sounds from multiple classes, to binary activity indicators of each event class. Our method is tested on a large database of real-life recordings, with 61 classes (e.g. music, car, speech) from 10 different everyday contexts. The proposed method outperforms previous approaches by a large margin, and the results are further improved using data augmentation techniques. Overall, our system reports an average F1-score of 65.5\% on 1 second blocks and 64.7\% on single frames, a relative improvement over previous state-of-the-art approach of 6.8\% and 15.1\% respectively.},
+	urldate = {2019-08-22},
+	journal = {2016 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+	author = {Parascandolo, Giambattista and Huttunen, Heikki and Virtanen, Tuomas},
+	month = mar,
+	year = {2016},
+	note = {tex.ids: parascandoloRecurrentNeuralNetworks2016
+arXiv: 1604.00861},
+	keywords = {Computer Science - Sound, Computer Science - Neural and Evolutionary Computing, Computer Science - Machine Learning},
+	pages = {6440--6444},
+	annote = {arXiv: 1604.00861},
+	annote = {Comment: To appean in Proceedings of IEEE ICASSP 2016},
+	annote = {Comment: To appean in Proceedings of IEEE ICASSP 2016},
+	file = {arXiv\:1604.00861 PDF:/Users/yardenc/Zotero/storage/YDCMEXJC/Parascandolo et al. - 2016 - Recurrent Neural Networks for Polyphonic Sound Eve.pdf:application/pdf;arXiv.org Snapshot:/Users/yardenc/Zotero/storage/SSMCAN93/1604.html:text/html}
+}
+
+@software{attrs,
+  author = {{Hynek Schlawack}},
+  title = {attrs},
+  url = {https://github.com/python-attrs/attrs},
+  version = {20.2.0},
+  date = {2020-10-05},
+}
+
+@software{casper_da_costa_luis_2020_4054194,
+  author       = {Casper da Costa-Luis and
+                  Stephen Karl Larroque and
+                  Kyle Altendorf and
+                  Hadrien Mary and
+                  Mikhail Korobov and
+                  Noam Yorav-Raphael and
+                  Ivan Ivanov and
+                  Marcel Bargull and
+                  Nishant Rodrigues and
+                  Guangshuo CHEN and
+                  Charles Newey and
+                  James and
+                  Martin Zugnoni and
+                  Matthew D. Pagel and
+                  mjstevens777 and
+                  Mikhail Dektyarev and
+                  Alex Rothberg and
+                  Alexander and
+                  Daniel Panteleit and
+                  Fabian Dill and
+                  FichteFoll and
+                  HeoHeo and
+                  Hugo van Kemenade and
+                  Jack McCracken and
+                  Max Nordlund and
+                  Orivej Desh and
+                  RedBug312 and
+                  richardsheridan and
+                  Socialery and
+                  Staffan Malmgren},
+  title        = {{tqdm: A fast, Extensible Progress Bar for Python 
+                   and CLI}},
+  month        = sep,
+  year         = 2020,
+  publisher    = {Zenodo},
+  version      = {v4.50.0},
+  doi          = {10.5281/zenodo.4054194},
+  url          = {https://doi.org/10.5281/zenodo.4054194}
+}
+
+@Article{Hunter:2007,
+  Author    = {Hunter, J. D.},
+  Title     = {Matplotlib: A 2D graphics environment},
+  Journal   = {Computing in Science \& Engineering},
+  Volume    = {9},
+  Number    = {3},
+  Pages     = {90--95},
+  abstract  = {Matplotlib is a 2D graphics package used for Python for
+  application development, interactive scripting, and publication-quality
+  image generation across user interfaces and operating systems.},
+  publisher = {IEEE COMPUTER SOC},
+  doi       = {10.1109/MCSE.2007.55},
+  year      = 2007
+}
+
+@inproceedings{kluyver2016jupyter,
+  title={Jupyter Notebooks-a publishing format for reproducible computational workflows.},
+  author={Kluyver, Thomas and Ragan-Kelley, Benjamin and P{\'e}rez, Fernando and Granger, Brian E and Bussonnier, Matthias and Frederic, Jonathan and Kelley, Kyle and Hamrick, Jessica B and Grout, Jason and Corlay, Sylvain and others},
+  booktitle={ELPUB},
+  pages={87--90},
+  year={2016}
+}
+
+@software{thomas_a_caswell_2020_4030140,
+  author       = {Thomas A Caswell and
+                  Michael Droettboom and
+                  Antony Lee and
+                  John Hunter and
+                  Elliott Sales de Andrade and
+                  Eric Firing and
+                  Tim Hoffmann and
+                  Jody Klymak and
+                  David Stansby and
+                  Nelle Varoquaux and
+                  Jens Hedegaard Nielsen and
+                  Benjamin Root and
+                  Ryan May and
+                  Phil Elson and
+                  Jouni K. Seppänen and
+                  Darren Dale and
+                  Jae-Joon Lee and
+                  Damon McDougall and
+                  Andrew Straw and
+                  Paul Hobson and
+                  Christoph Gohlke and
+                  Tony S Yu and
+                  Eric Ma and
+                  Adrien F. Vincent and
+                  Steven Silvester and
+                  Charlie Moad and
+                  Nikita Kniazev and
+                  hannah and
+                  Elan Ernest and
+                  Paul Ivanov},
+  title        = {matplotlib/matplotlib: REL: v3.3.2},
+  month        = sep,
+  year         = 2020,
+  publisher    = {Zenodo},
+  version      = {v3.3.2},
+  doi          = {10.5281/zenodo.4030140},
+  url          = {https://doi.org/10.5281/zenodo.4030140}
+}
+
+@software{michael_waskom_2020_4019146,
+  author       = {Michael Waskom and
+                  Olga Botvinnik and
+                  Maoz Gelbart and
+                  Joel Ostblom and
+                  Paul Hobson and
+                  Saulius Lukauskas and
+                  David C Gemperline and
+                  Tom Augspurger and
+                  Yaroslav Halchenko and
+                  Jordi Warmenhoven and
+                  John B. Cole and
+                  Julian de Ruiter and
+                  Jake Vanderplas and
+                  Stephan Hoyer and
+                  Cameron Pye and
+                  Alistair Miles and
+                  Corban Swain and
+                  Kyle Meyer and
+                  Marcel Martin and
+                  Pete Bachant and
+                  Eric Quintero and
+                  Gero Kunter and
+                  Santi Villalba and
+                  Brian and
+                  Clark Fitzgerald and
+                  C.G. Evans and
+                  Mike Lee Williams and
+                  Drew O'Kane and
+                  Tal Yarkoni and
+                  Thomas Brunner},
+  title        = {mwaskom/seaborn: v0.11.0 (Sepetmber 2020)},
+  month        = sep,
+  year         = 2020,
+  publisher    = {Zenodo},
+  version      = {v0.11.0},
+  doi          = {10.5281/zenodo.4019146},
+  url          = {https://doi.org/10.5281/zenodo.4019146}
+}
+
+@article{harris2020array,
+  title={Array programming with NumPy},
+  author={Harris, Charles R and Millman, K Jarrod and van der Walt, St{\'e}fan J and Gommers, Ralf and Virtanen, Pauli and Cournapeau, David and Wieser, Eric and Taylor, Julian and Berg, Sebastian and Smith, Nathaniel J and others},
+  journal={Nature},
+  volume={585},
+  number={7825},
+  pages={357--362},
+  year={2020},
+  publisher={Nature Publishing Group}
+}
+
+@article{searfoss2020chipper,
+  title={Chipper: Open-source software for semi-automated segmentation and analysis of birdsong and other natural sounds},
+  author={Searfoss, Abigail M and Pino, James C and Creanza, Nicole},
+  journal={Methods in Ecology and Evolution},
+  volume={11},
+  number={4},
+  pages={524--531},
+  year={2020},
+  publisher={Wiley Online Library}
+}
+
+@book{james2013introduction,
+  title={An introduction to statistical learning},
+  author={James, Gareth and Witten, Daniela and Hastie, Trevor and Tibshirani, Robert},
+  volume={112},
+  year={2013},
+  publisher={Springer}
+}
+
+@inproceedings{sainburg2019animal,
+  title={Animal Vocalization Generative Network (AVGN): A method for visualizing, understanding, and sampling from animal communicative repertoires.},
+  author={Sainburg, Tim and Thielk, Marvin and Gentner, Timothy},
+  booktitle={CogSci},
+  pages={3563},
+  year={2019}
+}
+
+@article{sainburg2019latent,
+  title={Latent space visualization, characterization, and generation of diverse vocal communication signals},
+  author={Sainburg, Tim and Thielk, Marvin and Gentner, Timothy Q},
+  journal={bioRxiv},
+  pages={870311},
+  year={2019},
+  publisher={Cold Spring Harbor Laboratory}
+}
+
+@software{songbrowser,
+  author = {{Troyer lab}},
+  title = {Song Browser},
+  url = {https://www.utsa.edu/troyerlab/software/SongBrowserManual.pdf},
+  version = {0.1.0},
+  date = {2012-07-11},
+}
+
+@article{tachibana2014semi,
+  title={Semi-automatic classification of birdsong elements using a linear support vector machine},
+  author={Tachibana, Ryosuke O and Oosugi, Naoya and Okanoya, Kazuo},
+  journal={PloS one},
+  volume={9},
+  number={3},
+  pages={e92584},
+  year={2014},
+  publisher={Public Library of Science}
+}
+
+@inproceedings{nicholson2016comparison,
+  title={Comparison of machine learning methods applied to birdsong element classification},
+  author={Nicholson, David},
+  booktitle={Proceedings of the 15th Python in Science Conference},
+  pages={57--61},
+  year={2016}
+}
+
+@article{kogan1998automated,
+  title={Automated recognition of bird song elements from continuous recordings using dynamic time warping and hidden Markov models: A comparative study},
+  author={Kogan, Joseph A and Margoliash, Daniel},
+  journal={The Journal of the Acoustical Society of America},
+  volume={103},
+  number={4},
+  pages={2185--2196},
+  year={1998},
+  publisher={Acoustical Society of America}
+}
+
+@article{daou2012computational,
+  title={A computational tool for automated large-scale analysis and measurement of bird-song syntax},
+  author={Daou, Arij and Johnson, Frank and Wu, Wei and Bertram, Richard},
+  journal={Journal of neuroscience methods},
+  volume={210},
+  number={2},
+  pages={147--160},
+  year={2012},
+  publisher={Elsevier}
+}
+
+@article{burkett2015voice,
+  title={VoICE: A semi-automated pipeline for standardizing vocal analysis across models},
+  author={Burkett, Zachary D and Day, Nancy F and Pe{\~n}agarikano, Olga and Geschwind, Daniel H and White, Stephanie A},
+  journal={Scientific reports},
+  volume={5},
+  pages={10237},
+  year={2015},
+  publisher={Nature Publishing Group}
+}
+
+@article{anderson1996template,
+  title={Template-based automatic recognition of birdsong syllables from continuous recordings},
+  author={Anderson, Sven E and Dave, Amish S and Margoliash, Daniel},
+  journal={The Journal of the Acoustical Society of America},
+  volume={100},
+  number={2},
+  pages={1209--1219},
+  year={1996},
+  publisher={Acoustical Society of America}
+}
+
+@article{markowitz_long-range_2013,
+	title = {Long-range {Order} in {Canary} {Song}},
+	volume = {9},
+	issn = {1553-7358},
+	url = {http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003052},
+	doi = {10.1371/journal.pcbi.1003052},
+	abstract = {Bird songs range in form from the simple notes of a Chipping Sparrow to the rich performance of the nightingale. Non-adjacent correlations can be found in the syntax of some birdsongs, indicating that the choice of what to sing next is determined not only by the current syllable, but also by previous syllables sung. Here we examine the song of the domesticated canary, a complex singer whose song consists of syllables, grouped into phrases that are arranged in flexible sequences. Phrases are defined by a fundamental time-scale that is independent of the underlying syllable duration. We show that the ordering of phrases is governed by long-range rules: the choice of what phrase to sing next in a given context depends on the history of the song, and for some syllables, highly specific rules produce correlations in song over timescales of up to ten seconds. The neural basis of these long-range correlations may provide insight into how complex behaviors are assembled from more elementary, stereotyped modules.},
+	language = {English},
+	number = {5},
+	urldate = {2018-06-13},
+	journal = {PLOS Computational Biology},
+	author = {Markowitz, Jeffrey E. and Ivie, Elizabeth and Kligler, Laura and Gardner, Timothy J.},
+	month = may,
+	year = {2013},
+	note = {tex.ids: markowitzLongrangeOrderCanary2013},
+	keywords = {Entropy, Syllables, Canaries, Birds, Acoustics, Bird song, Syntax, Markov processes},
+	pages = {e1003052},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/4CQ69MCW/Markowitz et al. - 2013 - Long-range Order in Canary Song.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/9BUEJ99D/article.html:text/html}
+}
+
+@article{gardner_freedom_2005,
+	title = {Freedom and rules: the acquisition and reprogramming of a bird's learned song},
+	volume = {308},
+	issn = {1095-9203},
+	shorttitle = {Freedom and rules},
+	doi = {10.1126/science.1108214},
+	abstract = {Canary song is hierarchically structured: Short stereotyped syllables are repeated to form phrases, which in turn are arranged to form songs. This structure occurs even in the songs of young isolates, which suggests that innate rules govern canary song development. However, juveniles that had never heard normal song imitated abnormal synthetic songs with great accuracy, even when the tutor songs lacked phrasing. As the birds matured, imitated songs were reprogrammed to form typical canary phrasing. Thus, imitation and innate song constraints are separate processes that can be segregated in time: freedom in youth, rules in adulthood.},
+	language = {English},
+	number = {5724},
+	journal = {Science (New York, N.Y.)},
+	author = {Gardner, Timothy J. and Naef, Felix and Nottebohm, Fernando},
+	month = may,
+	year = {2005},
+	pmid = {15890887},
+	note = {tex.ids: gardnerFreedomRulesAcquisition2005
+tex.pmid: 15890887},
+	keywords = {Vocalization, Animal, Canaries, Female, Learning, Memory, Animals, Animal, Male, Aging, Imitative Behavior, Sexual Maturation, Testosterone, Vocalization},
+	pages = {1046--1049},
+	annote = {bibtex*[pmid=15890887]}
+}
+
+@article{wittenbach_adapting_2015,
+	title = {An {Adapting} {Auditory}-motor {Feedback} {Loop} {Can} {Contribute} to {Generating} {Vocal} {Repetition}},
+	volume = {11},
+	issn = {1553-7358},
+	doi = {10.1371/journal.pcbi.1004471},
+	abstract = {Consecutive repetition of actions is common in behavioral sequences. Although integration of sensory feedback with internal motor programs is important for sequence generation, if and how feedback contributes to repetitive actions is poorly understood. Here we study how auditory feedback contributes to generating repetitive syllable sequences in songbirds. We propose that auditory signals provide positive feedback to ongoing motor commands, but this influence decays as feedback weakens from response adaptation during syllable repetitions. Computational models show that this mechanism explains repeat distributions observed in Bengalese finch song. We experimentally confirmed two predictions of this mechanism in Bengalese finches: removal of auditory feedback by deafening reduces syllable repetitions; and neural responses to auditory playback of repeated syllable sequences gradually adapt in sensory-motor nucleus HVC. Together, our results implicate a positive auditory-feedback loop with adaptation in generating repetitive vocalizations, and suggest sensory adaptation is important for feedback control of motor sequences.},
+	language = {English},
+	number = {10},
+	journal = {PLoS computational biology},
+	author = {Wittenbach, Jason D. and Bouchard, Kristofer E. and Brainard, Michael S. and Jin, Dezhe Z.},
+	month = oct,
+	year = {2015},
+	pmcid = {PMC4598084},
+	pmid = {26448054},
+	note = {tex.ids: wittenbachAdaptingAuditorymotorFeedback2015
+tex.pmcid: PMC4598084
+tex.pmid: 26448054},
+	keywords = {Motor Cortex, Vocalization, Animal, Models, Neurological, Feedback, Models, Neurological, Animals, Animal, Male, Adaptation, Physiological, Computer Simulation, Adaptation, Physiological, Songbirds, Feedback, Physiological, Movement, Efferent Pathways, Auditory Cortex, Auditory Pathways, Vocalization},
+	pages = {e1004471},
+	annote = {bibtex*[pmid=26448054;pmcid=PMC4598084]}
+}
+
+@article{nicholson_bengalese_2017,
+	title = {Bengalese {Finch} song repository},
+	url = {https://figshare.com/articles/Bengalese_Finch_song_repository/4805749},
+	doi = {10.6084/m9.figshare.4805749.v5},
+	abstract = {This is a collection of song from four Bengalese finches recorded in the Sober lab at Emory University. The song has been hand-labeled by two of the authors. To make it easy to work with the dataset, we have created a Python package, "evfuncs", available at https://github.com/soberlab/evfuncs (Please see "References" section below for a direct link).How to work with the files is described on the README of that library, but we describe the types of files here briefly. The actual sound files have the extension .cbin and were created by an application that runs behavioral experiments and collects data called EvTAF. Each .cbin file has an associated .cbin.not.mat file that contains song syllable onsets, offsets, labels, etc., created by a GUI for song annotation called evsonganaly. Each .cbin file also has associated .tmp and .rec files, also created by EvTAF. Those files are not strictly required to work with this dataset but are included for completeness.We share this collection as a means of testing different machine learning algorithms for classifying the elements of birdsong, known as syllables. A Python package for that purpose, "hybrid-vocal-classifier", was developed in part using this dataset.To learn more about hybrid-vocal-classifier, please visit https://hybrid-vocal-classifier.readthedocs.io/en/latest/ (see "References" section below for a direct link).},
+	urldate = {2019-08-17},
+	author = {Nicholson, David and Queen, Jonah E. and Sober, Samuel J.},
+	month = oct,
+	year = {2017},
+	keywords = {Bengalese finch, songbirds, NumPy, Python, Bengalese Finch Birdsongs, Bengalese finch song, Keras, machine learning, neuroscience/behavioral neuroscience, scikit-learn, SciPy, songbird studies}
+}
+
+@article{koumura_birdsongrecognition_2016,
+	title = {{BirdsongRecognition}},
+	url = {https://figshare.com/articles/BirdsongRecognition/3470165},
+	doi = {10.6084/m9.figshare.3470165.v1},
+	abstract = {This is a test data for the program "Birdsong Recognition" (https://github.com/takuya-koumura/birdsong-recognition) and the manuscript "Automatic recognition of element classes and boundaries in the birdsong with variable sequences" by Takuya Koumura and Kazuo Okanoya (http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0159188).The source code of the program is available at https://github.com/takuya-koumura/birdsong-recognition.The data includes songs in Bengalese finches, manual annotations of the song elements, and expected validation errors.Songs were collected from eleven birds (from Bird0 to Bird10). Data is located in the directory “Wave E The sound format is 16-bit linear PCM with sampling rate of 32 kHz.Annotations are defined in XML format. Annotation of each sequence includes the name of wave file, position and length of the sequence in the wave file, and annotations of sound elements in the sequence. Annotation of each sound element includes position and length in the sequence and the label of the element. The schema for the XML file is in birdsong-recognition/xsd/AnnotationSchema.xsd or at http://marler.c.u-tokyo.ac.jp/files/koumura-okanoya-2016-songs/xsd/AnnotationSchema.xsdValidation errors are the expected values that would be obtained by running the program in https://github.com/takuya-koumura/birdsong-recognition with hyper parameters provided in the source code. The program contains three algorithms for automatic recognition: "BD -{\textgreater} LC -{\textgreater} GS", "LC -{\textgreater} BD \& GS" and "LC \& GS -{\textgreater} BD \& GS" Expected errors for each algorithm are provided in "ErrorBdLcGs.xml", "ErrorLcBdGs.xml", "ErrorLcGsBdGs.xml". Each file contains two types of validation errors: "Levenshtein error" and "matching error". Please read the manuscript for the description of the algorithms and errors. The schema for the XML file is in birdsong-recognition/xsd/ErrorSchema.xsd or at http://marler.c.u-tokyo.ac.jp/files/koumura-okanoya-2016-songs/xsd/ErrorSchema.xsd},
+	urldate = {2019-08-17},
+	author = {Koumura, Takuya},
+	month = jul,
+	year = {2016},
+	keywords = {birdsong}
+}
+
+@article{tensorflow2015-whitepaper,
+	title = {{TensorFlow}: {Large}-{Scale} {Machine} {Learning} on {Heterogeneous} {Systems}},
+	url = {http://tensorflow.org/},
+	author = {Abadi, Mart́ın and Agarwal, Ashish and Barham, Paul and Brevdo, Eugene and Chen, Zhifeng and Citro, Craig and Corrado, Greg S. and Davis, Andy and Dean, Jeffrey and Devin, Matthieu and Ghemawat, Sanjay and Goodfellow, Ian and Harp, Andrew and Irving, Geoffrey and Isard, Michael and Jia, Yangqing and Jozefowicz, Rafal and Kaiser, Lukasz and Kudlur, Manjunath and Levenberg, Josh and Mané, Dan and Monga, Rajat and Moore, Sherry and Murray, Derek and Olah, Chris and Schuster, Mike and Shlens, Jonathon and Steiner, Benoit and Sutskever, Ilya and Talwar, Kunal and Tucker, Paul and Vanhoucke, Vincent and Vasudevan, Vijay and Viégas, Fernanda and Vinyals, Oriol and Warden, Pete and Wattenberg, Martin and Wicke, Martin and Yu, Yuan and Zheng, Xiaoqiang},
+	year = {2015},
+	annote = {Software available from tensorflow.org}
+}
+
+@article{koumura_automatic_2016-1,
+	title = {Automatic recognition of element classes and boundaries in the birdsong with variable sequences},
+	volume = {11},
+	issn = {19326203},
+	doi = {10.1371/journal.pone.0159188},
+	abstract = {Researches on sequential vocalization often require analysis of vocalizations in long continuous sounds. In such studies as developmental ones or studies across generations in which days or months of vocalizations must be analyzed, methods for automatic recognition would be strongly desired. Although methods for automatic speech recognition for application purposes have been intensively studied, blindly applying them for biological purposes may not be an optimal solution. This is because, unlike human speech recognition, analysis of sequential vocalizations often requires accurate extraction of timing information. In the present study we propose automated systems suitable for recognizing birdsong, one of the most intensively investigated sequential vocalizations, focusing on the three properties of the birdsong. First, a song is a sequence of vocal elements, called notes, which can be grouped into categories. Second, temporal structure of birdsong is precisely controlled, meaning that temporal information is important in song analysis. Finally, notes are produced according to certain probabilistic rules, which may facilitate the accurate song recognition. We divided the procedure of song recognition into three sub-steps: local classification, boundary detection, and global sequencing, each of which corresponds to each of the three properties of birdsong. We compared the performances of several different ways to arrange these three steps. As results, we demonstrated a hybrid model of a deep convolutional neural network and a hidden Markov model was effective. We propose suitable arrangements of methods according to whether accurate boundary detection is needed. Also we designed the new measure to jointly evaluate the accuracy of note classification and boundary detection. Our methods should be applicable, with small modification and tuning, to the songs in other species that hold the three properties of the sequential vocalization.},
+	number = {7},
+	journal = {PLoS ONE},
+	author = {Koumura, Takuya and Okanoya, Kazuo},
+	year = {2016},
+	note = {tex.ids: koumuraAutomaticRecognitionElement2016, koumuraAutomaticRecognitionElement2016a, koumura\_automatic\_2016},
+	keywords = {Neural networks, Birds, Bird song, Syntax, vocalization, speech, Hidden Markov models, Markov models},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/RCKYJPWR/Koumura and Okanoya - 2016 - Automatic Recognition of Element Classes and Bound.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/WU5J3Y8V/article.html:text/html}
+}
+
+@article{virtanen_scipy_2019,
+	title = {{SciPy} 1.0–{Fundamental} {Algorithms} for {Scientific} {Computing} in {Python}},
+	url = {http://arxiv.org/abs/1907.10121},
+	abstract = {SciPy is an open source scientific computing library for the Python programming language. SciPy 1.0 was released in late 2017, about 16 years after the original version 0.1 release. SciPy has become a de facto standard for leveraging scientific algorithms in the Python programming language, with more than 600 unique code contributors, thousands of dependent packages, over 100,000 dependent repositories, and millions of downloads per year. This includes usage of SciPy in almost half of all machine learning projects on GitHub, and usage by high profile projects including LIGO gravitational wave analysis and creation of the first-ever image of a black hole (M87). The library includes functionality spanning clustering, Fourier transforms, integration, interpolation, file I/O, linear algebra, image processing, orthogonal distance regression, minimization algorithms, signal processing, sparse matrix handling, computational geometry, and statistics. In this work, we provide an overview of the capabilities and development practices of the SciPy library and highlight some recent technical developments.},
+	urldate = {2019-08-17},
+	journal = {arXiv:1907.10121 [physics]},
+	author = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and Haberland, Matt and Reddy, Tyler and Cournapeau, David and Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and Bright, Jonathan and van der Walt, Stéfan J. and Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and Kern, Robert and Larson, Eric and Carey, C. J. and Polat, İlhan and Feng, Yu and Moore, Eric W. and VanderPlas, Jake and Laxalde, Denis and Perktold, Josef and Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and Harris, Charles R. and Archibald, Anne M. and Ribeiro, Antônio H. and Pedregosa, Fabian and van Mulbregt, Paul and Contributors, SciPy 1 0},
+	month = jul,
+	year = {2019},
+	keywords = {Computer Science - Data Structures and Algorithms, Computer Science - Mathematical Software, Computer Science - Software Engineering, Physics - Computational Physics},
+	annote = {arXiv: 1907.10121},
+	annote = {Comment: Article source data is available here: https://github.com/scipy/scipy-articles}
+}
+
+@article{yardencsgithub_hybrid_2019,
+	title = {Hybrid convolutional-recurrent neural networks for segmentation of birdsong and classification of elements: {yardencsGitHub}/tweetynet},
+	shorttitle = {Hybrid convolutional-recurrent neural networks for segmentation of birdsong and classification of elements},
+	url = {https://github.com/yardencsGitHub/tweetynet},
+	urldate = {2019-08-17},
+	author = {{yardencsGitHub}},
+	month = aug,
+	year = {2019},
+	note = {tex.copyright: BSD-3-Clause},
+	annote = {original-date: 2017-06-05T13:42:05Z}
+}
+
+@article{david_nicholson_yardencsgithub/tweetynet_2019,
+	title = {{yardencsGitHub}/tweetynet 0.2.0},
+	url = {https://zenodo.org/record/2667818},
+	doi = {10.5281/zenodo.2667818},
+	abstract = {Added add gardner package with yarden2seq module that converts annotation.mat files to crowsetta.Sequence objects will be installed along with TweetyNet so that vak knows how to use yarden format},
+	urldate = {2019-08-17},
+	author = {Nicholson, David and {yardencsGitHub}},
+	month = may,
+	year = {2019},
+	note = {tex.publisher: Zenodo}
+}
+
+@article{david_nicholson_nickledave/vak:_2019,
+	title = {{NickleDave}/vak: sparrows-gathering},
+	shorttitle = {{NickleDave}/vak},
+	url = {https://zenodo.org/record/3247001},
+	doi = {10.5281/zenodo.3247001},
+	abstract = {Added add helper function to TestLearncurve that multiple unit tests can use to assert all outputs were generated. Now being used to make sure bug fixed in 0.1.0a8 stays fixed. error checking in cli that raises ValueError when cli command is learncurve and the option 'results\_dir\_made\_by\_main\_script' is already defined in [OUTPUT] section, since running 'learncurve' would overwrite it. dataset subpackage that houses VocalizationDataset and related classes that facilitate creating data sets for training neural networks from heterogeneous data: audio files, files of arrays containing spectrograms, different annotation types, etc. also includes modules for handling each data source e.g. audio.to\_spect creates spectrograms from audio files spect.from\_files creates a VocalizationDataset from spectrogram files core sub-package that contains / will contain functions that do heavy lifting: learning\_curve, train, predict learning\_curve is a sub-sub-module that does both train and test of models, instead of having a separate learncurve and summary function (i.e. train and test). Still will confuse some ML/AI people that this "learning curve" has a test data step but whatevs cli sub-package calls / will call these functions and handle any command-line-interface specific logic (e.g. making changes to config.ini files) Changed change name of vak.cli.make\_data to vak.cli.prep structure of config.ini file now specify either audio\_format or spect\_format in [DATA] section and annot\_format for annotations refactor utils sub-package move several functions from data and general into a labels module Removed remove unused options from command-line interface: –glob, –txt, –dataset skip\_files\_with\_labels\_not\_in\_labelset option now happens whenever labelset is specified; if no labelset is given then no filtering is done summary command-line option, since learncurve now runs trains models and also tests them on separate data set silent\_label\_gap option, because VocalizationDataset class determines if a label for unlabeled segments between other segments is needed, and if so automatically assigns this a label of 0 when mapping user labels to consecutive integers this way user does not have to think about it and program doesn't have to keep track of a labels\_mapping file that saves what user specified},
+	urldate = {2019-08-17},
+	author = {Nicholson, David and {yardencsGitHub}},
+	month = jun,
+	year = {2019},
+	note = {tex.publisher: Zenodo}
+}
+
+@incollection{graves_supervised_2012,
+	title = {Supervised sequence labelling},
+	booktitle = {Supervised sequence labelling with recurrent neural networks},
+	publisher = {Springer},
+	author = {Graves, Alex},
+	year = {2012},
+	note = {tex.ids: gravesSupervisedSequenceLabelling2012},
+	pages = {5--13},
+	file = {Full Text:/Users/yardenc/Zotero/storage/6QP3Q8E5/Graves - 2012 - Supervised sequence labelling.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/2IQVFCJL/978-3-642-24797-2_2.html:text/html}
+}
+
+@article{graves_framewise_2005,
+	title = {Framewise phoneme classification with bidirectional {LSTM} and other neural network architectures},
+	volume = {18},
+	number = {5-6},
+	journal = {Neural networks},
+	author = {Graves, Alex and Schmidhuber, Jürgen},
+	year = {2005},
+	note = {tex.ids: gravesFramewisePhonemeClassification2005},
+	pages = {602--610},
+	file = {Full Text:/Users/yardenc/Zotero/storage/6494VG59/Graves and Schmidhuber - 2005 - Framewise phoneme classification with bidirectiona.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/ZHDXWXGM/S0893608005001206.html:text/html}
+}
+
+@inproceedings{graves2006connectionist,
+  title={Connectionist temporal classification: labelling unsegmented sequence data with recurrent neural networks},
+  author={Graves, Alex and Fern{\'a}ndez, Santiago and Gomez, Faustino and Schmidhuber, J{\"u}rgen},
+  booktitle={Proceedings of the 23rd international conference on Machine learning},
+  pages={369--376},
+  year={2006}
+}
+
+@misc{paul_boersma_praat_nodate,
+	title = {Praat: doing phonetics by computer},
+	url = {http://www.praat.org/},
+	author = {{Paul Boersma} and {David Weenink}}
+}
+
+@misc{noauthor_audacity_nodate,
+	title = {Audacity},
+	url = {https://www.audacityteam.org/},
+	abstract = {Audacity® software is copyright © 1999-2019 Audacity Team.
+Web site: https://audacityteam.org/. It is free software
+distributed under the terms of the GNU General Public License.
+The name Audacity® is a registered trademark of Dominic Mazzoni.}
+}
+
+@article{tumer_performance_2007,
+	title = {Performance variability enables adaptive plasticity of ‘crystallized’ adult birdsong},
+	volume = {450},
+	copyright = {2007 Nature Publishing Group},
+	issn = {1476-4687},
+	url = {https://www.nature.com/articles/nature06390},
+	doi = {10.1038/nature06390},
+	abstract = {Why is it that even the best-trained athletes and musicians cannot perform perfectly? One thought is that residual variability in performance is 'noise' that reflects fundamental limits on our ability to control our movements. Experiments using the exceptionally well-rehearsed songs of adult songbirds as a model point to an alternative explanation. Computerized monitoring of the apparently stereotyped songs of adult Bengalese finches revealed minuscule variations in performance. When the birds were given corrections each time the song varied beyond a certain limit, they rapidly learned to adapt their vocalizations. The implication is that once learned, songs can be maintained despite subtle changes to the vocal system due to factors such as ageing. So behavioural 'noise', rather than simply being a nuisance, may reflect experimentation by the nervous system to refine performance.},
+	language = {en},
+	number = {7173},
+	urldate = {2020-08-18},
+	journal = {Nature},
+	author = {Tumer, Evren C. and Brainard, Michael S.},
+	month = dec,
+	year = {2007},
+	note = {Number: 7173
+Publisher: Nature Publishing Group},
+	pages = {1240--1244},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/MG7SHEQL/Tumer and Brainard - 2007 - Performance variability enables adaptive plasticit.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/9LIXENH6/nature06390.html:text/html}
+}
+
+@article{yamahachi_undirected_2020,
+	title = {Undirected singing rate as a non-invasive tool for welfare monitoring in isolated male zebra finches},
+	volume = {15},
+	issn = {1932-6203},
+	url = {https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0236333},
+	doi = {10.1371/journal.pone.0236333},
+	abstract = {Research on the songbird zebra finch (Taeniopygia guttata) has advanced our behavioral, hormonal, neuronal, and genetic understanding of vocal learning. However, little is known about the impact of typical experimental manipulations on the welfare of these birds. Here we explore whether the undirected singing rate can be used as an indicator of welfare. We tested this idea by performing a post hoc analysis of singing behavior in isolated male zebra finches subjected to interactive white noise, to surgery, or to tethering. We find that the latter two experimental manipulations transiently but reliably decreased singing rates. By contraposition, we infer that a high-sustained singing rate is suggestive of successful coping or improved welfare in these experiments. Our analysis across more than 300 days of song data suggests that a singing rate above a threshold of several hundred song motifs per day implies an absence of an acute stressor or a successful coping with stress. Because singing rate can be measured in a completely automatic fashion, its observation can help to reduce experimenter bias in welfare monitoring. Because singing rate measurements are non-invasive, we expect this study to contribute to the refinement of the current welfare monitoring tools in zebra finches.},
+	language = {en},
+	number = {8},
+	urldate = {2020-08-18},
+	journal = {PLOS ONE},
+	author = {Yamahachi, Homare and Zai, Anja T. and Tachibana, Ryosuke O. and Stepien, Anna E. and Rodrigues, Diana I. and Cavé-Lopez, Sophie and Lorenz, Corinna and Arneodo, Ezequiel M. and Giret, Nicolas and Hahnloser, Richard H. R.},
+	month = aug,
+	year = {2020},
+	note = {Publisher: Public Library of Science},
+	pages = {e0236333},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/DUXQDEHI/Yamahachi et al. - 2020 - Undirected singing rate as a non-invasive tool for.pdf:application/pdf}
+}
+
+@article{wohlgemuth2010linked,
+  title={Linked control of syllable sequence and phonology in birdsong},
+  author={Wohlgemuth, Melville J and Sober, Samuel J and Brainard, Michael S},
+  journal={Journal of Neuroscience},
+  volume={30},
+  number={39},
+  pages={12936--12949},
+  year={2010},
+  publisher={Soc Neuroscience}
+}
+
+@article{sober2009adult,
+  title={Adult birdsong is actively maintained by error correction},
+  author={Sober, Samuel J and Brainard, Michael S},
+  journal={Nature neuroscience},
+  volume={12},
+  number={7},
+  pages={927},
+  year={2009},
+  publisher={Nature Publishing Group}
+}
+
+@article{sober2012vocal,
+  title={Vocal learning is constrained by the statistics of sensorimotor experience},
+  author={Sober, Samuel J and Brainard, Michael S},
+  journal={Proceedings of the National Academy of Sciences},
+  volume={109},
+  number={51},
+  pages={21099--21103},
+  year={2012},
+  publisher={National Acad Sciences}
+}
+
+@article{hedley2016complexity,
+  title={Complexity, predictability and time homogeneity of syntax in the songs of Cassin’s vireo (Vireo cassinii)},
+  author={Hedley, Richard W},
+  journal={PloS one},
+  volume={11},
+  number={4},
+  pages={e0150822},
+  year={2016},
+  publisher={Public Library of Science San Francisco, CA USA}
+}
+
+@article{berwick2011songs,
+  title={Songs to syntax: the linguistics of birdsong},
+  author={Berwick, Robert C and Okanoya, Kazuo and Beckers, Gabriel JL and Bolhuis, Johan J},
+  journal={Trends in cognitive sciences},
+  volume={15},
+  number={3},
+  pages={113--121},
+  year={2011},
+  publisher={Elsevier}
+}
+
+@article{jin2011compact,
+  title={A compact statistical model of the song syntax in Bengalese finch},
+  author={Jin, Dezhe Z and Kozhevnikov, Alexay A},
+  journal={PLoS Comput Biol},
+  volume={7},
+  number={3},
+  pages={e1001108},
+  year={2011},
+  publisher={Public Library of Science}
+}
+
+@book{goodfellow_deep_2016-1,
+	title = {Deep {Learning}},
+	isbn = {978-0-262-03561-3},
+	abstract = {An introduction to a broad range of topics in deep learning, covering mathematical and conceptual background, deep learning techniques used in industry, and research perspectives.“Written by three experts in the field, Deep Learning is the only comprehensive book on the subject.”—Elon Musk, cochair of OpenAI; cofounder and CEO of Tesla and SpaceXDeep learning is a form of machine learning that enables computers to learn from experience and understand the world in terms of a hierarchy of concepts. Because the computer gathers knowledge from experience, there is no need for a human computer operator to formally specify all the knowledge that the computer needs. The hierarchy of concepts allows the computer to learn complicated concepts by building them out of simpler ones; a graph of these hierarchies would be many layers deep. This book introduces a broad range of topics in deep learning. The text offers mathematical and conceptual background, covering relevant concepts in linear algebra, probability theory and information theory, numerical computation, and machine learning. It describes deep learning techniques used by practitioners in industry, including deep feedforward networks, regularization, optimization algorithms, convolutional networks, sequence modeling, and practical methodology; and it surveys such applications as natural language processing, speech recognition, computer vision, online recommendation systems, bioinformatics, and videogames. Finally, the book offers research perspectives, covering such theoretical topics as linear factor models, autoencoders, representation learning, structured probabilistic models, Monte Carlo methods, the partition function, approximate inference, and deep generative models. Deep Learning can be used by undergraduate or graduate students planning careers in either industry or research, and by software engineers who want to begin using deep learning in their products or platforms. A website offers supplementary material for both readers and instructors.},
+	language = {en},
+	publisher = {MIT Press},
+	author = {Goodfellow, Ian and Bengio, Yoshua and Courville, Aaron},
+	month = nov,
+	year = {2016},
+	note = {Google-Books-ID: Np9SDQAAQBAJ}
+}
+
+@article{farabet_learning_2013,
+	title = {Learning {Hierarchical} {Features} for {Scene} {Labeling}},
+	volume = {35},
+	issn = {1939-3539},
+	doi = {10.1109/TPAMI.2012.231},
+	abstract = {Scene labeling consists of labeling each pixel in an image with the category of the object it belongs to. We propose a method that uses a multiscale convolutional network trained from raw pixels to extract dense feature vectors that encode regions of multiple sizes centered on each pixel. The method alleviates the need for engineered features, and produces a powerful representation that captures texture, shape, and contextual information. We report results using multiple postprocessing methods to produce the final labeling. Among those, we propose a technique to automatically retrieve, from a pool of segmentation components, an optimal set of components that best explain the scene; these components are arbitrary, for example, they can be taken from a segmentation tree or from any family of oversegmentations. The system yields record accuracies on the SIFT Flow dataset (33 classes) and the Barcelona dataset (170 classes) and near-record accuracy on Stanford background dataset (eight classes), while being an order of magnitude faster than competing approaches, producing a 320×240 image labeling in less than a second, including feature extraction.},
+	number = {8},
+	journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+	author = {Farabet, Clement and Couprie, Camille and Najman, Laurent and LeCun, Yann},
+	month = aug,
+	year = {2013},
+	note = {Conference Name: IEEE Transactions on Pattern Analysis and Machine Intelligence},
+	pages = {1915--1929},
+	file = {IEEE Xplore Abstract Record:/Users/yardenc/Zotero/storage/KIVTIUBW/6338939.html:text/html;Submitted Version:/Users/yardenc/Zotero/storage/QTG34R32/Farabet et al. - 2013 - Learning Hierarchical Features for Scene Labeling.pdf:application/pdf}
+}
+
+@incollection{krizhevsky_imagenet_2012,
+	title = {{ImageNet} {Classification} with {Deep} {Convolutional} {Neural} {Networks}},
+	url = {http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf},
+	urldate = {2020-08-18},
+	booktitle = {Advances in {Neural} {Information} {Processing} {Systems} 25},
+	publisher = {Curran Associates, Inc.},
+	author = {Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
+	editor = {Pereira, F. and Burges, C. J. C. and Bottou, L. and Weinberger, K. Q.},
+	year = {2012},
+	pages = {1097--1105},
+	file = {NIPS Full Text PDF:/Users/yardenc/Zotero/storage/FDW9VVFI/Krizhevsky et al. - 2012 - ImageNet Classification with Deep Convolutional Ne.pdf:application/pdf;NIPS Snapshot:/Users/yardenc/Zotero/storage/IUGRV5SK/4824-imagenet-classification-with-deep-convolutional-neural-networks.html:text/html}
+}
+
+@article{goffinet_inferring_2019,
+	title = {Inferring low-dimensional latent descriptions of animal vocalizations},
+	copyright = {© 2019, Posted by Cold Spring Harbor Laboratory. This pre-print is available under a Creative Commons License (Attribution-NonCommercial 4.0 International), CC BY-NC 4.0, as described at http://creativecommons.org/licenses/by-nc/4.0/},
+	url = {https://www.biorxiv.org/content/10.1101/811661v1},
+	doi = {10.1101/811661},
+	abstract = {{\textless}h3{\textgreater}ABSTRACT{\textless}/h3{\textgreater} {\textless}p{\textgreater}Vocalization is an essential medium for social and sexual signaling in most birds and mammals. Consequently, the analysis of vocal behavior is of great interest to fields such as neuroscience and linguistics. A standard approach to analyzing vocalization involves segmenting the sound stream into discrete vocal elements, calculating a number of handpicked acoustic features, and then using the feature values for subsequent quantitative analysis. While this approach has proven powerful, it suffers from several crucial limitations: First, handpicked acoustic features may miss important dimensions of variability that are important for communicative function. Second, many analyses assume vocalizations fall into discrete vocal categories, often without rigorous justification. Third, a syllable-level analysis requires a consistent definition of syllable boundaries, which is often difficult to maintain in practice and limits the sorts of structure one can find in the data. To address these shortcomings, we apply a data-driven approach based on the variational autoencoder (VAE), an unsupervised learning method, to the task of characterizing vocalizations in two model species: the laboratory mouse (\textit{Mus musculus}) and the zebra finch (\textit{Taeniopygia guttata}). We find that the VAE converges on a parsimonious representation of vocal behavior that outperforms handpicked acoustic features on a variety of common analysis tasks, including representing acoustic similarity and recovering a known effect of social context on birdsong. Additionally, we use our learned acoustic features to argue against the widespread view that mouse ultrasonic vocalizations form discrete syllable categories. Lastly, we present a novel “shotgun VAE” that can quantify moment-by-moment variability in vocalizations. In all, we show that data-derived acoustic features confirm and extend existing approaches while offering distinct advantages in several critical applications.{\textless}/p{\textgreater}},
+	language = {en},
+	urldate = {2020-08-18},
+	journal = {bioRxiv},
+	author = {Goffinet, Jack and Mooney, Richard and Pearson, John},
+	month = oct,
+	year = {2019},
+	note = {Publisher: Cold Spring Harbor Laboratory
+Section: New Results},
+	pages = {811661},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/INPEQWXT/Goffinet et al. - 2019 - Inferring low-dimensional latent descriptions of a.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/W4S4JZY4/811661v1.html:text/html}
+}
+
+@article{mathis_deeplabcut_2018,
+	title = {{DeepLabCut}: markerless pose estimation of user-defined body parts with deep learning},
+	volume = {21},
+	copyright = {2018 The Author(s)},
+	issn = {1546-1726},
+	shorttitle = {{DeepLabCut}},
+	url = {https://www.nature.com/articles/s41593-018-0209-y},
+	doi = {10.1038/s41593-018-0209-y},
+	abstract = {Quantifying behavior is crucial for many applications in neuroscience. Videography provides easy methods for the observation and recording of animal behavior in diverse settings, yet extracting particular aspects of a behavior for further analysis can be highly time consuming. In motor control studies, humans or other animals are often marked with reflective markers to assist with computer-based tracking, but markers are intrusive, and the number and location of the markers must be determined a priori. Here we present an efficient method for markerless pose estimation based on transfer learning with deep neural networks that achieves excellent results with minimal training data. We demonstrate the versatility of this framework by tracking various body parts in multiple species across a broad collection of behaviors. Remarkably, even when only a small number of frames are labeled ({\textasciitilde}200), the algorithm achieves excellent tracking performance on test frames that is comparable to human accuracy.},
+	language = {en},
+	number = {9},
+	urldate = {2020-08-18},
+	journal = {Nature Neuroscience},
+	author = {Mathis, Alexander and Mamidanna, Pranav and Cury, Kevin M. and Abe, Taiga and Murthy, Venkatesh N. and Mathis, Mackenzie Weygandt and Bethge, Matthias},
+	month = sep,
+	year = {2018},
+	note = {Number: 9
+Publisher: Nature Publishing Group},
+	pages = {1281--1289},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/ZPS5I296/Mathis et al. - 2018 - DeepLabCut markerless pose estimation of user-def.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/Y2CNWNYX/s41593-018-0209-y.html:text/html}
+}
+
+@article{coffey_deepsqueak_2019,
+	title = {{DeepSqueak}: a deep learning-based system for detection and analysis of ultrasonic vocalizations},
+	volume = {44},
+	copyright = {2019 American College of Neuropsychopharmacology},
+	issn = {1740-634X},
+	shorttitle = {{DeepSqueak}},
+	url = {https://www.nature.com/articles/s41386-018-0303-6},
+	doi = {10.1038/s41386-018-0303-6},
+	abstract = {Rodents engage in social communication through a rich repertoire of ultrasonic vocalizations (USVs). Recording and analysis of USVs has broad utility during diverse behavioral tests and can be performed noninvasively in almost any rodent behavioral model to provide rich insights into the emotional state and motor function of the test animal. Despite strong evidence that USVs serve an array of communicative functions, technical and financial limitations have been barriers for most laboratories to adopt vocalization analysis. Recently, deep learning has revolutionized the field of machine hearing and vision, by allowing computers to perform human-like activities including seeing, listening, and speaking. Such systems are constructed from biomimetic, “deep”, artificial neural networks. Here, we present DeepSqueak, a USV detection and analysis software suite that can perform human quality USV detection and classification automatically, rapidly, and reliably using cutting-edge regional convolutional neural network architecture (Faster-RCNN). DeepSqueak was engineered to allow non-experts easy entry into USV detection and analysis yet is flexible and adaptable with a graphical user interface and offers access to numerous input and analysis features. Compared to other modern programs and manual analysis, DeepSqueak was able to reduce false positives, increase detection recall, dramatically reduce analysis time, optimize automatic syllable classification, and perform automatic syntax analysis on arbitrarily large numbers of syllables, all while maintaining manual selection review and supervised classification. DeepSqueak allows USV recording and analysis to be added easily to existing rodent behavioral procedures, hopefully revealing a wide range of innate responses to provide another dimension of insights into behavior when combined with conventional outcome measures.},
+	language = {en},
+	number = {5},
+	urldate = {2020-08-18},
+	journal = {Neuropsychopharmacology},
+	author = {Coffey, Kevin R. and Marx, Russell G. and Neumaier, John F.},
+	month = apr,
+	year = {2019},
+	note = {Number: 5
+Publisher: Nature Publishing Group},
+	pages = {859--868},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/77XSKW37/Coffey et al. - 2019 - DeepSqueak a deep learning-based system for detec.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/QX87FGKH/s41386-018-0303-6.html:text/html}
+}
+
+@article{vaswani_attention_2017,
+	title = {Attention {Is} {All} {You} {Need}},
+	url = {http://arxiv.org/abs/1706.03762},
+	abstract = {The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data.},
+	urldate = {2020-08-18},
+	journal = {arXiv:1706.03762 [cs]},
+	author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, Lukasz and Polosukhin, Illia},
+	month = dec,
+	year = {2017},
+	note = {arXiv: 1706.03762},
+	annote = {Comment: 15 pages, 5 figures},
+	file = {arXiv Fulltext PDF:/Users/yardenc/Zotero/storage/U43422UR/Vaswani et al. - 2017 - Attention Is All You Need.pdf:application/pdf;arXiv.org Snapshot:/Users/yardenc/Zotero/storage/65WKBFLE/1706.html:text/html}
+}
+
+@article{cohen_hidden_2020,
+	title = {Hidden neural states underlie canary song syntax},
+	volume = {582},
+	copyright = {2020 The Author(s), under exclusive licence to Springer Nature Limited},
+	issn = {1476-4687},
+	url = {https://www.nature.com/articles/s41586-020-2397-3},
+	doi = {10.1038/s41586-020-2397-3},
+	abstract = {Coordinated skills such as speech or dance involve sequences of actions that follow syntactic rules in which transitions between elements depend on the identities and order of past actions. Canary songs consist of repeated syllables called phrases, and the ordering of these phrases follows long-range rules1 in which the choice of what to sing depends on the song structure many seconds prior. The neural substrates that support these long-range correlations are unknown. Here, using miniature head-mounted microscopes and cell-type-specific genetic tools, we observed neural activity in the premotor nucleus HVC2–4 as canaries explored various phrase sequences in their repertoire. We identified neurons that encode past transitions, extending over four phrases and spanning up to four seconds and forty syllables. These neurons preferentially encode past actions rather than future actions, can reflect more than one song history, and are active mostly during the rare phrases that involve history-dependent transitions in song. These findings demonstrate that the dynamics of HVC include ‘hidden states’ that are not reflected in ongoing behaviour but rather carry information about prior actions. These states provide a possible substrate for the control of syntax transitions governed by long-range rules.},
+	language = {en},
+	number = {7813},
+	urldate = {2020-08-24},
+	journal = {Nature},
+	author = {Cohen, Yarden and Shen, Jun and Semu, Dawit and Leman, Daniel P. and Liberti, William A. and Perkins, L. Nathan and Liberti, Derek C. and Kotton, Darrell N. and Gardner, Timothy J.},
+	month = jun,
+	year = {2020},
+	note = {Number: 7813
+Publisher: Nature Publishing Group},
+	pages = {539--544},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/R69ASI6P/Cohen et al. - 2020 - Hidden neural states underlie canary song syntax.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/7L2WRFFT/s41586-020-2397-3.html:text/html}
+}
+
+@article{alliende_seasonal_2017,
+	title = {Seasonal plasticity of song behavior relies on motor and syntactic variability induced by a basal ganglia–forebrain circuit},
+	volume = {359},
+	issn = {0306-4522},
+	url = {http://www.sciencedirect.com/science/article/pii/S0306452217304773},
+	doi = {10.1016/j.neuroscience.2017.07.007},
+	abstract = {The plasticity of nervous systems allows animals to quickly adapt to a changing environment. In particular, seasonal plasticity of brain structure and behavior is often critical to survival or mating in seasonal climates. Songbirds provide striking examples of seasonal changes in neural circuits and vocal behavior and have emerged as a leading model for adult brain plasticity. While seasonal plasticity and the well-characterized process of juvenile song learning may share common neural mechanisms, the extent of their similarity remains unclear. Especially, it is unknown whether the basal ganglia (BG)–forebrain loop which implements song learning in juveniles by driving vocal exploration participates in seasonal plasticity. To address this issue, we performed bilateral lesions of the output structure of the song-related BG–forebrain circuit (the magnocellular nucleus of the anterior nidopallium) in canaries during the breeding season, when song is most stereotyped, and just after resuming singing in early fall, when canaries sing their most variable songs and may produce new syllable types. Lesions drastically reduced song acoustic variability, increased song and phrase duration, and decreased syntax variability in early fall, reverting at least partially seasonal changes observed between the breeding season and early fall. On the contrary, lesions did not affect singing behavior during the breeding season. Our results therefore indicate that the BG–forebrain pathway introduces acoustic and syntactic variability in song when canaries resume singing in early fall. We propose that BG–forebrain circuits actively participate in seasonal plasticity by injecting variability in behavior during non-breeding season.
+Significance Statement
+The study of seasonal plasticity in temperate songbirds has provided important insights into the mechanisms of structural and functional plasticity in the central nervous system. The precise function and mechanisms of seasonal song plasticity however remain poorly understood. We show here that a basal ganglia–forebrain circuit involved in the acquisition and maintenance of birdsong is actively inducing song variability outside the breeding season, when singing is most variable, while having little effect on the stereotyped singing during the breeding season. Our results suggest that seasonal plasticity reflects an active song-maintenance process akin to juvenile learning, and that basal ganglia–forebrain circuits can drive plasticity in a learned vocal behavior during the non–injury-induced degeneration and reconstruction of the neural circuit underlying its production.},
+	language = {en},
+	urldate = {2020-03-28},
+	journal = {Neuroscience},
+	author = {Alliende, Jorge and Giret, Nicolas and Pidoux, Ludivine and Del Negro, Catherine and Leblois, Arthur},
+	month = sep,
+	year = {2017},
+	keywords = {basal ganglia, birdsong, canary, seasonal plasticity, variability},
+	pages = {49--68}
+}
+
+@article{alliende_species-specific_2013,
+	series = {Special issue: {Physiological} mechanisms of song learning and production},
+	title = {A species-specific view of song representation in a sensorimotor nucleus},
+	volume = {107},
+	issn = {0928-4257},
+	url = {http://www.sciencedirect.com/science/article/pii/S0928425712000447},
+	doi = {10.1016/j.jphysparis.2012.08.004},
+	abstract = {Songbirds constitute a powerful model system for the investigation of how complex vocal communication sounds are represented and generated, offering a neural system in which the brain areas involved in auditory, motor and auditory–motor integration are well known. One brain area of considerable interest is the nucleus HVC. Neurons in the HVC respond vigorously to the presentation of the bird’s own song and display song-related motor activity. In the present paper, we present a synthesis of neurophysiological studies performed in the HVC of one songbird species, the canary (Serinus canaria). These studies, by taking advantage of the singing behavior and song characteristics of the canary, have examined the neuronal representation of the bird’s own song in the HVC. They suggest that breeding cues influence the degree of auditory selectivity of HVC neurons for the bird’s own song over its time-reversed version, without affecting the contribution of spike timing to the information carried by these two song stimuli. Also, while HVC neurons are collectively more responsive to forward playback of the bird’s own song than to its temporally or spectrally modified versions, some are more broadly tuned, with an auditory responsiveness that extends beyond the bird’s own song. Lastly, because the HVC is also involved in song production, we discuss the peripheral control of song production, and suggest that interspecific variations in song production mechanisms could be exploited to improve our understanding of the functional role of the HVC in respiratory–vocal coordination.},
+	language = {en},
+	number = {3},
+	urldate = {2020-08-25},
+	journal = {Journal of Physiology-Paris},
+	author = {Alliende, Jorge and Lehongre, Katia and Del Negro, Catherine},
+	month = jun,
+	year = {2013},
+	pages = {193--202},
+	file = {ScienceDirect Full Text PDF:/Users/yardenc/Zotero/storage/JZTRPEL7/Alliende et al. - 2013 - A species-specific view of song representation in .pdf:application/pdf;ScienceDirect Snapshot:/Users/yardenc/Zotero/storage/T5BA4FY4/S0928425712000447.html:text/html}
+}
+
+@article{alonso_low-dimensional_2009,
+	title = {Low-dimensional dynamical model for the diversity of pressure patterns used in canary song},
+	volume = {79},
+	url = {https://link.aps.org/doi/10.1103/PhysRevE.79.041929},
+	doi = {10.1103/PhysRevE.79.041929},
+	abstract = {During song production, oscine birds produce large air sac pressure pulses. During those pulses, energy is transferred to labia located at the juncture between the bronchii and the trachea, inducing the high frequency labial oscillations which are responsible for airflow modulations, i.e., the uttered sound. In order to generate diverse syllables, canaries (Serinus canaria) use a set of air sac pressure patterns with characteristic shapes. In this work we show that these different shapes can be approximated by the subharmonic solutions of a forced normal form. This simple model is built from identifying dynamical elements which allow to reproduce the shape of the pressure pattern corresponding to one syllable type. Remarkably, integrating that simple model for other parameters allows to recover the other pressure patterns used during song. Interpreting the diversity of these physiological gestures as subharmonic solutions of a simple nonlinear system allows us to account simultaneously for their morphological features as well as for the syllabic timing and suggests a strategy for the generation of complex motor patterns.},
+	number = {4},
+	urldate = {2020-08-25},
+	journal = {Physical Review E},
+	author = {Alonso, Leandro M. and Alliende, Jorge A. and Goller, F. and Mindlin, Gabriel B.},
+	month = apr,
+	year = {2009},
+	note = {Publisher: American Physical Society},
+	pages = {041929},
+	file = {APS Snapshot:/Users/yardenc/Zotero/storage/K84BPZRM/PhysRevE.79.html:text/html;Full Text PDF:/Users/yardenc/Zotero/storage/NUJ3MSWC/Alonso et al. - 2009 - Low-dimensional dynamical model for the diversity .pdf:application/pdf}
+}
+
+@article{appeltants_effect_2005,
+	title = {The effect of auditory distractors on song discrimination in male canaries ({Serinus} canaria)},
+	volume = {69},
+	issn = {0376-6357},
+	url = {http://www.sciencedirect.com/science/article/pii/S0376635705000264},
+	doi = {10.1016/j.beproc.2005.01.010},
+	abstract = {Male songbirds such as canaries produce complex learned vocalizations that are used in the context of mate attraction and territory defense. Successful mate attraction or territorial defense requires that a bird be able to recognize individuals based on their vocal performance and identify these songs in a noisy background. In order to learn more about how birds are able to solve this problem, we investigated, with a two-alternative choice procedure, the ability of adult male canaries to discriminate between conspecific song segments from two different birds and to maintain this discrimination when conspecific songs are superimposed with a variety of distractors. The results indicate that male canaries have the ability to discriminate, with a high level of accuracy song segments produced by two different conspecific birds. Song discrimination was partially maintained when the stimuli were masked by auditory distractors, but the accuracy of the discrimination progressively declined as a function of the number of masking distractors. The type of distractor used in the experiments (other conspecific songs or different types of artificial white noise) did not markedly affect the rate of deterioration of the song discrimination. These data indicate that adult male canaries have the perceptual abilities to discriminate and selectively attend to one ongoing sound that occurs simultaneously with one or more other sounds. The administration of a noradrenergic neurotoxin did not impair markedly the discrimination learning abilities although the number of subjects tested was too small to allow any firm conclusion. In these conditions, however, the noradrenergic lesion significantly increased the number failures to respond in the discrimination learning task suggesting a role, in canaries, of the noradrenergic system in some attentional processes underlying song learning and processing.},
+	language = {en},
+	number = {3},
+	urldate = {2020-08-25},
+	journal = {Behavioural Processes},
+	author = {Appeltants, Didier and Gentner, Timothy Q. and Hulse, Stewart H. and Balthazart, Jacques and Ball, Gregory F.},
+	month = jun,
+	year = {2005},
+	pages = {331--341},
+	file = {Full Text:/Users/yardenc/Zotero/storage/VARPLXU5/Appeltants et al. - 2005 - The effect of auditory distractors on song discrim.pdf:application/pdf;ScienceDirect Snapshot:/Users/yardenc/Zotero/storage/G22TFSIL/S0376635705000264.html:text/html}
+}
+
+@article{pearre_fast_2017,
+	title = {A fast and accurate zebra finch syllable detector},
+	volume = {12},
+	issn = {1932-6203},
+	url = {https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0181992},
+	doi = {10.1371/journal.pone.0181992},
+	abstract = {The song of the adult male zebra finch is strikingly stereotyped. Efforts to understand motor output, pattern generation, and learning have taken advantage of this consistency by investigating the bird’s ability to modify specific parts of song under external cues, and by examining timing relationships between neural activity and vocal output. Such experiments require that precise moments during song be identified in real time as the bird sings. Various syllable-detection methods exist, but many require special hardware, software, and know-how, and details on their implementation and performance are scarce. We present an accurate, versatile, and fast syllable detector that can control hardware at precisely timed moments during zebra finch song. Many moments during song can be isolated and detected with false negative and false positive rates well under 1\% and 0.005\% respectively. The detector can run on a stock Mac Mini with triggering delay of less than a millisecond and a jitter of σ ≈ 2 milliseconds.},
+	language = {en},
+	number = {7},
+	urldate = {2020-08-25},
+	journal = {PLOS ONE},
+	author = {Pearre, Ben and Perkins, L. Nathan and Markowitz, Jeffrey E. and Gardner, Timothy J.},
+	month = jul,
+	year = {2017},
+	note = {Publisher: Public Library of Science},
+	pages = {e0181992},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/WQ6PCLIW/Pearre et al. - 2017 - A fast and accurate zebra finch syllable detector.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/Q3DSYFSH/comments.html:text/html}
+}
+
+@misc{noauthor_praat_nodate,
+	title = {Praat: doing {Phonetics} by {Computer}},
+	url = {https://www.fon.hum.uva.nl/praat/},
+	urldate = {2020-08-27},
+	file = {Praat\: doing Phonetics by Computer:/Users/yardenc/Zotero/storage/3YKDDGAI/praat.html:text/html}
+}
+
+@misc{noauthor_home_nodate,
+	title = {Home},
+	url = {http://www.audacityteam.org},
+	abstract = {Welcome to Audacity
+
+
+Audacity® is free, open source, cross-platform audio software for multi-track recording and editing.
+
+Audacity is available for Windows®, Mac®, GNU/Linux® and other operating systems. Check our feature list, Wiki and Forum.
+
+
+
+Download Audacity 2.1.3
+
+
+
+Mar 17th, 2017: Audacity},
+	language = {en-US},
+	urldate = {2020-08-27},
+	journal = {Audacity ®},
+	file = {Snapshot:/Users/yardenc/Zotero/storage/ZC9SUDUR/www.audacityteam.org.html:text/html}
+}
+
+@article{paszke_automatic_2017,
+	title = {Automatic differentiation in {PyTorch}},
+	url = {https://openreview.net/forum?id=BJJsrmfCZ},
+	abstract = {A summary of automatic differentiation techniques employed in PyTorch library, including novelties like support for in-place modification in presence of objects aliasing the same data, performance...},
+	urldate = {2020-08-27},
+	author = {Paszke, Adam and Gross, Sam and Chintala, Soumith and Chanan, Gregory and Yang, Edward and DeVito, Zachary and Lin, Zeming and Desmaison, Alban and Antiga, Luca and Lerer, Adam},
+	month = oct,
+	year = {2017},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/D4IFCXFP/Paszke et al. - 2017 - Automatic differentiation in PyTorch.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/8NUQP4CC/forum.html:text/html}
+}
+
+@inproceedings{marcel_torchvision_2010,
+	address = {New York, NY, USA},
+	series = {{MM} '10},
+	title = {Torchvision the machine-vision package of torch},
+	isbn = {978-1-60558-933-6},
+	url = {https://doi.org/10.1145/1873951.1874254},
+	doi = {10.1145/1873951.1874254},
+	abstract = {This paper presents Torchvision an open source machine vision package for Torch. Torch is a machine learning library providing a series of the state-of-the-art algorithms such as Neural Networks, Support Vector Machines, Gaussian Mixture Models, Hidden Markov Models and many others. Torchvision provides additional functionalities to manipulate and process images with standard image processing algorithms. Hence, the resulting images can be used directly with the Torch machine learning algorithms as Torchvision is fully integrated with Torch. Both Torch and Torchvision are written in C++ language and are publicly available under the Free-BSD License.},
+	urldate = {2020-08-26},
+	booktitle = {Proceedings of the 18th {ACM} international conference on {Multimedia}},
+	publisher = {Association for Computing Machinery},
+	author = {Marcel, Sébastien and Rodriguez, Yann},
+	month = oct,
+	year = {2010},
+	pages = {1485--1488}
+}
+
+@book{oliphant_guide_2015,
+	address = {North Charleston, SC, USA},
+	edition = {2nd},
+	title = {Guide to {NumPy}},
+	isbn = {978-1-5173-0007-4},
+	abstract = {This is the second edition of Travis Oliphant's A Guide to NumPy originally published electronically in 2006. It is designed to be a reference that can be used by practitioners who are familiar with Python but want to learn more about NumPy and related tools. In this updated edition, new perspectives are shared as well as descriptions of new distributed processing tools in the ecosystem, and how Numba can be used to compile code using NumPy arrays. Travis Oliphant is the co-founder and CEO of Continuum Analytics. Continuum Analytics develops Anaconda, the leading modern open source analytics platform powered by Python. Travis, who is a passionate advocate of open source technology, has a Ph.D. from Mayo Clinic and B.S. and M.S. degrees in Mathematics and Electrical Engineering from Brigham Young University. Since 1997, he has worked extensively with Python for computational and data science. He was the primary creator of the NumPy package and founding contributor to the SciPy package. He was also a co-founder and past board member of NumFOCUS, a non-profit for reproducible and accessible science that supports the PyData stack. He also served on the board of the Python Software Foundation.},
+	publisher = {CreateSpace Independent Publishing Platform},
+	author = {Oliphant, Travis E.},
+	year = {2015}
+}
+
+@article{virtanen_scipy_2020,
+	title = {{SciPy} 1.0: fundamental algorithms for scientific computing in {Python}},
+	volume = {17},
+	copyright = {2020 The Author(s)},
+	issn = {1548-7105},
+	shorttitle = {{SciPy} 1.0},
+	url = {https://www.nature.com/articles/s41592-019-0686-2},
+	doi = {10.1038/s41592-019-0686-2},
+	abstract = {SciPy is an open-source scientific computing library for the Python programming language. Since its initial release in 2001, SciPy has become a de facto standard for leveraging scientific algorithms in Python, with over 600 unique code contributors, thousands of dependent packages, over 100,000 dependent repositories and millions of downloads per year. In this work, we provide an overview of the capabilities and development practices of SciPy 1.0 and highlight some recent technical developments.},
+	language = {en},
+	number = {3},
+	urldate = {2020-08-27},
+	journal = {Nature Methods},
+	author = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and Haberland, Matt and Reddy, Tyler and Cournapeau, David and Burovski, Evgeni and Peterson, Pearu and Weckesser, Warren and Bright, Jonathan and van der Walt, Stéfan J. and Brett, Matthew and Wilson, Joshua and Millman, K. Jarrod and Mayorov, Nikolay and Nelson, Andrew R. J. and Jones, Eric and Kern, Robert and Larson, Eric and Carey, C. J. and Polat, İlhan and Feng, Yu and Moore, Eric W. and VanderPlas, Jake and Laxalde, Denis and Perktold, Josef and Cimrman, Robert and Henriksen, Ian and Quintero, E. A. and Harris, Charles R. and Archibald, Anne M. and Ribeiro, Antônio H. and Pedregosa, Fabian and van Mulbregt, Paul},
+	month = mar,
+	year = {2020},
+	note = {Number: 3
+Publisher: Nature Publishing Group},
+	pages = {261--272},
+	file = {Full Text PDF:/Users/yardenc/Zotero/storage/DGRDR5GN/Virtanen et al. - 2020 - SciPy 1.0 fundamental algorithms for scientific c.pdf:application/pdf;Snapshot:/Users/yardenc/Zotero/storage/H82QAU5F/s41592-019-0686-2.html:text/html}
+}
+
+@book{dask_development_team_dask_2016,
+	title = {Dask: {Library} for dynamic task scheduling},
+	url = {https://dask.org},
+	author = {{Dask Development Team}},
+	year = {2016}
+}
+
+@misc{team_pandas-devpandas_2020,
+	title = {pandas-dev/pandas: {Pandas}},
+	url = {https://doi.org/10.5281/zenodo.3509134},
+	publisher = {Zenodo},
+	author = {team, The pandas development},
+	month = feb,
+	year = {2020},
+	doi = {10.5281/zenodo.3509134}
+}
+
+@inproceedings{mckinney_data_2010,
+	title = {Data {Structures} for {Statistical} {Computing} in {Python}},
+	doi = {10.25080/Majora-92bf1922-00a},
+	booktitle = {Proceedings of the 9th {Python} in {Science} {Conference}},
+	author = {McKinney, Wes},
+	editor = {Walt, Stéfan van der and Millman, Jarrod},
+	year = {2010},
+	pages = {56 -- 61}
+}
