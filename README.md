@@ -22,6 +22,7 @@ An example of annotated song is shown below:
 
 ## How is it used?
 ### Installation
+#### To train models and use them to predict annotation
 To install, run the following command at the command line:  
 `pip install tweetynet`
 
@@ -32,6 +33,26 @@ that is installed automatically with `tweetynet`.
 
 Please see the `vak` documentation for detailed installation instructions:  
 https://vak.readthedocs.io/en/latest/get_started/installation.html  
+
+#### To reproduce results from article
+To reproduce results from the article, you will need to clone this repository.
+
+```console
+$ git clone https://github.com/yardencsGitHub/tweetynet.git
+```
+
+Then you will want to install in "editable" mode from the root of the project: 
+
+```console
+$ cd tweetynet
+$ pip install -e .[article]
+```
+
+> Be sure to add the `[article]` after the period as shown above, 
+> to tell `pip` that you want to install the
+> extra dependencies required to run scripts used for analysis and plots
+
+#### General use
 
 ### Usage
 For a tutorial on using `tweetynet` with `vak`, please see the `vak` documentation:  
