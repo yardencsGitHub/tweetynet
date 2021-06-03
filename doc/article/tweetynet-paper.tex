@@ -680,32 +680,23 @@ Canary vocalizations contain variations that challenge TweetyNet. The examples i
 \subsection*{Automated analysis of canary song structure. }
 
 Sequences of canary phrases contain transitions with different 'memory' depths. Namely, the probability distribution of transition outcomes from a given phrase is captured by Markov chains with variable lengths. As shown in a recent study in Waterslager canaries, this syntax structure is captured parsimoniously by probabilistic suffix trees (PST) \cite{ron_power_1996,markowitz_long-range_2013}. 
-The root node in these graphical models, appearing in the middle of Fig~\ref{fig8}A,B and Fig~\ref{fig9}A,B, represents the zero-order Markov, or base rate, frequencies of the different phrases, labelled in different colors and letters. Each branch, emanating from the colored letters in Figs~\ref{fig8},\ref{fig9} represents the set of Markov chains that end in the specific phrase type designated by that label. For example, the 'A' branch in Fig~\ref{fig8}a includes the first order Markov model 'A' and the second order Markov chains 'FA' and '1A' representing the second order dependence of the transition from phrase 'A'.
+The root node in these graphical models, appearing in the middle of Fig~\ref{fig8}A,B, represents the zero-order Markov, or base rate, frequencies of the different phrases, labelled in different colors and letters. Each branch, emanating from the colored letters in Fig~\ref{fig8}, represents the set of Markov chains that end in the specific phrase type designated by that label. For example, the 'A' branch in Fig~\ref{fig8}A includes the first order Markov model 'A' and the second order Markov chains 'FA' and '1A' representing the second order dependence of the transition from phrase 'A'.
 These models are built by iterative addition of nodes up the branch to represent longer Markov chains, or a transition's dependence on longer sequences of song history. 
 
-Figures~\ref{fig8} and \ref{fig9} demonstrate that TweetyNet parses domestic canary song with an accuracy sufficient to extract its long-range order. In both of these figures, we set parameters of the PST estimation algorithm to derive the deepest syntax structure possible without overfitting as practiced in a recent study \cite{markowitz_long-range_2013} that used about 600 hand annotated songs of Waterslager canaries. In this example, using 2.2\% of the data set, about 40 songs, to train a TweetyNet model and predict the rest of the data reveals the deep structures shown in Fig~\ref{fig8}B - comparable to using 600 hand annotated songs of the same bird (Fig~\ref{fig8}A). With more training data, Tweetynet's accuracy improves as does the statistical strength of the syntax model. In Fig~\ref{fig9}B a TweetyNet model was trained on 19\% of the data, about 340 songs, and predicted the rest of the data. The resulting syntax model can be elaborated to greater depth without overfitting. To crosscheck this deeper model, we manually annotated all 1764 songs of that bird, revealing a very similar syntax model (Fig~\ref{fig9}A).
+Figure~\ref{fig8} and Supplementary Figures~\nameref{S3_Fig},\nameref{S4_Fig} demonstrate that TweetyNet parses domestic canary song with an accuracy sufficient to extract its long-range order. In these figures, we set parameters of the PST estimation algorithm to derive the deepest syntax structure possible without overfitting as practiced in a recent study \cite{markowitz_long-range_2013} that used about 600 hand annotated songs of Waterslager canaries. In this example, using 2.2\% of the data set, about 40 songs, to train a TweetyNet model and predict the rest of the data reveals the deep structures shown in Fig~\ref{fig8}A - comparable to using 600 hand annotated songs of the same bird. With more training data, Tweetynet's accuracy improves as does the statistical strength of the syntax model. In Fig~\ref{fig8}B a TweetyNet model was trained on 19\% of the data, about 340 songs, and predicted the rest of the data. The resulting syntax model can be elaborated to greater depth without overfitting. To crosscheck this deeper model, we manually annotated all 1764 songs of that bird, revealing a very similar syntax model (Fig~\ref{fig8}B).
 
 
 In sum, we find that TweetyNet, trained on a small sample of canary song, is accurate enough to automatically derive the deep structure that has formed the basis of recent studies \cite{markowitz_long-range_2013,cohen_hidden_2020}.
 
 
-
-
 \begin{figure}[!ht]
-\includegraphics[scale=0.85]{Figures/fig8/Figure8_v7.png}
-\caption{{\bf Example of reproducing long-range syntax dependencies, seen in \textit{Waterslager} canaries, in another strain using a TweetyNet model trained on a small fraction of the data.}
-\textbf{A.} Long-range order found in 600 domestic canary songs annotated with human proof reader (methods, similar dataset size to \cite{markowitz_long-range_2013}). Letters and colors label different phrase types. Each branch terminating in a given phrase type indicates the extent to which song history impacts transition probabilities following that phrase. Each node corresponds to a phrase sequence, annotated in its title, and shows a pie chart representing the outgoing transition probabilities from that sequence. The nodes are scaled according to their frequency (legend). Nodes that can be grouped together (chunked as a sequence) without significantly reducing the power of the model are labeled with blue text.
-\textbf{B.} The songs used to create the PST in A are a subset of 1764 songs. A TweetyNet model was trained using about 2.2\% of that dataset (about 9.5\% of the data in A). The PST created from the model's predicted annotation of the entire dataset is very similar to A.}
+\includegraphics[scale=0.85]{Figures/fig8/Figure8_v8.png}
+\caption{{\bf Example of reproducing syntax dependencies seen in \textit{Waterslager} canaries and then using a TweetyNet model to automatically process a larger dataset - adding detail and memory limits of the syntax structure.}
+\textbf{A.} Long-range order found in 600 domestic canary songs annotated with human proof reader (methods, similar dataset size to \cite{markowitz_long-range_2013}). Letters and colors label different phrase types. Each branch terminating in a given phrase type indicates the extent to which song history impacts transition probabilities following that phrase. Each node corresponds to a phrase sequence, annotated in its title, and shows a pie chart representing the outgoing transition probabilities from that sequence. The nodes are scaled according to their frequency (legend). Nodes that can be grouped together (chunked as a sequence) without significantly reducing the power of the model are labeled with blue text. The songs used to create the PST are a subset of 1764 songs. A TweetyNet model was trained using 2.2\% of that dataset (9.5\% of the data in A). The PST created from the model's predicted annotation of the entire dataset is very similar to A (see full comparison in Supplementary Figure~\nameref{S3_Fig}). Here, branch differences between the hand labeled and model labeld song are marked by red and blue dashed lines for added and missed branches.}
+\textbf{B.} Using all 1764 hand labeled songs allowed creating a PST with greater detail. Compared to panel A, some branches did not grow. An almost identical PST was created \textit{without} a human proof reader from a TweetyNet model trained on 19\% of the data. The fluctuation in transition probabilities accumulates in long sequences and, in this example, increased the minimal sequence probability included in the PST. This difference prevented the inclusion of the 'N' branch (see full comparison in Supplementary Figure~\nameref{S4_Fig}).
 \label{fig8}
 \end{figure}
 
-\begin{figure}[!ht]
-\includegraphics[scale=0.85]{Figures/fig9/Figure9_v3.png}
-\caption{{\bf Example of how using TweetyNet to process a larger dataset of canary song adds detail and limits the memory of the syntax structure.}
-\textbf{A.} The full dataset of 1764 songs from Fig~\ref{fig8}, annotated with a human proof reader, allowed creating a PST with greater detail. Compared to Fig~\ref{fig8}A, some branches did not grow.
-\textbf{B.} An almost identical PST was created \textit{without} a human proof reader from a TweetyNet model trained on 19\% of the data. The fluctuation in transition probabilities accumulates in long sequences and, in this example, increased the minimal sequence probability included in the PST. This difference prevented the inclusion of the 'N' branch.}
-\label{fig9}
-\end{figure}
 
 \begin{figure}[!ht]
 \includegraphics[scale=1.0]{Figures/fig10/Figure10_v1.png}
@@ -716,11 +707,11 @@ In sum, we find that TweetyNet, trained on a small sample of canary song, is acc
 \end{figure}
 
 \subsection*{Larger data sets of annotated canary song add details and limit the memory of the syntax structure}
-The increase in syntax detail, presented in Fig~\ref{fig9}, is possible because more rare nodes can be added to the PST without over-fitting the data. Formally, the PST precision increase in larger data sets is defined by the decrease in minimal node frequency allowed in the process of building PST models (Fig~\ref{fig10}), as measured in model cross validation (methods). In our data set, we find an almost linear relation between the number of songs and this measure of precision - close to a tenfold precision improvement.
+The increase in syntax detail, presented in Fig~\ref{fig8}B, is possible because more rare nodes can be added to the PST without over-fitting the data. Formally, the PST precision increase in larger data sets is defined by the decrease in minimal node frequency allowed in the process of building PST models (Fig~\ref{fig10}), as measured in model cross validation (methods). In our data set, we find an almost linear relation between the number of songs and this measure of precision - close to a tenfold precision improvement.
 
-In Fig~\ref{fig9}A, this increased precision allowed reliably adding longer branches to the PST to represent longer Markov chains (in comparison to Fig~\ref{fig8}A). In this example, using a dataset 3 times larger revealed a 5-deep branch that initiate with the beginning of song ('1ABGN') indicating a potential global time-in-song dependency of that transition. The PST in Fig~\ref{fig9}A also has branches that did not 'grow' when more songs were analyzed (e.g. the 'B', 'Q', and 'R' branches) - indicating a potential cutoff of memory depth that is crucial in studying the neural mechanisms of song sequence generation. 
+In Fig~\ref{fig8}B, this increased precision allowed reliably adding longer branches to the PST to represent longer Markov chains (in comparison to Fig~\ref{fig8}A). In this example, using a dataset 3 times larger revealed a 5-deep branch that initiate with the beginning of song ('1ABGN') indicating a potential global time-in-song dependency of that transition. The PST in Fig~\ref{fig8}B also has branches that did not 'grow' compared to Fig~\ref{fig8}A when more songs were analyzed (e.g. the 'B', 'Q', and 'R' branches) - indicating a potential cutoff of memory depth that is crucial in studying the neural mechanisms of song sequence generation. 
 
-The data sets used in Figs~\ref{fig8}A,\ref{fig9}A, and Fig~\ref{fig10}, are about 10 times larger than previous studies. To ascertain the accuracy of the syntax models, in creating the data sets we manually proof read TweetyNet's results (see methods). Across 5 different human proof readers we compare the time required to manually annotate canary song with the proof reading time and find that using TweetyNet saves 95-97.5 percent of the labor.
+The data sets used in Figs~\ref{fig8} and Fig~\ref{fig10}, are about 10 times larger than previous studies. To ascertain the accuracy of the syntax models, in creating the data sets we manually proof read TweetyNet's results (see methods). Across 5 different human proof readers we compare the time required to manually annotate canary song with the proof reading time and find that using TweetyNet saves 95-97.5 percent of the labor.
 \newline
 
 Taken together, the TweetyNet algorithm allowed us to annotate many more songs of individual complex singers than previously demonstrated, with high accuracy across individuals and across species. This accuracy allowed fully-automated analyses, saved most of the labor, and revealed novel details of canary syntax in a new strain.    
@@ -915,10 +906,10 @@ In Fig~\ref{fig7} we present model outputs one step prior to assigning the most 
 \subsection*{Data analysis - song structure} 
 \subsubsection*{Shared template dependence on number of syllables in song (Fig~\ref{fig1}e)}
 In each bird we define an upper bound for repeating parts of songs using pairwise comparisons. For each song we examined all other songs with equal or larger number of syllables and found the largest shared string of consecutive syllables. The fraction of shared syllables is the ratio between the number of shared sequence and the number of syllables in the first, shorter, song. Then, we bin songs by syllable counts (bin size is 10 syllables) and calculate the mean and standard deviation across all pairwise comparisons.
-\subsubsection*{Probabilistic suffix tree (Figs~\ref{fig8},\ref{fig9})}
-For each canary phrase type we describe the dependency of the following transition on previous phrases with a probabilistic suffix tree. This method was described in a previous publication from our lab (Markowitz et. al. 2013, code in \url{https://github.com/jmarkow/pst}). Briefly, the tree is a directed graph in which each phrase type is a root node representing the first order (Markov) transition probabilities to downstream phrases, including the end of song. The pie chart in Figs~\ref{fig8},\ref{fig9} shows such probabilities. Upstream nodes represent higher order Markov chains that are added sequentially if they significantly add information about the transition.
+\subsubsection*{Probabilistic suffix tree (Figs~\ref{fig8},\nameref{S3_Fig}, and \nameref{S4_Fig})}
+For each canary phrase type we describe the dependency of the following transition on previous phrases with a probabilistic suffix tree. This method was described in a previous publication from our lab (Markowitz et. al. 2013, code in \url{https://github.com/jmarkow/pst}). Briefly, the tree is a directed graph in which each phrase type is a root node representing the first order (Markov) transition probabilities to downstream phrases, including the end of song. The pie charts in Figs~\ref{fig8},\nameref{S3_Fig}, and \nameref{S4_Fig} show such probabilities. Upstream nodes represent higher order Markov chains that are added sequentially if they significantly add information about the transition.
 \subsection*{Model cross validation to determine minimal node frequency}
-To prevent overfitting, nodes in the probabilistic suffix trees are added only if they appear more often than a threshold frequency, $P_{min}$. To determine $P_{min}$ we replicate the procedure in \cite{markowitz_long-range_2013} and carry a 10-fold model cross validation procedure. In this procedure the dataset is randomly divided into a training set, containing 90 percent of songs, and a test set, containing 10 percent of songs. A PST is created using the training set and used to calculate the negative log likelihood of the test set. This procedure is repeated 10 times for each value of $P_{min}$, the x-axis in Fig~\ref{fig10}a. For data sets of different sizes (curves in Fig~\ref{fig10}a, x-axis in Fig~\ref{fig10}b) the mean negative log-likelihood across the 10 cross validation subsets and across 10 data sets, y-axis in Fig~\ref{fig10}a, is then used to find the optimal value of $P_{min}$ - the minimum negative log-likelihood that corresponds to the highest precision without over-fitting the training set. All PSTs in Figs~\ref{fig8},\ref{fig9} are created using the cross-validated $P_{min}$.
+To prevent overfitting, nodes in the probabilistic suffix trees are added only if they appear more often than a threshold frequency, $P_{min}$. To determine $P_{min}$ we replicate the procedure in \cite{markowitz_long-range_2013} and carry a 10-fold model cross validation procedure. In this procedure the dataset is randomly divided into a training set, containing 90 percent of songs, and a test set, containing 10 percent of songs. A PST is created using the training set and used to calculate the negative log likelihood of the test set. This procedure is repeated 10 times for each value of $P_{min}$, the x-axis in Fig~\ref{fig10}a. For data sets of different sizes (curves in Fig~\ref{fig10}a, x-axis in Fig~\ref{fig10}b) the mean negative log-likelihood across the 10 cross validation subsets and across 10 data sets, y-axis in Fig~\ref{fig10}a, is then used to find the optimal value of $P_{min}$ - the minimum negative log-likelihood that corresponds to the highest precision without over-fitting the training set. All PSTs in Figs~\ref{fig8},\nameref{S3_Fig}, and \nameref{S4_Fig} are created using the cross-validated $P_{min}$.
 
 \section*{Acknowledgments}
 This study was supported by NIH grants R01NS104925,
@@ -945,6 +936,23 @@ R24NS098536, and R01NS118424 (T.J.G.) We thank J. Markowitz and T.M. Otchy for s
 \label{supp_fig_2}
 \end{figure}
 
+\paragraph*{Fig. S3}
+\label{S3_Fig}
+{\bf Detailed comparison of syntax structure in 600 hand labeled or TweetyNet-labeled canary songs.}
+\begin{figure}[!ht]
+\includegraphics[scale=0.85]{Figures/fig8/Figure8_v7.png}
+\caption{Supporting Fig~\ref{fig8}A. we plot the full probabilistic suffix trees created from 600 hand labeled canary songs ({\bf A}) and from a TweetyNet model trained on 2.2 percent of this bird's song ({\bf B})}
+\label{supp_fig_3}
+\end{figure}
+
+\paragraph*{Fig. S4}
+\label{S4_Fig}
+{\bf Detailed comparison of syntax structure in 1764 hand labeled or TweetyNet-labeled canary songs.}
+\begin{figure}[!ht]
+\includegraphics[scale=0.85]{Figures/fig9/Figure9_v3.png}
+\caption{Supporting Fig~\ref{fig8}B. we plot the full probabilistic suffix trees created from 1764 hand labeled canary songs ({\bf A}) and from a TweetyNet model trained on 19 percent of this bird's song ({\bf B})}
+\label{supp_fig_4}
+\end{figure}
 
 
 \nolinenumbers
