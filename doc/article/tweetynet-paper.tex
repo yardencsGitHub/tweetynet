@@ -1,5 +1,4 @@
-                                                                                                                                                                      % Template for PLoS
-% Version 3.5 March 2018
+% Template for PLoS% Version 3.5 March 2018
 %
 % % % % % % % % % % % % % % % % % % % % % %
 %
@@ -157,7 +156,7 @@
      }
 
 % Use the PLoS provided BiBTeX style
-\bibliographystyle{plos2015}
+\bibliographystyle{plos2015.bst}
 
 % Remove brackets from numbering in List of References
 \makeatletter
@@ -318,8 +317,8 @@ Annotating song greatly increases our ability to leverage songbirds as a model s
 when answering questions about how the brain produces syntax observed in 
 sequenced motor skills, and how the brain learns to adaptively control muscles.
 
-\begin{figure}[!h]
-\includegraphics[scale=1.0]{doc/Figures/fig0/annotfig.png}
+\begin{figure}[!ht]
+\includegraphics[scale=1.0]{Figures/fig0/annotfig.png}
 \caption{{\bf Annotation of birdsong.}
 \textbf{A.} Spectrogram showing a brief clip of Bengalese finch song 
 with different syllable types. 
@@ -350,7 +349,7 @@ Segments are typically defined as points where the smoothed sound envelope or ot
 Fig~\ref{fig2} illustrates how canary song is difficult to segment in an automated manner. 
 Finally, canary song has a hierarchical structure where syllables occur in trilled repetitions, called phrases, that themselves obey long-range syntax rules \cite{markowitz_long-range_2013,gardner_freedom_2005}. Phrases can differ in duration depending on the type of syllable being repeated and similarly inter-syllable silent gaps vary widely in duration (\nameref{S1_Fig}). Because of all this complexity, there are currently no automated methods for accurate annotation of canary song.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \includegraphics[scale=0.725]{Figures/fig1/Figure1_v4.png}
 \caption{{\bf The challenge of annotating complex songs.}
 \textbf{A.} The zebra finch repeating motif allows annotation by matching its template spectrogram without segmenting different syllables (colored bars).
@@ -362,7 +361,7 @@ Finally, canary song has a hierarchical structure where syllables occur in trill
 \label{fig1}
 \end{figure} 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \includegraphics[scale=0.2]{Figures/fig2/fig2_v2.png}
 \caption{{\bf Examples of failure to segment canary song.}
 \textbf{A.} Several seconds of domestic canary song, presented as a spectrogram, beneath a plot of a band-pass filtered sound amplitude. To segment song, an amplitude threshold can be taken, marked by the dashed line on the amplitude trace, and then an automated program finds continuous segments of above-threshold amplitude and marks the onset and offset times of those segments (green, red lines in the spectrogram panel). 
@@ -416,8 +415,8 @@ Finally, we simply find uninterrupted runs of a single syllable label to annotat
 provides robust predictions of segment onsets, offsets, and labels.
 
 
-\begin{figure}[!h]
-\includegraphics[scale=0.5]{doc/Figures/fig3/fig3_v2.png}
+\begin{figure}[!ht]
+\includegraphics[scale=0.5]{Figures/fig3/fig3_v2.png}
 \caption{{\bf TweetyNet neural network architecture.}
 Top, network schematic. TweetyNet takes as input a window, 
 specified in time bins, from a spectrogram (red box, left) 
@@ -513,8 +512,8 @@ achieved much lower syllable error rates. Taken together, the results from bench
 dataset indicate that the architecture performs well across the song of many individual birds. In addition, it dramatically outperforms existing models with less training data, and does so while being trained end-to-end
 without requiring optimizations of multiple steps in a pipeline.
 
-\begin{figure}[!h]
-\includegraphics[scale=0.75]{doc/Figures/fig4/fig4-learning-curves-ai.png}
+\begin{figure}[!ht]
+\includegraphics[scale=0.75]{Figures/fig4/fig4-learning-curves-ai.png}
 \caption{{\bf TweetyNet annotates song with low error rates across ten indiviudal Bengalese finches.}
 Model ‘learning curves’ showing the reduction in annotation error (y-axis) 
 on a held-out test set as a function of the size of the training set (x-axis). 
@@ -596,8 +595,8 @@ that TweetyNet outperforms existing models and that,
 with only minimal cleaning of its output, analyses of behavioral experiments 
 can be scaled up to very large datasets.
 
-\begin{figure}[!h]
-\includegraphics[scale=0.75]{doc/Figures/fig5/fig5-error-across-days-ai.png}
+\begin{figure}[!ht]
+\includegraphics[scale=0.75]{Figures/fig5/fig5-error-across-days-ai.png}
 \caption{{\bf TweetyNet models achieve low error across days of Bengalese finch song, 
 even when trained with just the first three minutes of song recorded}.
 \textbf{A.} TweetyNet models trained on the first three minutes of song 
@@ -624,7 +623,7 @@ After demonstrating TweetyNet's high performance across multiple individuals of 
  
 As in our first test in Bengalese finches, we curated training sets of 1-10 minutes of song from 3 canaries and measured the frame error rates in a held-out test set 20-30 minutes long. (Training sets are relatively longer than the Bengalese tests since canary songs can be up to a minute or more in length and even sparse sampling of the full repertoire requires these longer training sets.)  Still, Fig~\ref{fig6} shows that in three canaries the model learning curves asymptote with 8-10 minute training sets to frame error rates similar to TweetyNet's performance in Bengalese finches.    
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \includegraphics[scale=1.0]{Figures/fig6/fig6_CanaryLC.png}
 \caption{{\bf TweetyNet segments and labels canary song with low error rates, similar to Bengalese finches, across individuals.}
 Models were trained on 60s-600s of song from each individual. The mean frame error (lines) of five models (markers) trained with different randomly-drawn subsets from the training set was measured on a separate 1500-2000s test set from each individual. The asymptotic error rates, annotated to the right of the curves, overlaps with the error rates in the Bengalese finch data sets}
@@ -665,7 +664,7 @@ For each Bengalese finch (BF) and canary (Can) data set we evaluate test-set err
 \end{table}
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \includegraphics[scale=1.0]{Figures/fig7/fig7_model_err_examples.png}
 \caption{{\bf Variants of canary song introduce segmentation and annotation errors.}
 Canary vocalizations contain variations that challenge TweetyNet. The examples in panels A-E show spectrograms on top of the time-aligned likelihood (gray scale) assigned by a trained TweetyNet model to each of the labels (y-axis, 30 syllable types and the tag \textit{unl.} for the unlabeled segments). Green and red vertical lines and numbers on top of the spectrograms mark the onset, offset, and labels predicted by the model. 
@@ -692,7 +691,7 @@ In sum, we find that TweetyNet, trained on a small sample of canary song, is acc
 
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \includegraphics[scale=0.85]{Figures/fig8/Figure8_v7.png}
 \caption{{\bf Example of reproducing long-range syntax dependencies, seen in \textit{Waterslager} canaries, in another strain using a TweetyNet model trained on a small fraction of the data.}
 \textbf{A.} Long-range order found in 600 domestic canary songs annotated with human proof reader (methods, similar dataset size to \cite{markowitz_long-range_2013}). Letters and colors label different phrase types. Each branch terminating in a given phrase type indicates the extent to which song history impacts transition probabilities following that phrase. Each node corresponds to a phrase sequence, annotated in its title, and shows a pie chart representing the outgoing transition probabilities from that sequence. The nodes are scaled according to their frequency (legend). Nodes that can be grouped together (chunked as a sequence) without significantly reducing the power of the model are labeled with blue text.
@@ -700,7 +699,7 @@ In sum, we find that TweetyNet, trained on a small sample of canary song, is acc
 \label{fig8}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \includegraphics[scale=0.85]{Figures/fig9/Figure9_v3.png}
 \caption{{\bf Example of how using TweetyNet to process a larger dataset of canary song adds detail and limits the memory of the syntax structure.}
 \textbf{A.} The full dataset of 1764 songs from Fig~\ref{fig8}, annotated with a human proof reader, allowed creating a PST with greater detail. Compared to Fig~\ref{fig8}A, some branches did not grow.
@@ -708,7 +707,7 @@ In sum, we find that TweetyNet, trained on a small sample of canary song, is acc
 \label{fig9}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \includegraphics[scale=1.0]{Figures/fig10/Figure10_v1.png}
 \caption{{\bf Using datasets more than 5 times larger than previously explored increases statistical power and the precision of syntax models.}
 \textbf{A.} Ten-fold cross validation is used in selection of the minimal node probability for the PSTs (x-axis). Lines show the mean negative log-likelihood of test set data estimated by PSTs in 10 repetitions (methods). Curves are calculated for datasets that are sub sampled from about 5000 songs. Red dots show minimal values - the optimum for building the PSTs.
@@ -931,7 +930,7 @@ R24NS098536, and R01NS118424 (T.J.G.) We thank J. Markowitz and T.M. Otchy for s
 \paragraph*{Fig. S1}
 \label{S1_Fig}
 {\bf Consecutive canary phrases can include acoustically-similar syllables but differ in the duration of inter-syllabic gaps.}
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \includegraphics[scale=1.0]{Figures/Supplementaries/Supp_Figure1_1.png}
 \caption{Example of two consecutive canary phrases that differ mostly in inter-syllable gaps. In this case, annotation methods that first segment syllables and then use acoustic parameters to classify them will introduce errors. By simultaneously learning acoustic and sequence properties, TweetyNet overcomes this weakness.}
 \label{supp_fig_1}
@@ -940,7 +939,7 @@ R24NS098536, and R01NS118424 (T.J.G.) We thank J. Markowitz and T.M. Otchy for s
 \paragraph*{Fig. S2}
 \label{S2_Fig}
 {\bf Most errors of trained TweetyNet models are disagreement on syllable boundaries of 0-2 time bins.}
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \includegraphics[scale=1.0]{Figures/Supplementaries/EdgeErrorDistCanaries.png}
 \caption{Potential syllable boundary disagreements are time bins in which the ground truth test set or the trained TweetyNet model disagree and just one of them assigns the 'unlabeled' silence tag. The histograms show the distances of those time bins from the nearest syllable boundary in test sets 5000 second long.}
 \label{supp_fig_2}
