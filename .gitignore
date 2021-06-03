@@ -25,3 +25,12 @@ doc/notebooks/Canary_Example_Train_Predict/annotated_prep_llb11_example.csv
 src/configs/Canaries/llb16/llb16_eval_080320.toml
 src/configs/Canaries/llb16/llb16_evade_080320.toml
 src/scripts/Canaries/eval.sh
+
+# latex build files
+doc/article/tweetynet-paper.aux
+doc/article/tweetynet-paper.bbl
+doc/article/tweetynet-paper.blg
+doc/article/tweetynet-paper.log
+doc/article/tweetynet-paper.out
+doc/article/tweetynet-paper.pdf
+doc/article/tweetynet-paper.synctex.gz
