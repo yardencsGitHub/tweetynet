@@ -8,19 +8,6 @@ import pandas as pd
 import torch
 from tqdm import tqdm
 
-from vak import config, io, models, transforms
-from vak.datasets.vocal_dataset import VocalDataset
-import vak.device
-import vak.files
-from vak.labeled_timebins import (
-    lbl_tb2segments,
-    majority_vote_transform,
-    lbl_tb_segment_inds_list,
-    remove_short_segments
-)
-from vak.core.learncurve import train_dur_csv_paths as _train_dur_csv_paths
-from vak.logging import log_or_print
-
 from .metrics import compute_metrics, boundary_err
 
 
@@ -56,6 +43,18 @@ def eval_with_output_tfms(csv_path,
     -------
     df : pandas.Dataframe
     """
+    from vak import io, models, transforms  # avoid circular imports
+    from vak.datasets.vocal_dataset import VocalDataset
+    import vak.device
+    import vak.files
+    from vak.labeled_timebins import (
+        lbl_tb2segments,
+        majority_vote_transform,
+        lbl_tb_segment_inds_list,
+        remove_short_segments
+    )
+    from vak.logging import log_or_print
+
     if spect_scaler_path:
         log_or_print(
             f"loading spect scaler from path: {spect_scaler_path}",
@@ -259,6 +258,10 @@ def eval_with_output_tfms(csv_path,
 def learncurve_with_transforms(previous_run_path,
                                min_segment_dur,
                                logger=None):
+    from vak import config  # avoid circular imports
+    from vak.core.learncurve import train_dur_csv_paths as _train_dur_csv_paths
+    from vak.logging import log_or_print
+
     previous_run_path = Path(previous_run_path)
     toml_path = sorted(previous_run_path.glob('*.toml'))
     assert len(toml_path) == 1, f'found more than one .toml config file: {toml_path}'
@@ -372,6 +375,9 @@ def learncurve_with_transforms(previous_run_path,
 def train_with_transforms(results_root,
                           min_segment_dur,
                           logger=None):
+    from vak import config  # avoid circular imports
+    from vak.logging import log_or_print
+
     results_root = Path(results_root)
     toml_path = sorted(results_root.glob('*.toml'))
     assert len(toml_path) == 1, f'found more than one .toml config file: {toml_path}'
