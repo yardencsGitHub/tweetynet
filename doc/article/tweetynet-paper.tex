@@ -143,6 +143,8 @@
 \usepackage{ragged2e}
 \usepackage[rightcaption]{sidecap}
 
+\usepackage{floatrow}
+
 % Bold the 'Figure #' in the caption and separate it from the title/caption with a period
 % Captions will be left justified
 \usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
@@ -402,7 +404,7 @@ Given these issues, we sought to develop an algorithm for automated annotation
 that (1) can learn features from data, and 
 (2) does not require segmented syllables to predict annotations.
 To meet both these criteria, we developed an artificial neural network 
-that we call TweetyNet, shown in (Fig~\ref{fig3}).
+that we call TweetyNet, shown in (Fig~\ref{fig_tweetynet_architecture}).
 TweetyNet takes as input windows from spectrograms of song 
 and produces labels for each time bin of that spectrogram window.
 TweetyNet requires no pre-processing of song spectrograms - most importantly,  segmentation of song into syllables is not needed. Silent gaps between syllables are labelled in training data, and these silent labels are assigned to gaps between syllables when TweetyNet inference is applied to a new song. 
@@ -416,27 +418,24 @@ provides robust predictions of segment onsets, offsets, and labels.
 
 
 \begin{figure}[!ht]
-\includegraphics[scale=0.5]{Figures/fig3/fig3_v2.png}
-\caption{{\bf TweetyNet neural network architecture.}
-Top, network schematic. TweetyNet takes as input a window, 
-specified in time bins, from a spectrogram (red box, left) 
-and in a sequence of steps (left to right) outputs a label for each time bin within the window:
+\floatbox[{\capbeside\thisfloatsetup{capbesideposition={right,top}}}]{figure}[\FBwidth]
+{\includegraphics[scale=0.66]{figures/mainfig_tweetynet_architecture_and_basic_operation/mainfig_tweetynet_architecture_operations_and_post_processing.png}}
+{\caption{{\bf TweetyNet architecture and operation.}
+TweetyNet takes as input a window, 
+specified in time bins, from a spectrogram and in a sequence of steps (top to bottom) outputs a sequence of labeled segments:
 (1) The convolutional blocks produce a set of feature maps 
-by performing a cross-correlation-like operation (asterisk) 
-between their input and a set of learned filters (greyscale boxes). 
+by convolving (asterisk) their input and a set of learned filters (greyscale boxes). 
 A max-pooling operation down samples the feature maps.
-(2) The recurrent layer is made up of Long Short Term Memory (LSTM) units, 
-and the number of units equals the number of time bins in the spectrogram window. 
+(2) The recurrent layer is made up of Long Short Term Memory (LSTM) units. 
 This step is designed to capture dependencies across time 
-using both forward (F) and backward (B) passes through time to learn. 
-(3) A projection ($\overrightarrow{W}_{t,s}$) onto the different syllable classes, $s=1..n$, 
-resulting in a vector of probabilities at each time bin $t$ that the label is $n$. 
-The number of classes, $n$, is predetermined by the user and includes a class for no-song time bins.
-(4) Each time bins is labeled by choosing the class with the highest probability 
-and the labelled time bins are used to separate continuous song segments 
-from no-song segments and to annotate each song-segment with a single label.
-Bottom, the shapes of tensors (multi-dimensional arrays) that result from each operation the network performs.}
-\label{fig3}
+using both forward (F) and backward (B) passes through time to learn the weight governing the dynamics of the layer's internal state. 
+(3) A learned matrix projects the LSTM state onto the different syllable classes at each time bin 
+resulting in a vector of label probabilities.
+(4) Each time bins is labeled by choosing the class with the highest probability (argmax).
+(5) The labelled bins separate continuous song segments from no-song segments (Unl.).  
+(6) Post processing rejects short segments, and annotates each song-segment with a single label using the majority vote of time bins in the segment.
+(i-iv) Zoom into abberant sound (i), max. label probabilities and post-processing.}
+\label{fig_tweetynet_architecture}}
 \end{figure}
 
 Surprisingly, beyond the work previously cited, we find little research that addresses the problem of learning to classify each time bin of a vocalization, either for human speech or birdsong.
@@ -788,7 +787,7 @@ and tqdm \cite{casper_da_costa_luis_2020_4054194}.
 \subsection*{Data collection}
 \subsubsection*{Use of available datasets}
 Bengalese finch song is from two publicly-available repositories. 
-The first \cite{koumura_birdsongrecognition_2016} was used for results in \ref{fig3} and can be found at 
+The first \cite{koumura_birdsongrecognition_2016} was used for results in \ref{fig_tweetynet_architecture} and can be found at 
 \url{https://figshare.com/articles/BirdsongRecognition/3470165}. It accompanied the paper \cite{koumura_automatic_2016-1}.
 The second \cite{nicholson_bengalese_2017} was used for results in Fig~\ref{fig4} can be found at \url{https://figshare.com/articles/Bengalese_Finch_song_repository/4805749}.
 Apart from recordings made for this manuscript we used publicly available datasets of Waterslager canary songs \cite{markowitz_long-range_2013}, Bengalese finch songs \cite{koumura_automatic_2016-1} and Zebra finch songs \cite{otchy_acute_2015}.
@@ -826,14 +825,14 @@ learn. We did not notice any difference in the nature of the transform (i.e, we 
 although here we do not study this systematically.
 
 \subsection*{Network Architecture}
-The network takes a 2D window from a spectrogram as input (red box, left in Fig~\ref{fig3}) and produces as output 
+The network takes a 2D window from a spectrogram as input (red box, left in Fig~\ref{fig_tweetynet_architecture}) and produces as output 
 labels for each time bin in the window. 
 The spectrogram window passes through two standard convolutional blocks, 
 each of which consists of a convolutional layer and a max pooling layer. 
 The convolutional layer performs a cross-correlation
-like operation (asterisk in Fig~\ref{fig3}) between the spectrogram window and learned filters (greyscale boxes in Fig~\ref{fig3}) to produces feature maps.
+like operation (asterisk in Fig~\ref{fig_tweetynet_architecture}) between the spectrogram window and learned filters (greyscale boxes in Fig~\ref{fig_tweetynet_architecture}) to produces feature maps.
 The max pooling layer uses a similar operation to further reduce feature maps to maximum values within a sliding 
-window (orange bin in Fig~\ref{fig3}). Importantly, the window size we use in the max pooling layer has a "width" of one time bin, so that this 
+window (orange bin in Fig~\ref{fig_tweetynet_architecture}). Importantly, the window size we use in the max pooling layer has a "width" of one time bin, so that this 
 layer does not down-sample along the time axis (although the convolutional layer does).
 The output of the second convolutional block passes through a recurrent layer made up of LSTM units, where 
 the number of units equals the number of time bins in the spectrogram window.
@@ -901,7 +900,7 @@ In Table~\ref{table:1} we provide two additional measures. The first is a lower 
 These syllable boundaries are naturally variable in creating the ground truth hand annotated data sets. Spectrogram time bins in which a trained TweetyNet model and the ground truth disagree and only one of them assigns the 'unlabeled' tag can potentially be around segment boundaries. In \nameref{S2_Fig} we show the histogram of distances, in spectrogram bins, of such frame errors from ground truth segment boundaries. The majority is concentrated in 0-2 bins away from the boundaries, amounting the overall percents summarized in Table~\ref{table:1}. The second is syllable error rate after applying post-hoc cleaning of annotation. This cleanup is done in two steps: (1) discard all segments shorter than 5msec (using 10 msec adds an insignificant improvement in some birds) and (2)assign a single label to each segment of time bins not labeled as 'silence' by majority vote.
 
 \subsubsection*{Model output as syllable likelihoods}
-In Fig~\ref{fig7} we present model outputs one step prior to assigning the most likely label to each spectrogram time bin. At that stage, one before the \textit{argmax(N)} step in Fig~\ref{fig3}, the model output for a given time bin $t$ is a real-valued affinity $a(t,s)\in\mathcal{R}$ of all predefined syllable classes $s$. In Fig~\ref{fig7} we convert these numbers to likelihoods by subtracting the minimum value and normalizing separately for each time bin $L(t,s)=\frac{a(t,s)-\min_{s'}a(t,s')}{\sum_{\sigma}[a(t,\sigma)-\min_{s'}a(t,s')]}$. This transformation was done for presentation only. Applying the commonly-used softmax transform ($x\rightarrow\frac{exp(x)}{\sum_xexp(x)}$) is equivalent since we only keep the maximal value.
+In Fig~\ref{fig7} we present model outputs one step prior to assigning the most likely label to each spectrogram time bin. At that stage, one before the \textit{argmax(N)} step in Fig~\ref{fig_tweetynet_architecture}, the model output for a given time bin $t$ is a real-valued affinity $a(t,s)\in\mathcal{R}$ of all predefined syllable classes $s$. In Fig~\ref{fig7} we convert these numbers to likelihoods by subtracting the minimum value and normalizing separately for each time bin $L(t,s)=\frac{a(t,s)-\min_{s'}a(t,s')}{\sum_{\sigma}[a(t,\sigma)-\min_{s'}a(t,s')]}$. This transformation was done for presentation only. Applying the commonly-used softmax transform ($x\rightarrow\frac{exp(x)}{\sum_xexp(x)}$) is equivalent since we only keep the maximal value.
 
 \subsection*{Data analysis - song structure} 
 \subsubsection*{Shared template dependence on number of syllables in song (Fig~\ref{fig1}e)}
