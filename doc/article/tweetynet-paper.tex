@@ -436,7 +436,7 @@ using both forward (F) and backward (B) passes through time to learn the weight 
 resulting in a vector of label probabilities.
 (4) Each time bins is labeled by choosing the class with the highest probability (argmax).
 (5) The labelled bins separate continuous song segments from no-song segments (Unl.).  
-(6) Post processing rejects short segments, and annotates each song-segment with a single label using the majority vote of time bins in the segment. Fig.~\ref{suppfig_example_tensors} shows example tesnsor shapes following each step of the deep network.
+(6) Post processing rejects short segments, and annotates each silence-separated song-segment with a single label using the majority vote of time bins in the segment. Fig.~\ref{suppfig_example_tensors} shows example tesnsor shapes following each step of the deep network.
 (i-iv) Zoom into abberant sound (i), max. label probabilities and post-processing.}
 \label{fig_tweetynet_architecture}}
 \end{figure}
@@ -581,10 +581,10 @@ maintained a low syllable error rate across days (Fig~\ref{fig5}B and Fig~\ref{f
 again comparable to what we observed in the learning curves (Fig~\ref{fig4}B).
 Here we additionally tested whether a simple post-processing step could 
 further lower the error rate. This "majority vote" transform consists of 
-taking each labeled segment (bordered by two segments that the network 
-predicted were "unlabeled" / "silent" segments), finding the label 
-occurred most frequently within that segment, and then assigning that 
-label to all time bins within the segment.
+defining syllable segments as continuous sequences of lebaled spectrogram time bins bordered by time bins that the network 
+predicted were "unlabeled" / "silent", finding the label 
+occurred most frequently across time bins within that segment, and then assigning that 
+label to the segment - and to all time bins within the segment.
 As shown in Fig~\ref{fig5}C, this simple post-processing step 
 did lower the syllable error rate of TweetyNet models.
 We did not find that this post-processing step had a large effect on the 
@@ -839,7 +839,7 @@ layer does not down-sample along the time axis \st{(although the convolutional l
 The output of the second convolutional block passes through a recurrent layer made up of LSTM units, where by default
 the number of units equals the number of time bins in the spectrogram window. This default choice, like other model parameters, can be changed by the user.
 
-The final layer in TweetyNet is a projection ($\overrightarrow{W}_{t,s}$, purple matrix in Fig~\ref{fig_tweetynet_architecture}) of the recurrent layer's output onto the different syllable classes, $s=1..n$, resulting in a vector of $n$ syllable-similarity scores for each spectrogram time bin $t$. The number of classes, $n$, is predetermined by the user and includes a class for no-song time bins ('Unl.' in Fig~\ref{fig_tweetynet_architecture}). At present this non-song class includes both background noises and silence, and future iterations of the model may distinguish between these for better performance. To segment syllables, the bin-wise syllable-similarity scores are first used to select a single syllable class per time bin by choosing the label with the highest syllable-similarity score. Since similarity scores can be normalized, this is akin to maximum a-posteriori (MAP) label selection. Then, the labelled time bins are used to separate continuous song segments from no-song segments and to annotate each song-segment with a single label using majority decision.  
+The final layer in TweetyNet is a projection ($\overrightarrow{W}_{t,s}$, purple matrix in Fig~\ref{fig_tweetynet_architecture}) of the recurrent layer's output onto the different syllable classes, $s=1..n$, resulting in a vector of $n$ syllable-similarity scores for each spectrogram time bin $t$. The number of classes, $n$, is predetermined by the user and includes a class for no-song time bins ('Unl.' in Fig~\ref{fig_tweetynet_architecture}). At present this non-song class includes both background noises and silence, and future iterations of the model may distinguish between these for better performance. To segment syllables, the bin-wise syllable-similarity scores are first used to select a single syllable class per time bin by choosing the label with the highest syllable-similarity score. Since similarity scores can be normalized, this is akin to maximum a-posteriori (MAP) label selection. Then, the labelled time bins are used to separate continuous song segments from no-song segments and to annotate each song-segment with a single label using majority decision across time bins in that segment.  
 
 \subsection*{Training and benchmarking TweetyNet}
 \label{methods:training}
