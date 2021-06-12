@@ -276,8 +276,6 @@ def learncurve_with_transforms(previous_run_path,
 
     eval_dfs = []
     if to_annot:
-        LearncurveAnnot = namedtuple(typename='LearncurveAnnot',
-                                     field_names=('train_dur', 'replicate', 'annots_by_cleanup'))
         learncurve_annots = []
     else:
         learncurve_annots = None
