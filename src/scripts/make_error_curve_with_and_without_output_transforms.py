@@ -27,7 +27,11 @@ import article
 
 def main(results_root,
          min_segment_dur_ini,
-         csv_filename):
+         csv_filename,
+         to_annot):
+    # import crowsetta here to avoid circular import
+    import crowsetta
+
     results_root = Path(results_root)
     indiv_roots = sorted(
         [subdir for subdir in results_root.iterdir() if subdir.is_dir()]
@@ -46,13 +50,28 @@ def main(results_root,
             )
 
     all_eval_dfs = []
+    if to_annot:
+        # make dir we will save annotations in, we actually save the files below
+        annot_root = results_root / 'annotations'
+        annot_root.mkdir(exist_ok=True)
 
     for indiv_root in indiv_roots:
         results_dirs = sorted(indiv_root.glob('results_*'))
         most_recent_results = results_dirs[-1]
         min_segment_dur = min_segment_durs[indiv_root.name]
-        eval_dfs = article.eval.learncurve_with_transforms(previous_run_path=most_recent_results,
-                                                           min_segment_dur=min_segment_dur)
+        (eval_dfs,
+         learncurve_annots) = article.eval.learncurve_with_transforms(previous_run_path=most_recent_results,
+                                                                      min_segment_dur=min_segment_dur,
+                                                                      to_annot=to_annot)
+
+        if to_annot:
+            csv_prefix = f'{indiv_root.name}-{most_recent_results.name}-'
+            for train_dur, replicate_num, annots_by_cleanup in learncurve_annots:  # unpack named tuple
+                for cleanup_type, annots_list in annots_by_cleanup.items():
+                    csv_fname = csv_prefix + f'{train_dur}-{replicate_num}-cleanup-{cleanup_type}.csv'
+                    csv_path = annot_root / csv_fname
+                    crowsetta.csv.annot2csv(annots_list, str(csv_path))
+
         eval_dfs['avg_error'] = 1 - eval_dfs['avg_acc']
         eval_dfs['animal_id'] = indiv_root.name
         all_eval_dfs.append(eval_dfs)
@@ -92,6 +111,11 @@ def get_parser():
     parser.add_argument('--csv_filename',
                         help='filename of .csv that will be saved by this script in results_root',
                         default='error_across_birds_with_cleanup.csv')
+    parser.add_argument('--to_annot',
+                        help=("if this option is added, predictions will be converted to annotations "
+                              "and then saved in an 'annotations' directory in 'results_root'. "
+                              "(If the option is not added, then 'to_annot' defaults to False.)")
+                        )
     return parser
 
 
@@ -100,4 +124,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
     main(results_root=args.results_root,
          min_segment_dur_ini=args.min_segment_dur_ini,
-         csv_filename=args.csv_filename)
+         csv_filename=args.csv_filename,
+         to_annot=args.to_annot)
