@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 import json
 from pathlib import Path
 
@@ -9,6 +9,13 @@ import torch
 from tqdm import tqdm
 
 from .metrics import compute_metrics, boundary_err
+from .pred import pred2labels
+
+
+def s_to_sample_num(edges_s, timebin_dur):
+    """convert array of segment onsets or offset times in seconds
+    to those times given in digital sample number"""
+    return np.round(np.array(edges_s) / timebin_dur).astype(int)
 
 
 # number of timebins from an onset or offset
@@ -34,7 +41,8 @@ def eval_with_output_tfms(csv_path,
                           device='cuda',
                           spect_key='s',
                           timebins_key='t',
-                          logger=None):
+                          logger=None,
+                          to_annot=False):
     """computes evaluation metrics on a dataset
 
     computes the metrics without and with "majority vote" transform
@@ -43,15 +51,14 @@ def eval_with_output_tfms(csv_path,
     -------
     df : pandas.Dataframe
     """
-    from vak import io, models, transforms  # avoid circular imports
+    # import here to avoid circular imports
+    from crowsetta import Sequence, Annotation
+    from vak import io, models, transforms
     from vak.datasets.vocal_dataset import VocalDataset
     import vak.device
     import vak.files
     from vak.labeled_timebins import (
         lbl_tb2segments,
-        majority_vote_transform,
-        lbl_tb_segment_inds_list,
-        remove_short_segments
     )
     from vak.logging import log_or_print
 
@@ -132,8 +139,13 @@ def eval_with_output_tfms(csv_path,
     if device is None:
         device = vak.device.get_default_device()
 
+    to_long_tensor = transforms.ToLongTensor()  # used in main loop after applying clean-up
+
     records = defaultdict(list)  # will be used with pandas.DataFrame.from_records to make output csv
-    to_long_tensor = transforms.ToLongTensor()
+    if to_annot:
+        annots_by_cleanup = {cleanup: [] for cleanup in CLEANUP_TYPES}
+    else:
+        annots_by_cleanup = None
 
     models_map = models.from_model_config_map(
         model_config_map,
@@ -174,58 +186,18 @@ def eval_with_output_tfms(csv_path,
                 y_pred = y_pred.unsqueeze(0)[padding_mask]
                 y_pred_np = np.squeeze(y_pred.cpu().numpy())
 
-                # --- apply cleanup transform to output if any
-                if cleanup_type == 'none':
-                    y_pred_labels, _, _ = lbl_tb2segments(y_pred_np,
-                                                          labelmap=labelmap,
-                                                          t=t,
-                                                          min_segment_dur=None,
-                                                          majority_vote=False)
-                    y_pred_labels = ''.join(y_pred_labels.tolist())
-                else:
-                    # need segment_inds_list for transforms
-                    segment_inds_list = lbl_tb_segment_inds_list(y_pred_np,
-                                                                 unlabeled_label=labelmap['unlabeled'])
-
-                    if cleanup_type == 'majority_vote':
-                        y_pred_np = majority_vote_transform(y_pred_np, segment_inds_list)
-                        y_pred = to_long_tensor(y_pred_np).to(device)
-                        y_pred_labels, _, _ = lbl_tb2segments(y_pred_np,
-                                                              labelmap=labelmap,
-                                                              t=t,
-                                                              min_segment_dur=None,
-                                                              majority_vote=False)
-                        y_pred_labels = ''.join(y_pred_labels.tolist())
-
-                    elif cleanup_type == 'min_segment_dur':
-                        y_pred_np, _ = remove_short_segments(y_pred_np,
-                                                             segment_inds_list,
-                                                             timebin_dur=timebin_dur,
-                                                             min_segment_dur=min_segment_dur,
-                                                             unlabeled_label=labelmap['unlabeled'])
-                        y_pred = to_long_tensor(y_pred_np).to(device)
-                        y_pred_labels, _, _ = lbl_tb2segments(y_pred_np,
-                                                              labelmap=labelmap,
-                                                              t=t,
-                                                              min_segment_dur=None,
-                                                              majority_vote=False)
-                        y_pred_labels = ''.join(y_pred_labels.tolist())
-
-                    elif cleanup_type == 'min_segment_dur_majority_vote':
-                        y_pred_np, segment_inds_list = remove_short_segments(y_pred_np,
-                                                                             segment_inds_list,
-                                                                             timebin_dur=timebin_dur,
-                                                                             min_segment_dur=min_segment_dur,
-                                                                             unlabeled_label=labelmap['unlabeled'])
-                        y_pred_np = majority_vote_transform(y_pred_np,
-                                                            segment_inds_list)
-                        y_pred = to_long_tensor(y_pred_np).to(device)
-                        y_pred_labels, _, _ = lbl_tb2segments(y_pred_np,
-                                                              labelmap=labelmap,
-                                                              t=t,
-                                                              min_segment_dur=None,
-                                                              majority_vote=False)
-                        y_pred_labels = ''.join(y_pred_labels.tolist())
+                # --- get labels as strings, applying cleanup transform to output (if any)
+                (y_pred_np,
+                 y_pred_labels,
+                 pred_onsets_s,
+                 pred_offsets_s) = pred2labels(y_pred_np,
+                                               labelmap,
+                                               t,
+                                               timebin_dur,
+                                               cleanup_type=cleanup_type,
+                                               min_segment_dur=min_segment_dur)
+                # take (possibly cleaned up) labeled timebin vector and put back into a tensor
+                y_pred = to_long_tensor(y_pred_np).to(device)
 
                 metric_vals_batch = compute_metrics(metrics, y_true, y_pred, y_true_labels, y_pred_labels)
                 for metric_name, metric_val in metric_vals_batch.items():
@@ -247,17 +219,34 @@ def eval_with_output_tfms(csv_path,
                 # this is the same row in records as 'metric_name` and 'cleanup_type' above
                 records['pct_boundary_err'].append(bnd_err)
 
-        eval_df = pd.DataFrame.from_records(records)
-        gb = eval_df.groupby('cleanup').agg('mean')
-        gb = gb.add_prefix('avg_')
-        eval_df = gb.reset_index()
+                if to_annot:
+                    seq = Sequence.from_keyword(labels=y_pred_labels,
+                                                onsets_s=pred_onsets_s,
+                                                offsets_s=pred_offsets_s,
+                                                onsets_Hz=s_to_sample_num(pred_onsets_s, timebin_dur),
+                                                offsets_Hz=s_to_sample_num(pred_offsets_s, timebin_dur))
+                    annot = Annotation(seq=seq,
+                                       audio_path=df_split.iloc[ind].audio_path,
+                                       annot_path=df_split.iloc[ind].annot_path)
+                    annots_by_cleanup[cleanup_type].append(annot)
 
-    return eval_df
+    eval_df = pd.DataFrame.from_records(records)
+    gb = eval_df.groupby('cleanup').agg('mean')
+    gb = gb.add_prefix('avg_')
+    eval_df = gb.reset_index()
+
+    return eval_df, annots_by_cleanup
+
+
+# declare this outside function so we can import and use in other scripts
+LearncurveAnnot = namedtuple(typename='LearncurveAnnot',
+                             field_names=('train_dur', 'replicate_num', 'annots_by_cleanup'))
 
 
 def learncurve_with_transforms(previous_run_path,
                                min_segment_dur,
-                               logger=None):
+                               logger=None,
+                               to_annot=False):
     from vak import config  # avoid circular imports
     from vak.core.learncurve import train_dur_csv_paths as _train_dur_csv_paths
     from vak.logging import log_or_print
@@ -265,6 +254,7 @@ def learncurve_with_transforms(previous_run_path,
     previous_run_path = Path(previous_run_path)
     toml_path = sorted(previous_run_path.glob('*.toml'))
     assert len(toml_path) == 1, f'found more than one .toml config file: {toml_path}'
+
     toml_path = toml_path[0]
 
     cfg = config.parse.from_toml_path(toml_path)
@@ -285,6 +275,13 @@ def learncurve_with_transforms(previous_run_path,
     train_dur_csv_paths = _train_dur_csv_paths._dict_from_dir(previous_run_path)
 
     eval_dfs = []
+    if to_annot:
+        LearncurveAnnot = namedtuple(typename='LearncurveAnnot',
+                                     field_names=('train_dur', 'replicate', 'annots_by_cleanup'))
+        learncurve_annots = []
+    else:
+        learncurve_annots = None
+
     for train_dur, csv_paths in train_dur_csv_paths.items():
         for replicate_num, this_train_dur_this_replicate_csv_path in enumerate(
             csv_paths
@@ -354,27 +351,36 @@ def learncurve_with_transforms(previous_run_path,
                 log_or_print(
                     f"Using checkpoint: {ckpt_path}", logger=logger, level="info"
                 )
+                eval_df, annots_by_cleanup = eval_with_output_tfms(csv_path,
+                                                                   model_config_map,
+                                                                   checkpoint_path=ckpt_path,
+                                                                   labelmap=labelmap,
+                                                                   window_size=window_size,
+                                                                   num_workers=num_workers,
+                                                                   spect_scaler_path=spect_scaler_path,
+                                                                   min_segment_dur=min_segment_dur,
+                                                                   to_annot=to_annot)
 
-                eval_df = eval_with_output_tfms(csv_path,
-                                                model_config_map,
-                                                checkpoint_path=ckpt_path,
-                                                labelmap=labelmap,
-                                                window_size=window_size,
-                                                num_workers=num_workers,
-                                                spect_scaler_path=spect_scaler_path,
-                                                min_segment_dur=min_segment_dur)
                 eval_df['train_set_dur'] = train_dur
                 eval_df['replicate_num'] = replicate_num
                 eval_df['model_name'] = model_name
                 eval_dfs.append(eval_df)
 
+                if to_annot:
+                    learncurve_annots.append(
+                        LearncurveAnnot(train_dur=train_dur,
+                                        replicate_num=replicate_num,
+                                        annots_by_cleanup=annots_by_cleanup)
+                    )
+
     eval_dfs = pd.concat(eval_dfs)
-    return eval_dfs
+    return eval_dfs, learncurve_annots
 
 
 def train_with_transforms(results_root,
                           min_segment_dur,
-                          logger=None):
+                          logger=None,
+                          to_annot=False):
     from vak import config  # avoid circular imports
     from vak.logging import log_or_print
 
@@ -416,7 +422,7 @@ def train_with_transforms(results_root,
     with labelmap_path.open("r") as f:
         labelmap = json.load(f)
 
-    eval_dfs = []  # hack to make loop over items work -- we only ever eval one model
+    # hack: we only ever eval one model
     for model_name, model_config in model_config_map.items():
         log_or_print(
             f"Evaluating model: {model_name}", logger=logger, level="info"
@@ -426,16 +432,15 @@ def train_with_transforms(results_root,
             f"Using checkpoint: {ckpt_path}", logger=logger, level="info"
         )
 
-        eval_df = eval_with_output_tfms(csv_path,
-                                        model_config_map,
-                                        checkpoint_path=ckpt_path,
-                                        labelmap=labelmap,
-                                        window_size=window_size,
-                                        num_workers=num_workers,
-                                        spect_scaler_path=spect_scaler_path,
-                                        min_segment_dur=min_segment_dur)
+        eval_df, annots_by_cleanup = eval_with_output_tfms(csv_path,
+                                                           model_config_map,
+                                                           checkpoint_path=ckpt_path,
+                                                           labelmap=labelmap,
+                                                           window_size=window_size,
+                                                           num_workers=num_workers,
+                                                           spect_scaler_path=spect_scaler_path,
+                                                           min_segment_dur=min_segment_dur,
+                                                           to_annot=to_annot)
         eval_df['model_name'] = model_name
-        eval_dfs.append(eval_df)
 
-    eval_dfs = pd.concat(eval_dfs)
-    return eval_dfs
+    return eval_df, annots_by_cleanup
