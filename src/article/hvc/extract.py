@@ -82,7 +82,7 @@ def make_syls(
 # hvc.parse.extract._validate_feature_group_and_convert_to_list('svm')
 # but re-ordered to make sure features are in same order as they are
 # returned by the original matlab script written by Tachibana
-FEATURE_LIST = [
+FEATURE_LIST = (
     'mean spectrum',
     'mean delta spectrum',
     'mean cepstrum',
@@ -107,7 +107,7 @@ FEATURE_LIST = [
     'mean delta pitch',
     'mean delta pitch goodness',
     'mean delta amplitude'
-]
+)
 
 
 def extract(csv_path,
@@ -117,6 +117,38 @@ def extract(csv_path,
             spect_maker,
             audio_format,
             feature_list=FEATURE_LIST):
+    """extract features used in [1]_ for training a
+    support vector machine (SVM) model
+
+    Parameters
+    ----------
+    csv_path : str, pathlib.Path
+        "source" .csv used to find audio + annotation files,
+        and extract features from them
+    labelset
+    features_dst : str, pathlib.Path
+        directory where feature files should be saved
+    csv_dst : str, pathlib.Path
+        directory where .csv
+    spect_maker : hvc.audiofileIO.Spectrogram
+        instance of class, used to make spectrograms
+    audio_format : str
+        one of {'cbin', 'wav'}
+    feature_list : list
+        of string, features that should be extracted.
+        Default is ``article.hvc.extract.FEATURES_LIST',
+        which lists original features from [1]_.
+
+    Returns
+    -------
+    extract_csv_path
+
+    References
+    ----------
+    .. [1] Tachibana, Ryosuke O., Naoya Oosugi, and Kazuo Okanoya.
+       "Semi-automatic classification of birdsong elements using
+       a linear support vector machine." PloS one 9.3 (2014): e92584.
+    """
     csv_path = Path(csv_path).expanduser().resolve()
     if not csv_path.exists():
         raise FileNotFoundError(
@@ -203,4 +235,7 @@ def extract(csv_path,
         ftrs_path_col.append(ftrs_path)
 
     vak_df['features_path'] = ftrs_path_col
-    vak_df.to_csv(csv_dst / Path(csv_path.name), index=False)
+    extract_csv_path = csv_dst / Path(csv_path.name)
+    vak_df.to_csv(extract_csv_path, index=False)
+
+    return extract_csv_path
