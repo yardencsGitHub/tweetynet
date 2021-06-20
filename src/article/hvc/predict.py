@@ -6,7 +6,6 @@ import numpy as np
 
 import pandas as pd
 from tqdm import tqdm
-import vak
 
 
 def predict(prep_csv_path,
@@ -14,6 +13,32 @@ def predict(prep_csv_path,
             clf_path,
             predict_dst,
             labelset):
+    """generate predictions
+    using a trained classifier
+
+    Parameters
+    ----------
+    prep_csv_path : str, pathlib.Path
+        path to csv saved by ``vak prep``
+    resegment_csv_path : str, pathlib.Path
+        path to csv saved by ``article.hvc.resegment.resegment``
+    clf_path : str, pathlib.Path
+        path to classifier saved by ``article.hvc.fit.save_clf``
+    predict_dst : str, pathlib.Path
+        where text file of predicted labels should be saved.
+    labelset : set
+        of labels.
+        Used to map integer predictions to string labels.
+
+    Returns
+    -------
+    pred_paths : dict
+        with keys {'ground_truth', 'resegment'}
+        whose corresponding values are paths to
+        text files containing predicted labels.
+    """
+    import vak  # to avoid circular imports
+
     predict_dst = Path(predict_dst).expanduser().resolve()
     if not predict_dst.exists() or not predict_dst.is_dir():
         raise NotADirectoryError(
