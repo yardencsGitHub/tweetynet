@@ -177,7 +177,6 @@ def rerun_learncurve(previous_run_path,
     cfg = config.parse.from_toml_path(toml_path)
 
     # ---- get all the parameters from the config we need
-    prep_csv_path = cfg.learncurve.csv_path
     labelset = cfg.prep.labelset
     audio_format = cfg.prep.audio_format
 
@@ -220,7 +219,7 @@ def rerun_learncurve(previous_run_path,
                 level="info",
             )
 
-            scores = run_hvc_expt(prep_csv_path=prep_csv_path,
+            scores = run_hvc_expt(prep_csv_path=this_train_dur_this_replicate_csv_path,
                                   segment_params=segment_params,
                                   labelset=labelset,
                                   audio_format=audio_format,
