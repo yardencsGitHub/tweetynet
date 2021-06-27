@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import joblib
+import numpy as np
 import pandas as pd
 
 from sklearn.pipeline import make_pipeline
@@ -78,8 +79,23 @@ def fit(extract_csv_path,
     clf = HalvingRandomSearchCV(
         pipe, tuned_parameters, factor=3, n_jobs=-2, verbose=1,
     )
+    # need to dynamically set min_resources so default isn't greater than number of samples in dataset
+    DEFAULT_CV = 5
+    n_classes = np.unique(y).shape[0]
+    min_resources_ = DEFAULT_CV * 2 * n_classes  # 2 is ``magic_factor`` from ``sklearn.model_selection._search_successive_halving.py``
+    if min_resources_ > x.shape[0]:
+        for cv in (4, 3,):
+            min_resources_ = cv * 2 * n_classes
+            if min_resources_ < x.shape[0]:
+                break
+        if min_resources_ > x.shape[0]:
+            raise ValueError("could not find min_resources_ value smaller than number of samples")
+    else:
+        cv = DEFAULT_CV
+    clf = HalvingRandomSearchCV(
+        pipe, tuned_parameters, factor=3, min_resources=min_resources_, cv=cv, n_jobs=-2, verbose=1,
+    )
     clf.fit(x, y)
-
     return clf
 
 
