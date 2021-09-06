@@ -1,0 +1,40 @@
+[PREP]
+labelset = "range: 1-20"
+spect_format = "npz"
+annot_file = "D:\\Users\\yarde\\vak_project\\llb3\\llb3_annotation_Apr_2019_emily_4TF.mat"
+annot_format = "yarden"
+data_dir = "D:\\Users\\yarde\\vak_project\\llb3\\annotated"
+test_dur = 5000
+train_dur = 25000
+val_dur = 250
+output_dir = "D:\\Users\\yarde\\vak_project\\llb3\\train"
+
+[SPECT_PARAMS]
+fft_size = 1024
+step_size = 64
+freq_cutoffs = [ 500, 10000,]
+thresh = 6.25
+
+[DATALOADER]
+window_size = 370
+
+[LEARNCURVE]
+models = "TweetyNet"
+train_set_durs = [ 120, 180, 240, 300, 360, 420, 480, 540, 600, 660,]
+num_replicates = 7
+normalize_spectrograms = false
+batch_size = 8
+num_epochs = 1
+val_step = 250
+patience = 4
+ckpt_step = 1000
+num_workers = 8
+device = "cuda"
+root_results_dir = "D:\\Users\\yarde\\vak_project\\llb3\\results"
+csv_path = "D:\\Users\\yarde\\vak_project\\llb3\\train\\annotated_prep_200605_103353_linux_npz.csv"
+previous_run_path = "D:\\Users\\yarde\\vak_project\\llb3\\results\\results_200605_104920"
+[TweetyNet.optimizer]
+lr = 0.001
+
+[TweetyNet.network]
+hidden_size = 1024
