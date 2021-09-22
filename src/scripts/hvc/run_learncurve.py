@@ -231,10 +231,10 @@ def rerun_learncurve(previous_run_path,
                 records.append(
                     {
                         'animal_id': animal_id,
-                        'train_dur': train_dur,
-                        'replicate': replicate_num,
-                        'source': source,
-                        'mean_segment_error_rate': mean_seg_err_rate,
+                        'train_set_dur': train_dur,
+                        'replicate_num': replicate_num,
+                        'segmentation': source,
+                        'avg_segment_error_rate': mean_seg_err_rate,
                     }
                 )
     df = pd.DataFrame.from_records(records)
