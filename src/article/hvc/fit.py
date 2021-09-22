@@ -71,8 +71,11 @@ def fit(extract_csv_path,
 
     tuned_parameters = {
         'svc__kernel': ['rbf'],
-        'svc__gamma': loguniform(1e-9, 1e13),
-        'svc__C': loguniform(1e-2, 1e10)
+        # in practice found we never want large gamma,
+        # and that even gamma < 1 can still cause pathological behavior
+        # (model predicts all one class) when 0 < C < ~50.
+        'svc__gamma': loguniform(1e-9, 1e-3),
+        'svc__C': loguniform(60, 1e10)
     }
 
     pipe = make_pipeline(StandardScaler(), SVC())
