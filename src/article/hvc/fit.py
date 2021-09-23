@@ -17,7 +17,8 @@ from tqdm import tqdm
 
 def fit(extract_csv_path,
         learncurve_csv_path,
-        split='train'):
+        split='train',
+        max_fits=4):
     """fit an SVM to features extracted
     by ``article.hvc.extract.extract``.
 
@@ -31,6 +32,18 @@ def fit(extract_csv_path,
     split : str
         split to use to fit models,
         default is 'train'
+    max_fits : int
+        maximum number of times to attempt to ``fit`` the data.
+        After each ``fit`` this function tests that the number
+        of classes the model predicts is equal to the true number
+        of classes in the data. If this is True, the model is
+        returned. If not, this function attempts to fit again,
+        up to ``max_fits`` times. This loop is added to deal with
+        "pathological" behavior where random hyperparameter search finds
+        "best" values that cause the SVM to predict only
+        one class, or less than the n classes. The current ranges used
+        mostly mitigate this behavior, but for small duration training sets
+        (30, 45s) it can still occur, roughly every ~1/10 replicates.
 
     Returns
     -------
@@ -78,27 +91,56 @@ def fit(extract_csv_path,
         'svc__C': loguniform(60, 1e10)
     }
 
-    pipe = make_pipeline(StandardScaler(), SVC())
-    clf = HalvingRandomSearchCV(
-        pipe, tuned_parameters, factor=3, n_jobs=-2, verbose=1,
-    )
-    # need to dynamically set min_resources so default isn't greater than number of samples in dataset
-    DEFAULT_CV = 5
     n_classes = np.unique(y).shape[0]
-    min_resources_ = DEFAULT_CV * 2 * n_classes  # 2 is ``magic_factor`` from ``sklearn.model_selection._search_successive_halving.py``
-    if min_resources_ > x.shape[0]:
-        for cv in (4, 3,):
-            min_resources_ = cv * 2 * n_classes
-            if min_resources_ < x.shape[0]:
-                break
+
+    for fit_num in range(max_fits):
+        print(
+            f'fit {fit_num} of (maximum) {max_fits}.'
+        )
+        pipe = make_pipeline(StandardScaler(), SVC())
+        # need to dynamically set min_resources so default isn't greater than number of samples in dataset
+        DEFAULT_CV = 5
+        # in next line, 2 is ``magic_factor`` from ``sklearn.model_selection._search_successive_halving.py``
+        min_resources_ = DEFAULT_CV * 2 * n_classes
         if min_resources_ > x.shape[0]:
-            raise ValueError("could not find min_resources_ value smaller than number of samples")
-    else:
-        cv = DEFAULT_CV
-    clf = HalvingRandomSearchCV(
-        pipe, tuned_parameters, factor=3, min_resources=min_resources_, cv=cv, n_jobs=-2, verbose=1,
-    )
-    clf.fit(x, y)
+            for cv in (4, 3,):
+                min_resources_ = cv * 2 * n_classes
+                if min_resources_ < x.shape[0]:
+                    break
+            if min_resources_ > x.shape[0]:
+                raise ValueError("could not find min_resources_ value smaller than number of samples")
+        else:
+            cv = DEFAULT_CV
+        clf = HalvingRandomSearchCV(
+            pipe, tuned_parameters, factor=3, min_resources=min_resources_, cv=cv, n_jobs=-2, verbose=1,
+        )
+        clf.fit(x, y)
+        n_classes_preds = np.unique(clf.predict(x)).shape[0]
+        if n_classes_preds == n_classes:
+            print(
+                f'number of classes predicted by model, {n_classes_preds}, matches '
+                f'number of classes in ground truth data. Done fitting.'
+            )
+            break
+        elif n_classes_preds < n_classes:
+            if fit_num < max_fits - 1:
+                print(
+                    f'number of classes predicted by model, {n_classes_preds}, was '
+                    f'less than number of classes in ground truth data, {n_classes}. '
+                    f'Attempting random hyperparameter search again.'
+                )
+            else:
+                raise ValueError(
+                    f'number of classes predicted by model, {n_classes_preds}, was '
+                    f'less than number of classes in ground truth data, {n_classes}. '
+                    f'Was unable to fit model in less than {max_fits} attempts.'
+                )
+        elif n_classes_preds > n_classes:
+            raise ValueError(
+                f'number of classes predicted by model, {n_classes_preds}, was '
+                f'more than number of classes in ground truth data, {n_classes}. '
+            )
+
     return clf
 
 
