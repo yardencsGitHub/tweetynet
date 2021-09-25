@@ -22,7 +22,17 @@ def run_hvc_expt(prep_csv_path,
                  spect_params_ref='tachibana',
                  logger=None,
                  ):
-    """run a single ``hvc`` experiment
+    """run a single ``hvc`` experiment,
+    training an SVM on a dataset used to train
+    ``TweetyNet`` and then measuring the segment
+    error rate using predictions on a test set.
+
+    If ``segment_params`` are specified, then
+    this function re-segments the test set
+    using those segmenting parameters, and
+    additionally measures the error rate using
+    the blindly resegmented data, to provide an
+    empirical upper bound on error.
 
     Parameters
     ----------
@@ -50,8 +60,15 @@ def run_hvc_expt(prep_csv_path,
 
     Returns
     -------
-    mean_segment_error_rate : float
-        the mean segment error rate
+    scores : dict
+        of "scores", that is, segment error rates.
+        Keys {'ground_truth', 'resegment'}
+        are strings indicating how test data set
+        was processed: either using the manually
+        cleaned ground truth segmentation, or blindly
+        resegmenting (without clean-ups) using
+        ``segment_parms``. If ``segment_params`` is None,
+        then 'resegment' will also be None.
     """
     from vak.logging import log_or_print
 
@@ -76,17 +93,25 @@ def run_hvc_expt(prep_csv_path,
 
     # ---- 1. blindly resegment test set
     # (this is what would happen if dataset were not carefully hand annotated)
-    log_or_print(
-        f"(1) resegmenting test set",
-        logger=logger,
-        level="info",
-    )
-    resegment_csv_path = article.hvc.resegment.resegment(prep_csv_path,
-                                                         segment_params,
-                                                         dummy_label=dummy_label,
-                                                         annot_dst=annot_dst,
-                                                         csv_dst=csv_dst,
-                                                         split='test')
+    if segment_params is not None:
+        log_or_print(
+            f"(1) resegmenting test set",
+            logger=logger,
+            level="info",
+        )
+        resegment_csv_path = article.hvc.resegment.resegment(prep_csv_path,
+                                                             segment_params,
+                                                             dummy_label=dummy_label,
+                                                             annot_dst=annot_dst,
+                                                             csv_dst=csv_dst,
+                                                             split='test')
+    else:
+        log_or_print(
+            f"(1) no segmenting parameters, skipping re-segmenting step",
+            logger=logger,
+            level="info",
+        )
+        resegment_csv_path = None
 
     # ---- 2. extract features
     # from (correctly segmented) set
@@ -108,14 +133,15 @@ def run_hvc_expt(prep_csv_path,
                                                    audio_format,
                                                    article.hvc.extract.FEATURE_LIST)
 
-    # extract from re-segmented test set
-    article.hvc.extract.extract(csv_path=resegment_csv_path,
-                                labelset=dummy_label,
-                                features_dst=resegment_features_dst,
-                                csv_dst=csv_dst,
-                                spect_maker=spect_maker,
-                                audio_format=audio_format,
-                                feature_list=article.hvc.extract.FEATURE_LIST)
+    if resegment_csv_path is not None:
+        # extract from re-segmented test set
+        article.hvc.extract.extract(csv_path=resegment_csv_path,
+                                    labelset=dummy_label,
+                                    features_dst=resegment_features_dst,
+                                    csv_dst=csv_dst,
+                                    spect_maker=spect_maker,
+                                    audio_format=audio_format,
+                                    feature_list=article.hvc.extract.FEATURE_LIST)
 
     # ---- 3. train classifier
     log_or_print(
@@ -136,11 +162,21 @@ def run_hvc_expt(prep_csv_path,
         logger=logger,
         level="info",
     )
-    pred_paths = article.hvc.predict.predict(extract_csv_path,
-                                             resegment_csv_path,
-                                             clf_path,
-                                             predict_dst,
-                                             labelset)
+
+    pred_paths = {}
+    # loop over ground truth and resegmented data, to make predictions for each
+    for preds_source, csv_path in zip(
+            ('ground_truth', 'resegment'),
+            (extract_csv_path, resegment_csv_path),
+    ):
+        if csv_path is not None:  # resegment_csv_path will be None if no segmenting parameters
+            pred_path = article.hvc.predict.predict(csv_path,
+                                                    clf_path,
+                                                    predict_dst,
+                                                    labelset)
+            pred_paths[preds_source] = pred_path
+        else:
+            pred_paths[preds_source] = None
 
     # ---- 5. compute scores on predictions
     log_or_print(
@@ -148,11 +184,24 @@ def run_hvc_expt(prep_csv_path,
         logger=logger,
         level="info",
     )
-    scores = article.hvc.score.segment_error_rate(prep_csv_path,
-                                                  pred_paths)
-    scores = {source: scores_tuple._asdict() for source, scores_tuple in scores.items()}
-    for source in scores:
-        scores[source]['segment_error_rates'] = scores[source]['segment_error_rates'].tolist()
+
+    # below, maps 'source' (manually cleaned ground truth / re-segmented) to segment error rate
+    scores = {}  # name ``source`` for brevity
+    for preds_source, pred_path in pred_paths.items():
+        if pred_path is not None:
+            seg_error_tuple = article.hvc.score.segment_error_rate(prep_csv_path,
+                                                                   pred_path)
+        else:
+            seg_error_tuple = None
+        scores[preds_source] = seg_error_tuple
+
+    # make it so we can save scores as .json
+
+    scores = {source: (scores_tuple._asdict() if scores_tuple is not None else None)
+              for source, scores_tuple in scores.items()}
+    for source in scores:  # convert numpy array to list
+        if scores[source] is not None:
+            scores[source]['segment_error_rates'] = scores[source]['segment_error_rates'].tolist()
     scores_json_path = scores_dst / 'segment_error_rates.json'
     with scores_json_path.open('w') as fp:
         json.dump(scores, fp)
@@ -226,8 +275,11 @@ def rerun_learncurve(previous_run_path,
                                   results_dst=replicate_dst,
                                   spect_params_ref='tachibana')
 
-            for source in scores.keys():
-                mean_seg_err_rate = scores[source]['mean_segment_error_rate']
+            for source, seg_err_dict in scores.items():
+                if seg_err_dict is not None:
+                    mean_seg_err_rate = scores[source]['mean_segment_error_rate']
+                else:
+                    mean_seg_err_rate = None
                 records.append(
                     {
                         'animal_id': animal_id,
@@ -295,15 +347,18 @@ def main(results_root,
             f'directories for these animal IDs not found in results root:\n{doesnt_exist}'
         )
 
-    segment_params_ini = Path(segment_params_ini)
-    if not segment_params_ini.exists():
-        raise FileNotFoundError(f'segment_params_ini file not found: {segment_params_ini}')
+    if segment_params_ini is not None:
+        segment_params_ini = Path(segment_params_ini)
+        if not segment_params_ini.exists():
+            raise FileNotFoundError(f'segment_params_ini file not found: {segment_params_ini}')
 
-    # get segment parameters, fail early if they're not found
-    all_segment_params = {}
-    for animal_id in animal_ids:
-        all_segment_params[animal_id] = get_segment_params(segment_params_ini,
-                                                           animal_id)
+        # get segment parameters, fail early if they're not found
+        all_segment_params = {}
+        for animal_id in animal_ids:
+            all_segment_params[animal_id] = get_segment_params(segment_params_ini,
+                                                               animal_id)
+    else:
+        all_segment_params = {animal_id: None for animal_id in animal_ids}
 
     dfs = []
     for animal_id_root in animal_id_roots:
@@ -344,8 +399,7 @@ def get_parser():
                         nargs='+')
     parser.add_argument('--segment_params_ini',
                         help=("path to .ini file with segmenting parameters "
-                              "for audio files from each animal"),
-                        default=SEGMENT_PARAMS_INI)
+                              "for audio files from each animal"))
     parser.add_argument('--csv_filename',
                         help='filename of .csv that will be saved by this script in results_root',
                         default='segment_error_across_birds.hvc.csv')
