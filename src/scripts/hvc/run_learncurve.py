@@ -9,6 +9,7 @@ from pathlib import Path
 import hvc
 import pandas as pd
 import pyprojroot
+import toml
 
 import article.hvc
 
@@ -213,7 +214,8 @@ def rerun_learncurve(previous_run_path,
                      segment_params,
                      results_dst,
                      logger=None):
-    from vak import config  # import here to avoid circular imports
+    # import here to avoid circular imports
+    import vak.converters
     from vak.core.learncurve import train_dur_csv_paths as _train_dur_csv_paths
     from vak.logging import log_or_print
 
@@ -223,11 +225,16 @@ def rerun_learncurve(previous_run_path,
 
     toml_path = toml_path[0]
 
-    cfg = config.parse.from_toml_path(toml_path)
+    cfg_dict = toml.load(toml_path.open())  # not using ``vak.config.parse``, to avoid FileNotFound errors
 
     # ---- get all the parameters from the config we need
-    labelset = cfg.prep.labelset
-    audio_format = cfg.prep.audio_format
+    labelset = vak.converters.labelset_to_set(
+        cfg_dict['PREP']['labelset']
+    )
+    if 'audio_format' in cfg_dict['PREP']:
+        audio_format = cfg_dict['PREP']['audio_format']
+    else:
+        audio_format = 'wav'  # for canary song, which uses 'spect_format', no 'audio_format'
 
     # ---- make a "root" results directory for this animal id
     animal_id = previous_run_path.parent.name
