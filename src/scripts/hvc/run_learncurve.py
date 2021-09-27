@@ -349,9 +349,15 @@ def main(results_root,
     results_root = Path(results_root)
     animal_id_roots = sorted([results_root / animal_id for animal_id in animal_ids])
     if not all([animal_id_root.exists() for animal_id_root in animal_id_roots]):
-        doesnt_exist = [animal_id_root for animal_id_root in animal_id_roots if not animal_id_root.exits()]
+        doesnt_exist = [animal_id_root for animal_id_root in animal_id_roots if not animal_id_root.exists()]
         raise NotADirectoryError(
             f'directories for these animal IDs not found in results root:\n{doesnt_exist}'
+        )
+
+    results_dst = Path(results_dst)
+    if not results_dst.exists():
+        raise NotADirectoryError(
+            f'results_dst not recognized as a directory:\n{results_dst}'
         )
 
     if segment_params_ini is not None:
