@@ -151,7 +151,8 @@ def run_hvc_expt(prep_csv_path,
         level="info",
     )
     clf = article.hvc.fit.fit(extract_csv_path,
-                              learncurve_csv_path=prep_csv_path)
+                              learncurve_csv_path=prep_csv_path,
+                              split='train')
 
     clf_path = article.hvc.fit.save_clf(clf,
                                         extract_csv_path,
@@ -174,7 +175,8 @@ def run_hvc_expt(prep_csv_path,
             pred_path = article.hvc.predict.predict(csv_path,
                                                     clf_path,
                                                     predict_dst,
-                                                    labelset)
+                                                    labelset,
+                                                    split='test')
             pred_paths[preds_segmentation] = pred_path
         else:
             pred_paths[preds_segmentation] = None
@@ -191,7 +193,8 @@ def run_hvc_expt(prep_csv_path,
     for preds_source, pred_path in pred_paths.items():
         if pred_path is not None:
             seg_error_tuple = article.hvc.score.segment_error_rate(prep_csv_path,
-                                                                   pred_path)
+                                                                   pred_path,
+                                                                   split='test')
         else:
             seg_error_tuple = None
         scores[preds_source] = seg_error_tuple
