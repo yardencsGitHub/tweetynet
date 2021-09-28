@@ -9,7 +9,8 @@ SegmentErrorRates = namedtuple(typename='SegmentErrorRates',
 
 
 def segment_error_rate(prep_csv_path,
-                       pred_path):
+                       pred_path,
+                       split='test'):
     """compute segment error rates--
     i.e. a normalized edit distance--
     given ground truth labels and
@@ -39,6 +40,7 @@ def segment_error_rate(prep_csv_path,
     import vak
 
     prep_df = pd.read_csv(prep_csv_path)
+    prep_df = prep_df[prep_df.split == split]
     annots = vak.annotation.from_df(prep_df)
     y_true = [''.join(annot.seq.labels.tolist()) for annot in annots]
 
