@@ -11,7 +11,8 @@ from tqdm import tqdm
 def predict(extract_csv_path,
             clf_path,
             predict_dst,
-            labelset):
+            labelset,
+            split='test'):
     """generate predictions using a trained classifier,
     and save those predictions to a text file
 
@@ -28,6 +29,8 @@ def predict(extract_csv_path,
     labelset : set
         of labels.
         Used to map integer predictions to string labels.
+    split : str
+        split that should be used for predictions. Default is 'test'.
 
     Returns
     -------
@@ -43,6 +46,7 @@ def predict(extract_csv_path,
         )
 
     extract_df = pd.read_csv(extract_csv_path)
+    extract_df = extract_df[extract_df.split == split]
     clf = joblib.load(clf_path)
 
     labelset = vak.converters.labelset_to_set(labelset)
