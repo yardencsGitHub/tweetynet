@@ -1,4 +1,5 @@
 from pathlib import Path
+import warnings
 
 import dask
 from hvc.audiofileIO import Syllable
@@ -209,6 +210,8 @@ def extract(csv_path,
         # .not.mat annots do not have 'onsets_Hz' and 'offsets_Hz' attributes
         # so we compute dynamically
         onset_inds = np.round(annot.seq.onsets_s * samp_freq).astype(int)
+        if onset_inds[0] < 0.0:
+            onset_inds[0] = 0.0  # one case of this in canary 'llb11' annotation, avoids crash
         offset_inds = np.round(annot.seq.offsets_s * samp_freq).astype(int)
 
         syls = make_syls(raw_audio=raw_audio,
@@ -219,9 +222,15 @@ def extract(csv_path,
                          offsets_Hz=offset_inds)
 
         ftr_dicts = []
-        for syl in syls:
-            ftr_dict = dask.delayed(ftrs_dict_from_syl)(syl)
-            ftr_dicts.append(ftr_dict)
+        for syl_ind, syl in enumerate(syls):
+            if syl.sylAudio.shape[0] < 1:
+                warnings.warn(
+                    f'Audio for syllable {syl_ind} with label {syl.label} had length less than 1, skipping. '
+                    f'From audio file: {Path(audio_path).name}'
+                )
+            else:
+                ftr_dict = dask.delayed(ftrs_dict_from_syl)(syl)
+                ftr_dicts.append(ftr_dict)
 
         records = dask.compute(*ftr_dicts)
         ftrs_df = pd.DataFrame.from_records(records)
