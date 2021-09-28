@@ -96,7 +96,7 @@ def run_hvc_expt(prep_csv_path,
     # (this is what would happen if dataset were not carefully hand annotated)
     if segment_params is not None:
         log_or_print(
-            f"(1) resegmenting test set",
+            f"(1) resegmenting test set\n",
             logger=logger,
             level="info",
         )
@@ -108,7 +108,7 @@ def run_hvc_expt(prep_csv_path,
                                                              split='test')
     else:
         log_or_print(
-            f"(1) no segmenting parameters, skipping re-segmenting step",
+            f"(1) no segmenting parameters, skipping re-segmenting step\n",
             logger=logger,
             level="info",
         )
@@ -118,7 +118,7 @@ def run_hvc_expt(prep_csv_path,
     # from (correctly segmented) set
     # also need a `spect_maker` to call `hvc.audiofileIO.make_syls`
     log_or_print(
-        f"(2) extracting features",
+        f"(2) extracting features\n",
         logger=logger,
         level="info",
     )
@@ -146,7 +146,7 @@ def run_hvc_expt(prep_csv_path,
 
     # ---- 3. train classifier
     log_or_print(
-        f"(3) training classifiers",
+        f"(3) training classifiers\n",
         logger=logger,
         level="info",
     )
@@ -159,15 +159,15 @@ def run_hvc_expt(prep_csv_path,
 
     # ---- 4. get predictions
     log_or_print(
-        f"(4) getting predictions",
+        f"(4) getting predictions\n",
         logger=logger,
         level="info",
     )
 
     pred_paths = {}
     # loop over ground truth and resegmented data, to make predictions for each
-    for preds_source, csv_path in zip(
-            ('ground_truth', 'resegment'),
+    for preds_segmentation, csv_path in zip(
+            ('manually cleaned', 'not cleaned'),
             (extract_csv_path, resegment_csv_path),
     ):
         if csv_path is not None:  # resegment_csv_path will be None if no segmenting parameters
@@ -175,13 +175,13 @@ def run_hvc_expt(prep_csv_path,
                                                     clf_path,
                                                     predict_dst,
                                                     labelset)
-            pred_paths[preds_source] = pred_path
+            pred_paths[preds_segmentation] = pred_path
         else:
-            pred_paths[preds_source] = None
+            pred_paths[preds_segmentation] = None
 
     # ---- 5. compute scores on predictions
     log_or_print(
-        f"(5) computing segment error rates",
+        f"(5) computing segment error rates\n",
         logger=logger,
         level="info",
     )
@@ -196,8 +196,11 @@ def run_hvc_expt(prep_csv_path,
             seg_error_tuple = None
         scores[preds_source] = seg_error_tuple
 
-    # make it so we can save scores as .json
+    print(
+        f'\tscores: {scores}'
+    )
 
+    # make it so we can save scores as .json
     scores = {source: (scores_tuple._asdict() if scores_tuple is not None else None)
               for source, scores_tuple in scores.items()}
     for source in scores:  # convert numpy array to list
@@ -270,7 +273,7 @@ def rerun_learncurve(previous_run_path,
             log_or_print(
                 f"Training classifiers for training set duration of {train_dur},"
                 f"replicate number {replicate_num}, "
-                f"using dataset from .csv file:\n{this_train_dur_this_replicate_results_path}",
+                f"using dataset from .csv file:\n{this_train_dur_this_replicate_results_path}\n",
                 logger=logger,
                 level="info",
             )
