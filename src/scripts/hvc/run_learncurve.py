@@ -79,7 +79,6 @@ def run_hvc_expt(prep_csv_path,
     csv_dst = results_dst / 'csv'
     features_dst = results_dst / 'features'
     resegment_features_dst = results_dst / 'features' / 'resegment'
-    predict_dst = results_dst / 'predictions'
     scores_dst = results_dst / 'scores'
     clf_dst = results_dst / 'classifiers'
 
@@ -87,7 +86,6 @@ def run_hvc_expt(prep_csv_path,
                 csv_dst,
                 features_dst,
                 resegment_features_dst,
-                predict_dst,
                 scores_dst,
                 clf_dst):
         dst.mkdir(exist_ok=True, parents=True)
@@ -172,12 +170,13 @@ def run_hvc_expt(prep_csv_path,
             (extract_csv_path, resegment_csv_path),
     ):
         if csv_path is not None:  # resegment_csv_path will be None if no segmenting parameters
-            pred_path = article.hvc.predict.predict(csv_path,
-                                                    clf_path,
-                                                    predict_dst,
-                                                    labelset,
-                                                    split='test')
-            pred_paths[preds_segmentation] = pred_path
+            pred_csv_path = article.hvc.predict.predict(csv_path,
+                                                        clf_path,
+                                                        # overwrite csv in same place with added column 'pred_labels'
+                                                        predict_dst=csv_dst,
+                                                        labelset=labelset,
+                                                        split='test')
+            pred_paths[preds_segmentation] = pred_csv_path
         else:
             pred_paths[preds_segmentation] = None
 
@@ -190,10 +189,10 @@ def run_hvc_expt(prep_csv_path,
 
     # below, maps 'source' (manually cleaned ground truth / re-segmented) to segment error rate
     scores = {}  # name ``source`` for brevity
-    for preds_source, pred_path in pred_paths.items():
-        if pred_path is not None:
-            seg_error_tuple = article.hvc.score.segment_error_rate(prep_csv_path,
-                                                                   pred_path,
+    for preds_source, pred_csv_path in pred_paths.items():
+        if pred_csv_path is not None:
+            seg_error_tuple = article.hvc.score.segment_error_rate(pred_csv_path,
+                                                                   ground_truth_csv_path=extract_csv_path,
                                                                    split='test')
         else:
             seg_error_tuple = None
