@@ -14,7 +14,14 @@ def predict(extract_csv_path,
             labelset,
             split='test'):
     """generate predictions using a trained classifier,
-    and save those predictions to a text file
+    given arrays of features extracted from syllables,
+    and then map the predicted classes back to labels.
+
+    Adds predicted label sequences in a column
+    called 'pred_labels' to the ``pandas.DataFrame``
+    loaded from ``extract_csv_path``,
+    and then saves the updated ``DataFrame``
+    as a csv file in ``predict_dst``.
 
     Parameters
     ----------
@@ -25,17 +32,19 @@ def predict(extract_csv_path,
     clf_path : str, pathlib.Path
         path to classifier saved by ``article.hvc.fit.save_clf``
     predict_dst : str, pathlib.Path
-        where text file of predicted labels should be saved.
+        destination where csv with added column
+        of predicted labels should be saved.
     labelset : set
-        of labels.
-        Used to map integer predictions to string labels.
+        of labels, used to map integer predictions
+        back to string labels.
     split : str
         split that should be used for predictions. Default is 'test'.
 
     Returns
     -------
-    pred_path : pathlib.Path
-        path to text file containing predicted labels.
+    pred_csv_path : pathlib.Path
+        path to csv file with column 'pred_labels' that
+        contains the predicted labels as strings
     """
     import vak  # to avoid circular imports
 
@@ -53,27 +62,20 @@ def predict(extract_csv_path,
     labelmap = vak.labels.to_map(labelset, map_unlabeled=False)
     inverse_labelmap = {v: k for k, v in labelmap.items()}
 
-    ftr_paths = extract_df.features_path.values.tolist()
-    ftr_dfs = []
-    for row_num, ftr_path in enumerate(tqdm(ftr_paths)):
+    pred_labels = []  # will add as column to df
+    for ind in tqdm(extract_df.index):
+        ftr_path = extract_df.features_path[ind]
         ftr_df = pd.read_csv(ftr_path)
-        # "foreign key" maps back to row of resegment_df
-        # so we can figure out which predictions are for which row
-        ftr_df['foreign_key'] = row_num
-        ftr_dfs.append(ftr_df)
-    ftr_df = pd.concat(ftr_dfs)
+        # note we drop labels column and *then* get just values, i.e. array of features
+        x_pred = ftr_df.drop(labels=['labels'], axis="columns").values
+        y_pred = clf.predict(x_pred)
+        pred_labels.append(
+            # map array of class integers back to string of labels: [0, 1, 2] --> 'abc'
+            ''.join([inverse_labelmap[el] for el in y_pred])
+        )
 
-    x_pred = ftr_df.drop(labels=['labels', 'foreign_key'], axis="columns").values
-    y_pred = clf.predict(x_pred)
-    split_inds = np.nonzero(np.diff(ftr_df.foreign_key.values))[0]
-    y_pred_list = np.split(y_pred, split_inds)
-    y_pred_list = [
-        ''.join([inverse_labelmap[el] for el in y_pred]) + "\n"
-        for y_pred in y_pred_list
-    ]
+    extract_df['pred_labels'] = pred_labels
+    pred_csv_path = predict_dst / extract_csv_path.name
+    extract_df.to_csv(pred_csv_path, index=False)
 
-    pred_path = predict_dst / (extract_csv_path.stem + f'.pred.txt')
-    with pred_path.open('w') as fp:
-        fp.writelines(y_pred_list)
-
-    return pred_path
+    return pred_csv_path
