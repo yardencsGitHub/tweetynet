@@ -34,7 +34,7 @@ def main(results_root,
 
     results_root = Path(results_root)
     indiv_roots = sorted(
-        [subdir for subdir in results_root.iterdir() if subdir.is_dir()]
+        [subdir for subdir in results_root.iterdir() if subdir.is_dir() and not subdir.name.startswith('.')]
     )
 
     # get minimum segment durations to use for clean up. Fail early if they're not there.
