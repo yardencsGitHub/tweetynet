@@ -78,14 +78,12 @@ def run_hvc_expt(prep_csv_path,
     annot_dst = results_dst / 'annot'
     csv_dst = results_dst / 'csv'
     features_dst = results_dst / 'features'
-    resegment_features_dst = results_dst / 'features' / 'resegment'
     scores_dst = results_dst / 'scores'
     clf_dst = results_dst / 'classifiers'
 
     for dst in (annot_dst,
                 csv_dst,
                 features_dst,
-                resegment_features_dst,
                 scores_dst,
                 clf_dst):
         dst.mkdir(exist_ok=True, parents=True)
@@ -98,19 +96,19 @@ def run_hvc_expt(prep_csv_path,
             logger=logger,
             level="info",
         )
-        resegment_csv_path = article.hvc.resegment.resegment(prep_csv_path,
-                                                             segment_params,
-                                                             dummy_label=dummy_label,
-                                                             annot_dst=annot_dst,
-                                                             csv_dst=csv_dst,
-                                                             split='test')
+        resegment_csv_paths = article.hvc.resegment.resegment(prep_csv_path,
+                                                              segment_params,
+                                                              dummy_label=dummy_label,
+                                                              annot_dst=annot_dst,
+                                                              csv_dst=csv_dst,
+                                                              split='test')
     else:
         log_or_print(
             f"(1) no segmenting parameters, skipping re-segmenting step\n",
             logger=logger,
             level="info",
         )
-        resegment_csv_path = None
+        resegment_csv_paths = {}
 
     # ---- 2. extract features
     # from (correctly segmented) set
@@ -132,15 +130,21 @@ def run_hvc_expt(prep_csv_path,
                                                    audio_format,
                                                    article.hvc.extract.FEATURE_LIST)
 
-    if resegment_csv_path is not None:
+    if len(resegment_csv_paths) > 0:
         # extract from re-segmented test set
-        article.hvc.extract.extract(csv_path=resegment_csv_path,
-                                    labelset=dummy_label,
-                                    features_dst=resegment_features_dst,
-                                    csv_dst=csv_dst,
-                                    spect_maker=spect_maker,
-                                    audio_format=audio_format,
-                                    feature_list=article.hvc.extract.FEATURE_LIST)
+        for segmentation, resegment_csv_path in resegment_csv_paths.items():
+            print(
+                f'extracting features from re-segmented dataset. Segmenting type: {segmentation} '
+            )
+            resegment_features_dst = results_dst / 'features' / f'{segmentation}'
+            resegment_features_dst.mkdir()
+            article.hvc.extract.extract(csv_path=resegment_csv_path,
+                                        labelset=dummy_label,
+                                        features_dst=resegment_features_dst,
+                                        csv_dst=csv_dst,
+                                        spect_maker=spect_maker,
+                                        audio_format=audio_format,
+                                        feature_list=article.hvc.extract.FEATURE_LIST)
 
     # ---- 3. train classifier
     log_or_print(
@@ -163,12 +167,11 @@ def run_hvc_expt(prep_csv_path,
         level="info",
     )
 
+    # so we can loop over dictionary. Dict might be empty up til now, if we didn't resegment
+    resegment_csv_paths['manually-cleaned'] = extract_csv_path
     pred_paths = {}
     # loop over ground truth and resegmented data, to make predictions for each
-    for preds_segmentation, csv_path in zip(
-            ('manually cleaned', 'not cleaned'),
-            (extract_csv_path, resegment_csv_path),
-    ):
+    for preds_segmentation, csv_path in resegment_csv_paths.items():
         if csv_path is not None:  # resegment_csv_path will be None if no segmenting parameters
             pred_csv_path = article.hvc.predict.predict(csv_path,
                                                         clf_path,
@@ -198,8 +201,10 @@ def run_hvc_expt(prep_csv_path,
             seg_error_tuple = None
         scores[preds_source] = seg_error_tuple
 
+    scores_str = ''.join([f'\t\tmean syllable error rate, {k}: {v.mean_segment_error_rate}\n'
+                          for k, v in scores.items()])
     print(
-        f'\tscores: {scores}'
+        f'\tscores:\n{scores_str}'
     )
 
     # make it so we can save scores as .json
