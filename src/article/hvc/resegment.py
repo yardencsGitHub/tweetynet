@@ -1,11 +1,8 @@
 from collections import defaultdict
 from pathlib import Path
 
-import crowsetta
-import evfuncs
 import numpy as np
 import pandas as pd
-import vak.annotation
 from tqdm import tqdm
 
 
@@ -73,6 +70,10 @@ def resegment(prep_csv,
     GUI used to annotate the
     Bengalese Finch Song Repository.
     """
+    import crowsetta
+    import evfuncs
+    import vak.annotation
+
     SEGMENTATION_TYPES = ('not-cleaned', 'semi-automated-cleaning')
 
     prep_csv = Path(prep_csv)

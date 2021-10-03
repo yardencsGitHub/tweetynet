@@ -2,16 +2,9 @@ from pathlib import Path
 import warnings
 
 import dask
-from hvc.audiofileIO import Syllable
-from hvc.features.feature_dicts import (
-    single_syl_features_switch_case_dict,
-    multiple_syl_features_switch_case_dict
-)
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-import vak
-import vak.converters
 
 
 def make_syls(
@@ -35,6 +28,8 @@ def make_syls(
     onsetz_Hz : ndarray
     offsets_Hz : ndarray
     """
+    from hvc.audiofileIO import Syllable
+
     if type(labels) not in [str, list, np.ndarray]:
         raise TypeError(
             "labels must be of type str, list, or numpy ndarray, " "not {}".type(labels)
@@ -150,6 +145,13 @@ def extract(csv_path,
        "Semi-automatic classification of birdsong elements using
        a linear support vector machine." PloS one 9.3 (2014): e92584.
     """
+    from hvc.features.feature_dicts import (
+        single_syl_features_switch_case_dict,
+        multiple_syl_features_switch_case_dict
+    )
+    import vak
+    import vak.converters
+
     csv_path = Path(csv_path).expanduser().resolve()
     if not csv_path.exists():
         raise FileNotFoundError(
