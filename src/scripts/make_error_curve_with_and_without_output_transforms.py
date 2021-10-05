@@ -76,20 +76,22 @@ def main(results_root,
         eval_dfs['animal_id'] = indiv_root.name
         all_eval_dfs.append(eval_dfs)
 
-    curve_df = pd.concat(all_eval_dfs)
-    curve_df['animal_id'] = curve_df['animal_id'].astype('category')
-    curve_df['avg_error'] = curve_df['avg_error'] * 100
+        # save the whole thing after every animal_id,
+        # so we get some result even if there's a crash
+        curve_df = pd.concat(all_eval_dfs)
+        curve_df['animal_id'] = curve_df['animal_id'].astype('category')
+        curve_df['avg_error'] = curve_df['avg_error'] * 100
 
-    # add 'train_set_dur_ind' column that maps train set durations to consecutive integers
-    # so we can plot with those integers as the xticks, but then change the xticklabels to the actual values
-    # -- this lets us avoid having the labels overlap when the training set durations are close to each other
-    # e.g., 30 and 45
-    train_set_durs = sorted(curve_df['train_set_dur'].unique())
-    dur_int_map = dict(zip(train_set_durs, range(len(train_set_durs))))
-    curve_df['train_set_dur_ind'] = curve_df['train_set_dur'].map(dur_int_map)
-    
-    csv_path = results_root.joinpath(csv_filename)
-    curve_df.to_csv(csv_path, index=False)
+        # add 'train_set_dur_ind' column that maps train set durations to consecutive integers
+        # so we can plot with those integers as the xticks, but then change the xticklabels to the actual values
+        # -- this lets us avoid having the labels overlap when the training set durations are close to each other
+        # e.g., 30 and 45
+        train_set_durs = sorted(curve_df['train_set_dur'].unique())
+        dur_int_map = dict(zip(train_set_durs, range(len(train_set_durs))))
+        curve_df['train_set_dur_ind'] = curve_df['train_set_dur'].map(dur_int_map)
+
+        csv_path = results_root.joinpath(csv_filename)
+        curve_df.to_csv(csv_path, index=False)
 
 
 PROJ_ROOT = pyprojroot.here()
