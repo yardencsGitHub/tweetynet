@@ -362,6 +362,14 @@ def learncurve_with_transforms(previous_run_path,
                 eval_df['train_set_dur'] = train_dur
                 eval_df['replicate_num'] = replicate_num
                 eval_df['model_name'] = model_name
+                # ---- add data lineage / metadata so we can trace source data back to raw results
+                eval_df['results_dir'] = previous_run_path
+                eval_df['toml_path'] = toml_path
+                eval_df['training_replicate_csv_path'] = csv_path
+                eval_df['checkpoint_path'] = ckpt_path
+                eval_df['spect_scalar_path'] = spect_scaler_path
+                eval_df['min_segment_dur'] = min_segment_dur
+
                 eval_dfs.append(eval_df)
 
                 if to_annot:
