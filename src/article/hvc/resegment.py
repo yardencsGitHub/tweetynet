@@ -73,6 +73,7 @@ def resegment(prep_csv,
     import crowsetta
     import evfuncs
     import vak.annotation
+    import vak.constants
 
     SEGMENTATION_TYPES = ('not-cleaned', 'semi-automated-cleaning')
 
@@ -96,6 +97,16 @@ def resegment(prep_csv,
     audio_paths = prep_df.audio_path.values
     annots_by_segmentation = defaultdict(list)  # of generated files, will add to csvs below
 
+    if all([str(audio_path).endswith('cbin') for audio_path in audio_paths]):
+        audio_format = 'cbin'
+    elif all([str(audio_path).endswith('wav') for audio_path in audio_paths]):
+        audio_format = 'wav'
+    else:
+        raise ValueError(
+            'could not determine audio format, '
+            f'found the following set of extensions: {set([audio_path.suffix for audio_path in audio_paths])}'
+        )
+
     pbar = tqdm(zip(audio_paths, prep_annots))
     n_audio = len(audio_paths)
     for ind, (audio_path, ground_truth_annot) in enumerate(pbar):
@@ -108,7 +119,8 @@ def resegment(prep_csv,
         pbar.set_description(
             f'resegmenting audio file {ind + 1} of {n_audio}:{Path(audio_path).name}'
         )
-        rawsong, samp_freq = evfuncs.load_cbin(audio_path)
+
+        rawsong, samp_freq = vak.constants.AUDIO_FORMAT_FUNC_MAP[audio_format](audio_path)
         smooth = evfuncs.smooth_data(rawsong, samp_freq)
         onsets_s, offsets_s = evfuncs.segment_song(smooth, samp_freq, **segment_params)
         labels = np.array(list(dummy_label * onsets_s.shape[0]))  # dummy labels
