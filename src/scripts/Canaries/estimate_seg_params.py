@@ -46,8 +46,8 @@ def main(seg_feature_csvs_root=SEG_FEATURE_CSVS_ROOT,
     }
 
     QUANTILE = {
-        'min_segment_dur': 0.1,
-        'min_silent_interval': 0.1,
+        'min_segment_dur': 0.05,
+        'min_silent_interval': 0.005,
         'threshold': 0.5,
     }
 
