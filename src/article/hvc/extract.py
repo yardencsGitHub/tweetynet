@@ -149,6 +149,7 @@ def extract(csv_path,
         single_syl_features_switch_case_dict,
         multiple_syl_features_switch_case_dict
     )
+    import crowsetta
     import vak
     import vak.converters
 
@@ -174,12 +175,37 @@ def extract(csv_path,
         )
 
     vak_df = pd.read_csv(csv_path)
+    audio_paths = vak_df.audio_path.values
 
     # pair annotation with audio file,
     # will use both to create `hvc.Syllable` instances from which we extract features
-    annots = vak.annotation.from_df(vak_df)
-    audio_paths = vak_df.audio_path.values
-    audio_annot_map = vak.annotation.source_annot_map(audio_paths, annots)
+    try:
+        annots = vak.annotation.from_df(vak_df)
+        audio_annot_map = vak.annotation.source_annot_map(audio_paths, annots)
+    except ValueError:  # because number of annots did not match number of rows in df
+        # which can happen if there are no segments when re-segmenting -- e.g. for llb11
+        scribe = crowsetta.Transcriber(format='csv')
+        annot_path = vak_df["annot_path"].unique().item()
+        annots = scribe.from_file(annot_path)
+
+        annot_df = pd.read_csv(annot_path)
+        annot_nums = annot_df.annotation.unique()  #
+        # find the "nums" (row indices) of audio paths that don't have a corresponding annotation
+        no_annot_nums = [audio_path_num
+                         for audio_path_num in range(len(audio_paths))
+                         if audio_path_num not in annot_nums]
+        audio_paths_to_map = [audio_path
+                              for audio_path_num, audio_path in enumerate(audio_paths)
+                              if audio_path_num not in no_annot_nums
+                              ]
+        # we should now be able to map audio paths to annots without error
+        audio_annot_map = vak.annotation.source_annot_map(audio_paths_to_map, annots)
+        # and now we add a `None` for the audio paths that don't have annots
+        # Note we iterate through original audio paths to be extra sure we have same ordering as DataFrame
+        audio_annot_map = {
+            audio_path: audio_annot_map[audio_path] if audio_path in audio_annot_map else None
+            for audio_path in audio_paths
+        }
 
     # define this here so that `labelmap` and `feature_list` are in scope
     def ftrs_dict_from_syl(syl):
@@ -207,6 +233,10 @@ def extract(csv_path,
 
     ftrs_path_col = []  # gets added to dataset csv at end
     for audio_path, annot in tqdm(audio_annot_map.items()):
+        if annot is None:
+            ftrs_path_col.append('None')
+            continue  # no segments, so no features to extract
+
         raw_audio, samp_freq = vak.constants.AUDIO_FORMAT_FUNC_MAP[audio_format](audio_path)
 
         # .not.mat annots do not have 'onsets_Hz' and 'offsets_Hz' attributes

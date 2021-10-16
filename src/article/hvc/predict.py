@@ -62,6 +62,10 @@ def predict(extract_csv_path,
     pred_labels = []  # will add as column to df
     for ind in tqdm(extract_df.index):
         ftr_path = extract_df.features_path[ind]
+        if ftr_path == 'None':  # because there were no segments after 'semi-automated cleaning'
+            pred_labels.append('')
+            continue
+
         ftr_df = pd.read_csv(ftr_path)
         # note we drop labels column and *then* get just values, i.e. array of features
         x_pred = ftr_df.drop(labels=['labels'], axis="columns").values
