@@ -81,6 +81,9 @@ def segment_error_rate(pred_csv_path,
         y_true = [''.join(annot.seq.labels.tolist()) for annot in annots]
 
     y_pred = pred_df.pred_labels.values.tolist()
+    y_pred = [yp
+              if isinstance(yp, str) else ''  # convert np.nan back to empty string
+              for yp in y_pred]
 
     if not len(y_true) == len(y_pred):
         raise ValueError(
