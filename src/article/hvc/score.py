@@ -3,12 +3,14 @@ from collections import namedtuple
 import numpy as np
 import pandas as pd
 
+from . import predict
 
 SegmentErrorRates = namedtuple(typename='SegmentErrorRates',
                                field_names=('segment_error_rates', 'mean_segment_error_rate'))
 
 
 def segment_error_rate(pred_csv_path,
+                       labelset,
                        ground_truth_csv_path=None,
                        split='test'):
     """compute segment error rates--
@@ -27,6 +29,9 @@ def segment_error_rate(pred_csv_path,
         by the 'features_path' column in the same row.
         It may also have the ground truth annotation
         in the file pointed to by the 'annot_path' column of that row.
+    labelset : set
+        of labels, used to map integer predictions
+        back to string labels.
     ground_truth_csv_path : str, pathlib.Path
         path to csv with ground truth labels,
         in file(s) pointed to by the 'annot_path' column.
@@ -53,6 +58,15 @@ def segment_error_rate(pred_csv_path,
     """
     import vak
 
+    # we need to make sure our inverse labelmap
+    # is the same as what it was for ``hvc.predict``
+    inverse_labelmap = predict._labelset_to_inv_labelmap(labelset)
+    # note we call ``_labelset`` with "unconverted" labelset (e.g. list of strings),
+    # but here we make a set and then convert to map.
+    # We use both below: ground truth labels --> map --> integer labels --> inv_map --> single character labels
+    labelset = vak.converters.labelset_to_set(labelset)
+    labelmap = vak.labels.to_map(labelset, map_unlabeled=False)
+
     pred_df = pd.read_csv(pred_csv_path)
     if ground_truth_csv_path is not None:
         gt_df = pd.read_csv(ground_truth_csv_path)
@@ -75,10 +89,19 @@ def segment_error_rate(pred_csv_path,
 
     if gt_df is not None:
         annots = vak.annotation.from_df(gt_df)
-        y_true = [''.join(annot.seq.labels.tolist()) for annot in annots]
     else:
         annots = vak.annotation.from_df(pred_df)
-        y_true = [''.join(annot.seq.labels.tolist()) for annot in annots]
+
+    y_true = []
+    # have to make sure set of labels in ground truth matches set used for predicted;
+    # we may have mapped predicted labels to single-character strings,
+    # for canaries with multiple-character string labels (e.g., '20', '21', '13').
+    # We make sure they match by doing the same thing ``article.hvc.predict`` does:
+    # ground truth labels --> map --> integer labels --> inv_map --> single character labels
+    for annot in annots:
+        labels_int = [labelmap[lbl] for lbl in annot.seq.labels.tolist()]
+        labels_single_char = [inverse_labelmap[lbl_int] for lbl_int in labels_int]
+        y_true.append(''.join(labels_single_char))
 
     y_pred = pred_df.pred_labels.values.tolist()
     y_pred = [yp
