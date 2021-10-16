@@ -5,6 +5,19 @@ import pandas as pd
 from tqdm import tqdm
 
 
+def _labelset_to_inv_labelmap(labelset):
+    import vak.labeled_timebins
+
+    labelset = vak.converters.labelset_to_set(labelset)
+    labelmap = vak.labels.to_map(labelset, map_unlabeled=False)
+    if any([len(label) > 1 for label in labelmap.keys()]):  # only re-map if necessary
+        print('found labels with more than one character, mapping to single character to compute syllable error rate')
+        # (to minimize chance of knock-on bugs)
+        labelmap = vak.labeled_timebins._multi_char_labels_to_single_char(labelmap)
+    inverse_labelmap = {v: k for k, v in labelmap.items()}
+    return inverse_labelmap
+
+
 def predict(extract_csv_path,
             clf_path,
             predict_dst,
@@ -55,9 +68,7 @@ def predict(extract_csv_path,
     extract_df = extract_df[extract_df.split == split]
     clf = joblib.load(clf_path)
 
-    labelset = vak.converters.labelset_to_set(labelset)
-    labelmap = vak.labels.to_map(labelset, map_unlabeled=False)
-    inverse_labelmap = {v: k for k, v in labelmap.items()}
+    inverse_labelmap = _labelset_to_inv_labelmap(labelset)
 
     pred_labels = []  # will add as column to df
     for ind in tqdm(extract_df.index):
