@@ -195,6 +195,7 @@ def run_hvc_expt(prep_csv_path,
     for preds_source, pred_csv_path in pred_paths.items():
         if pred_csv_path is not None:
             seg_error_tuple = article.hvc.score.segment_error_rate(pred_csv_path,
+                                                                   labelset,
                                                                    ground_truth_csv_path=extract_csv_path,
                                                                    split='test')
         else:
