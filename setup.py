@@ -35,6 +35,7 @@ REQUIRED = [
 EXTRAS = {
     'article': [
         'pyprojroot',
+        'hybrid-vocal-classifier>=0.3.0',
         'seaborn',
         'jupyterlab'
     ],
