@@ -27,7 +27,7 @@ import article
 
 def main(results_root,
          experiment_dirs,
-         min_segment_dur_ini,
+         segment_params_ini,
          csv_filename,
          to_annot):
     # import crowsetta here to avoid circular import
@@ -61,7 +61,7 @@ def main(results_root,
         # get minimum segment durations to use for clean up. Fail early if they're not there.
         config = configparser.ConfigParser()
         config.optionxform = lambda option: option  # monkeypatch optionxform so it doesn't lowercase animal IDs
-        config.read(Path(min_segment_dur_ini).expanduser().resolve())
+        config.read(Path(segment_params_ini).expanduser().resolve())
         min_segment_durs = {k: float(v) for k, v in config['min_segment_dur'].items()}
         for indiv_root in indiv_roots:
             if indiv_root.name not in min_segment_durs:
@@ -125,7 +125,7 @@ EXPT_DIRS = (
     'window_size/window_size_88',
     'window_size/window_size_352',
 )
-MIN_SEGMENT_DUR_INI = PROJ_ROOT / 'data' / 'configs' / 'min_segment_dur.ini'
+SEGMENT_PARAMS_INI = PROJ_ROOT / 'data' / 'configs' / 'segment_params.ini'
 
 
 def get_parser():
@@ -143,10 +143,10 @@ def get_parser():
                               "will have subdirectories that are individuals from dataset, "
                               "and each subdirectory contains results folders from a run "
                               "of `vak learncurve`"))
-    parser.add_argument('--min-segment-dur-ini',
-                        help=('path to .ini file with minimum segment durations '
-                              'where option name is '),
-                        default=MIN_SEGMENT_DUR_INI)
+    parser.add_argument('--segment_params_ini',
+                        help=("path to .ini file with segmenting parameters "
+                              "for audio files from each animal"),
+                        default=SEGMENT_PARAMS_INI)
     parser.add_argument('--csv-filename',
                         help='filename of .csv that will be saved by this script in results_root',
                         default='error_across_birds_with_cleanup.csv')
@@ -164,6 +164,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     main(results_root=args.results_root,
          experiment_dirs=args.experiment_dirs,
-         min_segment_dur_ini=args.min_segment_dur_ini,
+         segment_params_ini=args.segment_params_ini,
          csv_filename=args.csv_filename,
          to_annot=args.to_annot)
