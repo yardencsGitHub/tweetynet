@@ -125,7 +125,7 @@ EXPT_DIRS = (
     'window_size/window_size_88',
     'window_size/window_size_352',
 )
-MIN_SEGMENT_DUR_INI = PROJ_ROOT / 'data' / 'configs' / 'min_segment_dur.ini'
+SEGMENT_PARAMS_INI = PROJ_ROOT / 'data' / 'configs' / 'segment_params.ini'
 
 
 def get_parser():
@@ -143,10 +143,10 @@ def get_parser():
                               "will have subdirectories that are individuals from dataset, "
                               "and each subdirectory contains results folders from a run "
                               "of `vak learncurve`"))
-    parser.add_argument('--min-segment-dur-ini',
-                        help=('path to .ini file with minimum segment durations '
-                              'where option name is '),
-                        default=MIN_SEGMENT_DUR_INI)
+    parser.add_argument('--segment_params_ini',
+                        help=("path to .ini file with segmenting parameters "
+                              "for audio files from each animal"),
+                        default=SEGMENT_PARAMS_INI)
     parser.add_argument('--csv-filename',
                         help='filename of .csv that will be saved by this script in results_root',
                         default='error_across_birds_with_cleanup.csv')
