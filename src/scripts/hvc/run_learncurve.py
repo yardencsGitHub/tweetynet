@@ -423,7 +423,8 @@ def get_parser():
                         nargs='+')
     parser.add_argument('--segment_params_ini',
                         help=("path to .ini file with segmenting parameters "
-                              "for audio files from each animal"))
+                              "for audio files from each animal"),
+                        default=SEGMENT_PARAMS_INI)
     parser.add_argument('--csv_filename',
                         help='filename of .csv that will be saved by this script in results_root',
                         default='segment_error_across_birds.hvc.csv')
