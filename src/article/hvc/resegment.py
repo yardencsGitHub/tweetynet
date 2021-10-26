@@ -2,8 +2,16 @@ from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
+from numpy.testing import assert_almost_equal
 import pandas as pd
 from tqdm import tqdm
+
+# need to ensure that we round the same way the `format2annot` functions do
+# or else when we do "semi-automated" cleaning we may unintentionally throw
+# away segments that were in the ground truth data, because
+# without rounding they look like they are "outside" those times --
+# basically floating point error
+N_DECIMALS_TO_ROUND = 3
 
 
 def resegment(prep_csv,
@@ -123,6 +131,9 @@ def resegment(prep_csv,
         rawsong, samp_freq = vak.constants.AUDIO_FORMAT_FUNC_MAP[audio_format](audio_path)
         smooth = evfuncs.smooth_data(rawsong, samp_freq)
         onsets_s, offsets_s = evfuncs.segment_song(smooth, samp_freq, **segment_params)
+        onsets_s = np.around(onsets_s, decimals=N_DECIMALS_TO_ROUND)
+        offsets_s = np.around(offsets_s, decimals=N_DECIMALS_TO_ROUND)
+
         labels = np.array(list(dummy_label * onsets_s.shape[0]))  # dummy labels
 
         raw_seq = crowsetta.Sequence.from_keyword(onsets_s=onsets_s, offsets_s=offsets_s, labels=labels)
@@ -135,10 +146,18 @@ def resegment(prep_csv,
         # keep all the onsets and offsets for which it is true that the onset is
         # is larger than the first onset in the cleaned ground truth data **and**
         # the offset is less than the last offset in the cleaned groudn truth data
+
+        # note we use the millisecond **before** the first onset and **after** the last offset
+        # to try and avoid issues with rounding + floating point error, see comment at top of module
+        # about "N_DECIMALS_TO_ROUND"
+        ms_before_first_onset = ground_truth_annot.seq.onsets_s[0] - 0.001
+        ms_after_last_offset = ground_truth_annot.seq.offsets_s[-1] + 0.001
         are_between_gt_onset_and_offset = np.logical_and(
-            onsets_s > ground_truth_annot.seq.onsets_s[0],
-            offsets_s < ground_truth_annot.seq.offsets_s[-1],
+            onsets_s > ms_before_first_onset,
+            offsets_s < ms_after_last_offset,
         )
+        # NOTE in some cases this still does not recover original on/offsets
+        # but the point here is "semi-automated clean-up" so it's ok to be imperfect
         onsets_s = onsets_s[are_between_gt_onset_and_offset]
         offsets_s = offsets_s[are_between_gt_onset_and_offset]
         labels = np.array(list(dummy_label * onsets_s.shape[0]))  # re-make dummy labels
