@@ -18,7 +18,10 @@ class Conv2dTF(nn.Conv2d):
     used to maintain behavior of original implementation of TweetyNet that used Tensorflow 1.0 low-level API
     """
     def __init__(self, *args, **kwargs):
-        super(Conv2dTF, self).__init__(*args, **kwargs)
+        # remove 'padding' from ``kwargs`` to avoid bug in ``torch`` => 1.7.2
+        # see https://github.com/yardencsGitHub/tweetynet/issues/166
+        kwargs_super = {k: v for k, v in kwargs.items() if k != 'padding'}
+        super(Conv2dTF, self).__init__(*args, **kwargs_super)
         padding = kwargs.get("padding", "SAME")
         if not isinstance(padding, str):
             raise TypeError(f"value for 'padding' argument should be a string, one of: {self.PADDING_METHODS}")
