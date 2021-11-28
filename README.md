@@ -89,4 +89,3 @@ If you use or adapt this code, please cite its DOI:
 ## License
 Released under [BSD license](./LICENSE).
 
-<contribution>
