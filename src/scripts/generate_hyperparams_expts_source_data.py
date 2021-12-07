@@ -10,9 +10,9 @@ import pyprojroot
 PROJROOT = pyprojroot.here()
 RESULTS_ROOT = PROJROOT / 'results'
 
+
 # 'expt' = was run as part of the experiments
 # 'learncurve' = was the value we used for the main figure learncurve
-
 HYPERPARAM_EXPTS = {
     'Bengalese_Finches': {
         'hidden_size': [
@@ -24,7 +24,17 @@ HYPERPARAM_EXPTS = {
             (88, 'expt'),
             (176, 'learncurve'),
             (352, 'expt'),
-        ]
+        ],
+        'filter_num': [
+            (16, 'expt'),
+            (32, 'learncurve'),
+            (64, 'expt'),
+        ],
+        'filter_size': [
+            (3, 'expt'),
+            (5, 'learncurve'),
+            (7, 'expt'),
+        ],
     },
     'Canaries': {
         'hidden_size': [
