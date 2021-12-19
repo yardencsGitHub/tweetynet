@@ -27,7 +27,7 @@ num_workers = 4
 device = "cuda"
 root_results_dir = "./results/Bengalese_Finches/window_size/window_size_88/gr41rd51"
 csv_path = "data/BFSongRepository/learncurve/gr41rd51/has_notmat_gaps_cleaned_prep_210521_212334.csv"
-previous_run_path = "results/BFSongRepository/learncurve/gr41rd51/results_210521_213108/"
+previous_run_path = "results/Bengalese_Finches/learncurve/gr41rd51/results_210521_213108/"
 
 [DATALOADER]
 window_size = 88
