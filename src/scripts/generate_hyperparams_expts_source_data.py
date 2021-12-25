@@ -21,6 +21,8 @@ HYPERPARAM_EXPTS = {
             (256, 'learncurve'),
         ],
         'window_size': [
+            (22, 'expt'),
+            (44, 'expt'),
             (88, 'expt'),
             (176, 'learncurve'),
             (352, 'expt'),
