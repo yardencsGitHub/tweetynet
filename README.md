@@ -13,12 +13,12 @@ https://www.biorxiv.org/content/10.1101/2020.08.28.272088v2
 A neural network architecture (shown below) 
 that automates annotation of birdsong and other vocalization by segmenting spectrograms.  
 <p align="center">
-<img src="./doc/article/figures/mainfig_tweetynet_architecture_and_basic_operation/mainfig_tweetynet_architecture_operations_and_post_processing.png" alt="neural network architecture" width=600>
+<img src="article/doc/figures/mainfig_tweetynet_architecture_and_basic_operation/mainfig_tweetynet_architecture_operations_and_post_processing.png" alt="neural network architecture" width=600>
 </p>
 
 This is an example of the kind of annotations that `tweetynet` learns to predict:  
 <p align="center">
-<img src="./doc/article/figures/older_fig_versions/fig1/fig1.png" alt="schematic of annotation" width=350>
+<img src="article/doc/figures/older_fig_versions/fig1/fig1.png" alt="schematic of annotation" width=350>
 </p>
 
 ## How is it used?

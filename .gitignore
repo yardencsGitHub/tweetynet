@@ -4,27 +4,21 @@
 
 # IDE
 .idea
+.vscode/settings.json
 
 # data + results
-data/
-results/
+article/data/
+article/results/
 
 # Python
 *__pycache__*
 *egg-info/
 dist/
 build/
+.venv
 
 # Mac
 .DS_Store
-/configs/old/
-.vscode/settings.json
-doc/notebooks/BF_Example_Train_Predict/TweetyNet/events.out.tfevents.1595982790.DESKTOP-HGJF5I6.20420.0TweetyNet
-doc/notebooks/Canary_train_and_predict.ipynb
-doc/notebooks/Canary_Example_Train_Predict/annotated_prep_llb11_example.csv
-src/configs/Canaries/llb16/llb16_eval_080320.toml
-src/configs/Canaries/llb16/llb16_evade_080320.toml
-src/scripts/Canaries/eval.sh
 
 # latex build files
 doc/article/tweetynet-paper.aux
