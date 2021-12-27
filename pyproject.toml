@@ -29,7 +29,8 @@ test = [
     "pytest-cov",
 ]
 dev = [
-    "ipython>=7.30.1"
+    "ipython>=7.30.1",
+    "nox",
 ]
 
 [project.urls]
