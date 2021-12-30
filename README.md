@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2667812.svg)](https://doi.org/10.5281/zenodo.2667812)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![PyPI version](https://badge.fury.io/py/tweetynet.svg)](https://badge.fury.io/py/tweetynet)
 
@@ -104,6 +104,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/zhehao-nkd"><img src="https://avatars.githubusercontent.com/u/45915756?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Zhehao Cheng</b></sub></a><br /><a href="https://github.com/yardencsGitHub/tweetynet/issues?q=author%3Azhehao-nkd" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://yardencsgithub.github.io/"><img src="https://avatars.githubusercontent.com/u/17324841?v=4?s=100" width="100px;" alt=""/><br /><sub><b>yardencsGitHub</b></sub></a><br /><a href="https://github.com/yardencsGitHub/tweetynet/commits?author=yardencsGitHub" title="Code">💻</a> <a href="https://github.com/yardencsGitHub/tweetynet/issues?q=author%3AyardencsGitHub" title="Bug reports">🐛</a> <a href="#data-yardencsGitHub" title="Data">🔣</a> <a href="https://github.com/yardencsGitHub/tweetynet/commits?author=yardencsGitHub" title="Documentation">📖</a> <a href="#ideas-yardencsGitHub" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-yardencsGitHub" title="Answering Questions">💬</a> <a href="#tool-yardencsGitHub" title="Tools">🔧</a> <a href="https://github.com/yardencsGitHub/tweetynet/commits?author=yardencsGitHub" title="Tests">⚠️</a> <a href="#tutorial-yardencsGitHub" title="Tutorials">✅</a> <a href="#talk-yardencsGitHub" title="Talks">📢</a></td>
+    <td align="center"><a href="https://nicholdav.info/"><img src="https://avatars.githubusercontent.com/u/11934090?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Nicholson</b></sub></a><br /><a href="https://github.com/yardencsGitHub/tweetynet/commits?author=NickleDave" title="Code">💻</a> <a href="https://github.com/yardencsGitHub/tweetynet/issues?q=author%3ANickleDave" title="Bug reports">🐛</a> <a href="#data-NickleDave" title="Data">🔣</a> <a href="https://github.com/yardencsGitHub/tweetynet/commits?author=NickleDave" title="Documentation">📖</a> <a href="#ideas-NickleDave" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-NickleDave" title="Answering Questions">💬</a> <a href="#tool-NickleDave" title="Tools">🔧</a> <a href="https://github.com/yardencsGitHub/tweetynet/commits?author=NickleDave" title="Tests">⚠️</a> <a href="#tutorial-NickleDave" title="Tutorials">✅</a> <a href="#talk-NickleDave" title="Talks">📢</a></td>
   </tr>
 </table>
 

@@ -31,6 +31,24 @@
         "tutorial",
         "talk"
       ]
+    },
+    {
+      "login": "NickleDave",
+      "name": "David Nicholson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11934090?v=4",
+      "profile": "https://nicholdav.info/",
+      "contributions": [
+        "code",
+        "bug",
+        "data",
+        "doc",
+        "ideas",
+        "question",
+        "tool",
+        "test",
+        "tutorial",
+        "talk"
+      ]
     }
   ],
   "contributorsPerLine": 7,
