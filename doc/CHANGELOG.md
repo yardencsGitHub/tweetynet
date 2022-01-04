@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+### Added
+- add code related to eLife article.
+  See [revisions project](https://github.com/yardencsGitHub/tweetynet/projects/1) for details.
+
+### Changed
+- make many code changes related to eLife article.
+  See [revisions project](https://github.com/yardencsGitHub/tweetynet/projects/1) for details.
+
+- refactor project so code for article is separate from `tweetynet` code 
+  [#188](https://github.com/yardencsGitHub/tweetynet/pull/56)
+  Fixes [#187](https://github.com/yardencsGitHub/tweetynet/issues/187).
+
 ## [0.6.0](https://github.com/yardencsGitHub/tweetynet/releases/tag/0.6.0) -- 2021-04-04
 ### Added
 - add hyperparameters for RNN component of `TweetyNet` architecture
