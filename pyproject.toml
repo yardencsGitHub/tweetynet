@@ -29,6 +29,7 @@ test = [
     "pytest-cov",
 ]
 dev = [
+    "flit",
     "ipython>=7.30.1",
     "nox",
 ]
