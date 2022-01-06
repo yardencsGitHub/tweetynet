@@ -1,7 +1,7 @@
 [project]
 name = "tweetynet"
 description = "neural network that segments and labels birdsong and other animal vocalizations"
-version = "0.6.0"
+version = "0.7.0"
 authors = [
     {name = "Yarden Cohen", email = "yardencsgithub@users.noreply.github.com"},
     {name = "David Nicholson", email = "nickledave@users.noreply.github.com"},
