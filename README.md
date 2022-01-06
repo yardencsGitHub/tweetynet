@@ -7,21 +7,17 @@
 # TweetyNet
 <p align="center"><img src="./doc/tweetynet.gif" alt="tweetynet image" width=100></p>
 
-repository for the paper:  
-"TweetyNet: A neural network that enables high-throughput, automated annotation of birdsong"  
-https://www.biorxiv.org/content/10.1101/2020.08.28.272088v2
-(in revision at eLife)
-
 ## What is `tweetynet`?
 A neural network architecture (shown below) 
-that automates annotation of birdsong and other vocalization by segmenting spectrograms.  
+that automates annotation of birdsong and other vocalizations by segmenting spectrograms, 
+and then labeling those segments.  
 <p align="center">
 <img src="article/doc/figures/mainfig_tweetynet_architecture_and_basic_operation/mainfig_tweetynet_architecture_operations_and_post_processing.png" alt="neural network architecture" width=600>
 </p>
 
 This is an example of the kind of annotations that `tweetynet` learns to predict:  
 <p align="center">
-<img src="article/doc/figures/older_fig_versions/fig1/fig1.png" alt="schematic of annotation" width=350>
+<img src="doc/annotation-example.png" width=350>
 </p>
 
 ## How is it used?
@@ -29,7 +25,7 @@ This is an example of the kind of annotations that `tweetynet` learns to predict
 #### To train models and use them to predict annotation
 To install, run the following command at the command line:  
 `pip install tweetynet`
-
+#### To train models and use them to predict annotation
 To facilitate training `tweetynet` models and using trained models 
 to predict annotation on new datasets, 
 we developed the `vak` library, 
@@ -38,23 +34,17 @@ that is installed automatically with `tweetynet`.
 Please see the `vak` documentation for detailed installation instructions:  
 https://vak.readthedocs.io/en/latest/get_started/installation.html  
 
+A link to a tutorial on using `tweetynet` with `vak` is below.
+
 #### To reproduce results from article
-To reproduce results from the article, you will need to clone this repository.
+In the directory [`./article`](./article) 
+we provide code to reproduce the results in the article   
+"TweetyNet: A neural network that enables high-throughput, automated annotation of birdsong"  
+https://www.biorxiv.org/content/10.1101/2020.08.28.272088v2
+(in revision at eLife).
 
-```console
-$ git clone https://github.com/yardencsGitHub/tweetynet.git
-```
-
-Then you will want to install in "editable" mode from the root of the project: 
-
-```console
-$ cd tweetynet
-$ pip install -e .[article]
-```
-
-> Be sure to add the `[article]` after the period as shown above, 
-> to tell `pip` that you want to install the
-> extra dependencies required to run scripts used for analysis and plots
+Please see the [README](./article/README.md) in that directory 
+for instructions on how to install and work with that code.
 
 #### General use
 
@@ -102,9 +92,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/zhehao-nkd"><img src="https://avatars.githubusercontent.com/u/45915756?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Zhehao Cheng</b></sub></a><br /><a href="https://github.com/yardencsGitHub/tweetynet/issues?q=author%3Azhehao-nkd" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://yardencsgithub.github.io/"><img src="https://avatars.githubusercontent.com/u/17324841?v=4?s=100" width="100px;" alt=""/><br /><sub><b>yardencsGitHub</b></sub></a><br /><a href="https://github.com/yardencsGitHub/tweetynet/commits?author=yardencsGitHub" title="Code">💻</a> <a href="https://github.com/yardencsGitHub/tweetynet/issues?q=author%3AyardencsGitHub" title="Bug reports">🐛</a> <a href="#data-yardencsGitHub" title="Data">🔣</a> <a href="https://github.com/yardencsGitHub/tweetynet/commits?author=yardencsGitHub" title="Documentation">📖</a> <a href="#ideas-yardencsGitHub" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-yardencsGitHub" title="Answering Questions">💬</a> <a href="#tool-yardencsGitHub" title="Tools">🔧</a> <a href="https://github.com/yardencsGitHub/tweetynet/commits?author=yardencsGitHub" title="Tests">⚠️</a> <a href="#tutorial-yardencsGitHub" title="Tutorials">✅</a> <a href="#talk-yardencsGitHub" title="Talks">📢</a></td>
     <td align="center"><a href="https://nicholdav.info/"><img src="https://avatars.githubusercontent.com/u/11934090?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Nicholson</b></sub></a><br /><a href="https://github.com/yardencsGitHub/tweetynet/commits?author=NickleDave" title="Code">💻</a> <a href="https://github.com/yardencsGitHub/tweetynet/issues?q=author%3ANickleDave" title="Bug reports">🐛</a> <a href="#data-NickleDave" title="Data">🔣</a> <a href="https://github.com/yardencsGitHub/tweetynet/commits?author=NickleDave" title="Documentation">📖</a> <a href="#ideas-NickleDave" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-NickleDave" title="Answering Questions">💬</a> <a href="#tool-NickleDave" title="Tools">🔧</a> <a href="https://github.com/yardencsGitHub/tweetynet/commits?author=NickleDave" title="Tests">⚠️</a> <a href="#tutorial-NickleDave" title="Tutorials">✅</a> <a href="#talk-NickleDave" title="Talks">📢</a></td>
+    <td align="center"><a href="https://github.com/zhehao-nkd"><img src="https://avatars.githubusercontent.com/u/45915756?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Zhehao Cheng</b></sub></a><br /><a href="https://github.com/yardencsGitHub/tweetynet/issues?q=author%3Azhehao-nkd" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
