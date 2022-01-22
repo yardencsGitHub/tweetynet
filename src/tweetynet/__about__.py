@@ -23,7 +23,7 @@ __title__ = "tweetynet"
 __summary__ = "neural network that segments and labels birdsong and other animal vocalizations"
 __uri__ = "https://github.com/yardencsGitHub/tweetynet"
 
-__version__ = "0.7.0"
+__version__ = "0.7.1"
 
 if base_dir is not None and os.path.exists(os.path.join(base_dir, ".commit")):
     with open(os.path.join(base_dir, ".commit")) as fp:
