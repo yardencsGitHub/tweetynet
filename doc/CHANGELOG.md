@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.7.1 -- 2021-01-22
+- update READMEs with link to eLife article
+  [#195](https://github.com/yardencsGitHub/tweetynet/pull/195)
+- remove notebooks in `doc/notebooks` to avoid giving people 
+  the impression that is how they should work with the code
+  [#195](https://github.com/yardencsGitHub/tweetynet/pull/195)
+
 ## 0.7.0 -- 2021-01-05
 ### Added
 - add code related to eLife article.
@@ -13,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - make many code changes related to eLife article.
   See [revisions project](https://github.com/yardencsGitHub/tweetynet/projects/1) for details.
 - refactor project so code for article is separate from `tweetynet` code 
-  [#188](https://github.com/yardencsGitHub/tweetynet/pull/56)
+  [#188](https://github.com/yardencsGitHub/tweetynet/pull/188)
   Fixes [#187](https://github.com/yardencsGitHub/tweetynet/issues/187).
 - raise minimum required versions of `vak` and `pytorch`
   [9708e2b](https://github.com/yardencsGitHub/tweetynet/commit/9708e2bab2b3ddb175c893396a40670a5da82b23).
