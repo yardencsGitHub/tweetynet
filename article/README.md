@@ -1,7 +1,7 @@
 # code to reproduce results in eLife article
 
-This code is provided to reproduce results in the article in eLife
-(currently in revision).
+This code is provided to reproduce results in the article in eLife:
+https://elifesciences.org/articles/63853
 
 ## installation
 
