@@ -6,6 +6,7 @@
 
 # TweetyNet
 <p align="center"><img src="./doc/tweetynet.gif" alt="tweetynet image" width=100></p>
+Now published in eLife: https://elifesciences.org/articles/63853
 
 ## What is `tweetynet`?
 A neural network architecture (shown below) 
@@ -40,8 +41,7 @@ A link to a tutorial on using `tweetynet` with `vak` is below.
 In the directory [`./article`](./article) 
 we provide code to reproduce the results in the article   
 "TweetyNet: A neural network that enables high-throughput, automated annotation of birdsong"  
-https://www.biorxiv.org/content/10.1101/2020.08.28.272088v2
-(in revision at eLife).
+https://elifesciences.org/articles/63853
 
 Please see the [README](./article/README.md) in that directory 
 for instructions on how to install and work with that code.
