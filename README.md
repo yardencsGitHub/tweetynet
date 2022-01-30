@@ -6,7 +6,9 @@
 
 # TweetyNet
 <p align="center"><img src="./doc/tweetynet.gif" alt="tweetynet image" width=100></p>
-Now published in eLife: https://elifesciences.org/articles/63853
+
+Now published in eLife: https://elifesciences.org/articles/63853  
+Code to reproduce results from the article is in the directory [`./article`](./article)
 
 ## What is `tweetynet`?
 A neural network architecture (shown below) 
@@ -23,34 +25,52 @@ This is an example of the kind of annotations that `tweetynet` learns to predict
 
 ## How is it used?
 ### Installation
-#### To train models and use them to predict annotation
-To install, run the following command at the command line:  
-`pip install tweetynet`
-#### To train models and use them to predict annotation
+
+Short version (for details see below):
+
+##### with `pip`
+
+```console
+$ pip install tweetynet
+```
+
+##### with `conda`
+###### on Mac and Linux
+
+```console
+$ conda install tweetynet -c conda-forge
+```
+
+###### on Windows
+On Windows, you need to add an additional channel, `pytorch`.  
+You can do this by repeating the `-c` option more than once.
+```console
+$ conda install tweetynet -c conda-forge -c pytorch
+$ #                                       ^ notice additional channel!
+```
+
+Long version:  
 To facilitate training `tweetynet` models and using trained models 
 to predict annotation on new datasets, 
 we developed the `vak` library, 
 that is installed automatically with `tweetynet`.
 
-Please see the `vak` documentation for detailed installation instructions:  
-https://vak.readthedocs.io/en/latest/get_started/installation.html  
+If you need more information about installation, please see the `vak` documentation:  
+https://vak.readthedocs.io/en/latest/get_started/installation.html
 
-A link to a tutorial on using `tweetynet` with `vak` is below.
+### Usage
+#### To train models and use them to predict annotation
+For a tutorial on using `tweetynet` with `vak`, please see the `vak` documentation:  
+https://vak.readthedocs.io/en/latest/tutorial/autoannotate.html
 
 #### To reproduce results from article
-In the directory [`./article`](./article) 
+In the directory [`./article`](./article)
 we provide code to reproduce the results in the article   
 "TweetyNet: A neural network that enables high-throughput, automated annotation of birdsong"  
 https://elifesciences.org/articles/63853
 
-Please see the [README](./article/README.md) in that directory 
+Please see the [README](./article/README.md) in that directory
 for instructions on how to install and work with that code.
-
-#### General use
-
-### Usage
-For a tutorial on using `tweetynet` with `vak`, please see the `vak` documentation:  
-https://vak.readthedocs.io/en/latest/tutorial/autoannotate.html
 
 ### FAQs
 #### Training data
@@ -81,7 +101,6 @@ If you use or adapt this code, please cite its DOI:
 
 ## License
 Released under [BSD license](./LICENSE).
-
 
 ## Contributors ✨
 
