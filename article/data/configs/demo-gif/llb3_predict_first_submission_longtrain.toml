@@ -1,0 +1,27 @@
+[PREP]
+data_dir = "/home/bart/Documents/data/birdsong/Canaries/llb3/annotated/"
+output_dir = "/home/bart/Documents/repos/coding/birdsong/tweetynet/article/data/Canaries/promo-fig"
+spect_format = "mat"
+
+[SPECT_PARAMS]
+fft_size = 1024
+step_size = 64
+freq_cutoffs = [ 500, 10000,]
+thresh = 6.25
+transform_type = "log_spect"
+
+[DATALOADER]
+window_size = 370
+
+[PREDICT]
+checkpoint_path = "/home/bart/Documents/repos/coding/birdsong/tweetynet/article/results/Canaries/long_train/long_train/llb3/results_210528_224118/TweetyNet/checkpoints/max-val-acc-checkpoint.pt"
+labelmap_path = "/home/bart/Documents/repos/coding/birdsong/tweetynet/article/results/Canaries/long_train/long_train/llb3/results_210528_224118/labelmap.json"
+models = "TweetyNet"
+batch_size = 8
+num_workers = 12
+device = "cuda"
+output_dir = "/home/bart/Documents/repos/coding/birdsong/tweetynet/article/results/Canaries/long_train"
+csv_path = "/home/bart/Documents/repos/coding/birdsong/tweetynet/article/data/Canaries/promo-fig/annotated_prep_220131_114437.csv"
+
+[TweetyNet.optimizer]
+lr = 0.001
