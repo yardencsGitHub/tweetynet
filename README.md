@@ -5,7 +5,9 @@
 [![PyPI version](https://badge.fury.io/py/tweetynet.svg)](https://badge.fury.io/py/tweetynet)
 
 # TweetyNet
-<p align="center"><img src="./doc/tweetynet.gif" alt="tweetynet image" width=100></p>
+<p align="center"><a href="https://drive.google.com/uc?export=view&id=1X3u6BIXuFuFlhhm_cakB_hcLEI2ecLjk"><img src="https://drive.google.com/uc?export=view&id=1X3u6BIXuFuFlhhm_cakB_hcLEI2ecLjk" style="width: 650px; max-width: 100%; height: auto" title="Click to enlarge picture" /></p>
+
+
 
 Now published in eLife: https://elifesciences.org/articles/63853  
 Code to reproduce results from the article is in the directory [`./article`](./article)

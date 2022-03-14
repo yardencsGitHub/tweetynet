@@ -1,0 +1,31 @@
+[PREP]
+labelset = "iabcdefghjk"
+data_dir = "~/Documents/data/BFSongRepository/gy6or6/032612/has_notmat"
+output_dir = "./data/BFSongRepository/behavior/gy6or6/"
+spect_output_dir = "./data/BFSongRepository/behavior/gy6or6/"
+audio_format = "cbin"
+annot_format = "notmat"
+
+[SPECT_PARAMS]
+fft_size = 512
+step_size = 64
+
+[PREDICT]
+checkpoint_path = "./results/Bengalese_Finches/learncurve/gy6or6/results_210509_010443/train_dur_600s/replicate_1/TweetyNet/checkpoints/max-val-acc-checkpoint.pt"
+labelmap_path = "./results/Bengalese_Finches/learncurve/gy6or6/results_210509_010443/train_dur_600s/replicate_1/labelmap.json"
+models = "TweetyNet"
+batch_size = 11
+num_workers = 4
+device = "cuda"
+spect_scaler_path = "./results/Bengalese_Finches/learncurve/gy6or6/results_210509_010443/train_dur_600s/replicate_1/StandardizeSpect"
+output_dir = "./results/Bengalese_Finches/behavior/gy6or6/eval"
+csv_path = "data/demo-gif/has_notmat_prep_210612_205945.csv"
+
+[DATALOADER]
+window_size = 176
+
+[TweetyNet.optimizer]
+lr = 0.001
+
+[TweetyNet.network]
+hidden_size = 256
