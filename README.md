@@ -61,7 +61,7 @@ https://vak.readthedocs.io/en/latest/get_started/installation.html
 ### Usage
 #### To train models and use them to predict annotation
 For a tutorial on using `tweetynet` with `vak`, please see the `vak` documentation:  
-https://vak.readthedocs.io/en/latest/tutorial/autoannotate.html
+https://vak.readthedocs.io/en/latest/get_started/autoannotate.html
 
 #### To reproduce results from article
 In the directory [`./article`](./article)
