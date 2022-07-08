@@ -4,9 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+### Changed
+- change minimum required Python to 3.8, 
+  to adhere to [NEP-29](https://numpy.org/neps/nep-0029-deprecation_policy.html), in 
+  [#216](https://github.com/yardencsGitHub/tweetynet/pull/216).
+  Fixes [#214](https://github.com/yardencsGitHub/tweetynet/issues/214).
+- raise lower bound on `vak` to 0.6.0, 
+  to work with new `vak` version that removes `logger` parameter 
+  from `vak.Engine.model.from_config`.
+  [#216](https://github.com/yardencsGitHub/tweetynet/pull/216).
+  Fixes [#215](https://github.com/yardencsGitHub/tweetynet/issues/214).
+
+### Removed
+- remove `logger` argument from `TweetyNetModel.from_config`,
+  to work with new `vak` version that removes `logger` parameter 
+  from `vak.Engine.model.from_config`.
+  [#216](https://github.com/yardencsGitHub/tweetynet/pull/216).
+  Fixes [#215](https://github.com/yardencsGitHub/tweetynet/issues/214).
+
 ## 0.7.1 -- 2021-01-22
+### Changed
 - update READMEs with link to eLife article
   [#195](https://github.com/yardencsGitHub/tweetynet/pull/195)
+
+### Removed
 - remove notebooks in `doc/notebooks` to avoid giving people 
   the impression that is how they should work with the code
   [#195](https://github.com/yardencsGitHub/tweetynet/pull/195)
