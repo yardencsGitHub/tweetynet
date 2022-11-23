@@ -24,22 +24,14 @@ def compute_metrics(metrics,
         sequence of segment labels
     y_pred_labels : str
         sequence of segment labels
-
-    Returns
-    -------
-    metric_vals : defaultdict
     """
     metric_vals = {}
 
     for metric_name, metric_callable in metrics.items():
         if metric_name == 'acc':
             metric_vals[metric_name] = metric_callable(y_pred, y_true)
-        elif metric_name == 'levenshtein':
-            metric_vals[metric_name] = metric_callable(y_pred_labels, y_true_labels)
         elif metric_name == 'segment_error_rate':
             metric_vals[metric_name] = metric_callable(y_pred_labels, y_true_labels)
-
-    return metric_vals
 
 
 def boundary_err(y_pred,
