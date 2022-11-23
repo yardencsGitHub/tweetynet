@@ -1,4 +1,5 @@
 from collections import defaultdict, namedtuple
+import dataclasses
 import json
 from pathlib import Path
 
@@ -6,6 +7,7 @@ import joblib
 import numpy as np
 import pandas as pd
 import torch
+import torchmetrics
 from tqdm import tqdm
 
 from .metrics import compute_metrics, boundary_err
@@ -17,9 +19,19 @@ def s_to_sample_num(edges_s, timebin_dur):
     to those times given in digital sample number"""
     return np.round(np.array(edges_s) / timebin_dur).astype(int)
 
+
 # HACK
 def log_or_print(msg, logger=None, level=None):
     print(msg)
+
+
+def get_metrics_instances(device):
+    """Create ``dict`` that maps instances of metrics to names.
+    Helper function that lets us have an instance for each cleanup type,
+    to accumulate values across batches separately and then compute at the end.
+    """
+    return {"acc": torchmetrics.Accuracy().to(device),
+            "segment_error_rate": torchmetrics.CharErrorRate().to(device)}
 
 
 # number of timebins from an onset or offset
@@ -144,7 +156,6 @@ def eval_with_output_tfms(csv_path,
 
     to_long_tensor = transforms.ToLongTensor()  # used in main loop after applying clean-up
 
-    records = defaultdict(list)  # will be used with pandas.DataFrame.from_records to make output csv
     if to_annot:
         annots_by_cleanup = {cleanup: [] for cleanup in CLEANUP_TYPES}
     else:
@@ -158,7 +169,11 @@ def eval_with_output_tfms(csv_path,
 
     for model_name, model in models_map.items():
         model.load(checkpoint_path)
-        metrics = model.metrics  # metric name -> callable map we use below in loop
+        metrics_cleanup_map = {
+            # we need separate instances for each cleanup type so we can accumulate with each instance
+            cleanup: get_metrics_instances(device)  # metric name -> callable map we use below in loop
+            for cleanup in CLEANUP_TYPES
+        }
 
         pred_dict = model.predict(pred_data=pred_data,
                                   device=device)
@@ -166,8 +181,6 @@ def eval_with_output_tfms(csv_path,
         progress_bar = tqdm(eval_data)
         for ind, batch in enumerate(progress_bar):
             for cleanup_type in CLEANUP_TYPES:
-                # append this first at beginning of code block
-                records['cleanup'].append(cleanup_type)
 
                 y_true, padding_mask, spect_path = batch['annot'], batch['padding_mask'], batch['spect_path']
                 if isinstance(spect_path, list) and len(spect_path) == 1:
@@ -175,9 +188,8 @@ def eval_with_output_tfms(csv_path,
                 t = vak.files.spect.load(spect_path)[timebins_key]
                 if len(t)==1: # this is added b.c. when loading canary npz files the data is in [[]]
                     t=t[0]
-                records['spect_path'].append(spect_path)  # remove str from tuple
-                y_true = y_true.to(device)
-                y_true_np = np.squeeze(y_true.cpu().numpy())
+                y_true = y_true.flatten().to(device)
+                y_true_np = y_true.cpu().numpy()
                 y_true_labels, onsets_s, offsets_s = lbl_tb2segments(y_true_np,
                                                                      labelmap=labelmap,
                                                                      t=t)
@@ -202,41 +214,51 @@ def eval_with_output_tfms(csv_path,
                 # take (possibly cleaned up) labeled timebin vector and put back into a tensor
                 y_pred = to_long_tensor(y_pred_np).to(device)
 
-                metric_vals_batch = compute_metrics(metrics, y_true, y_pred, y_true_labels, y_pred_labels)
-                for metric_name, metric_val in metric_vals_batch.items():
-                    records[metric_name].append(metric_val)
+                compute_metrics(metrics_cleanup_map[cleanup_type],
+                                y_true, y_pred, y_true_labels, y_pred_labels)
 
-                # here we measure the number of times a frame error occurs involving 'unlabeled' timebins
-                # within some fixed number of timebins from an onset or offset.
-                # the idea being that if those specific frame errors account
-                # for a large number of all frame errors,
-                # then most frame errors are due to noisiness of segmentation
-                bnd_err = boundary_err(y_pred_np,
-                                       y_true_np,
-                                       t,
-                                       onsets_s,
-                                       offsets_s,
-                                       timebin_dur,
-                                       n_timebin_from_onoffset,
-                                       unlabeled_class=labelmap['unlabeled'])
-                # this is the same row in records as 'metric_name` and 'cleanup_type' above
-                records['pct_boundary_err'].append(bnd_err)
+                # # here we measure the number of times a frame error occurs involving 'unlabeled' timebins
+                # # within some fixed number of timebins from an onset or offset.
+                # # the idea being that if those specific frame errors account
+                # # for a large number of all frame errors,
+                # # then most frame errors are due to noisiness of segmentation
+                # bnd_err = boundary_err(y_pred_np,
+                #                        y_true_np,
+                #                        t,
+                #                        onsets_s,
+                #                        offsets_s,
+                #                        timebin_dur,
+                #                        n_timebin_from_onoffset,
+                #                        unlabeled_class=labelmap['unlabeled'])
+                # # this is the same row in records as 'metric_name` and 'cleanup_type' above
+                # records['pct_boundary_err'].append(bnd_err)
 
-                if to_annot:
-                    seq = Sequence.from_keyword(labels=y_pred_labels,
-                                                onsets_s=pred_onsets_s,
-                                                offsets_s=pred_offsets_s,
-                                                onsets_Hz=s_to_sample_num(pred_onsets_s, timebin_dur),
-                                                offsets_Hz=s_to_sample_num(pred_offsets_s, timebin_dur))
-                    annot = Annotation(seq=seq,
-                                       audio_path=df_split.iloc[ind].audio_path,
-                                       annot_path=df_split.iloc[ind].annot_path)
-                    annots_by_cleanup[cleanup_type].append(annot)
+                # if to_annot:
+                #     seq = Sequence.from_keyword(labels=y_pred_labels,
+                #                                 onsets_s=pred_onsets_s,
+                #                                 offsets_s=pred_offsets_s,
+                #                                 onsets_Hz=s_to_sample_num(pred_onsets_s, timebin_dur),
+                #                                 offsets_Hz=s_to_sample_num(pred_offsets_s, timebin_dur))
+                #     annot = Annotation(seq=seq,
+                #                        audio_path=df_split.iloc[ind].audio_path,
+                #                        annot_path=df_split.iloc[ind].annot_path)
+                #     annots_by_cleanup[cleanup_type].append(annot)
+
+    metrics_computed = {}
+    for cleanup in metrics_cleanup_map.keys():
+        metrics_computed[cleanup] = {
+            metric_name: metric_class.compute().cpu().numpy().item()
+            for metric_name, metric_class in metrics_cleanup_map[cleanup].items()
+        }
+
+    records = []
+    for cleanup, metric_name_val_map in metrics_computed.items():
+        record = {'cleanup': cleanup}
+        metric_name_val_map = {f'avg_{k}': v for k, v in metric_name_val_map.items()}
+        record.update(metric_name_val_map)
+        records.append(record)
 
     eval_df = pd.DataFrame.from_records(records)
-    gb = eval_df.groupby('cleanup').agg('mean')
-    gb = gb.add_prefix('avg_')
-    eval_df = gb.reset_index()
 
     return eval_df, annots_by_cleanup
 
