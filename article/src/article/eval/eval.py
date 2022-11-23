@@ -17,6 +17,10 @@ def s_to_sample_num(edges_s, timebin_dur):
     to those times given in digital sample number"""
     return np.round(np.array(edges_s) / timebin_dur).astype(int)
 
+# HACK
+def log_or_print(msg, logger=None, level=None):
+    print(msg)
+
 
 # number of timebins from an onset or offset
 # in which we count errors involving "unlabeled" / silent gaps
@@ -60,7 +64,6 @@ def eval_with_output_tfms(csv_path,
     from vak.labeled_timebins import (
         lbl_tb2segments,
     )
-    from vak.logging import log_or_print
 
     if spect_scaler_path:
         log_or_print(
@@ -249,7 +252,6 @@ def learncurve_with_transforms(previous_run_path,
                                to_annot=False):
     from vak import config  # avoid circular imports
     from vak.core.learncurve import train_dur_csv_paths as _train_dur_csv_paths
-    from vak.logging import log_or_print
 
     previous_run_path = Path(previous_run_path)
     toml_path = sorted(previous_run_path.glob('*.toml'))
@@ -388,7 +390,6 @@ def train_with_transforms(results_root,
                           logger=None,
                           to_annot=False):
     from vak import config  # avoid circular imports
-    from vak.logging import log_or_print
 
     results_root = Path(results_root)
     toml_path = sorted(results_root.glob('*.toml'))
