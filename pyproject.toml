@@ -21,7 +21,7 @@ requires-python = ">=3.8"
 license = {file = "LICENSE"}
 dependencies = [
     "torch>=1.7.1",
-    "vak>=0.6.0"
+    "vak>=0.8.0"
 ]
 [project.optional-dependencies]
 test = [
