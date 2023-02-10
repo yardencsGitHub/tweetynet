@@ -11,7 +11,7 @@ def acc(y_pred, y):
 
 class TweetyNetModel(vak.Model):
     @classmethod
-    def from_config(cls, config):
+    def from_config(cls, config, post_tfm=None):
         network = TweetyNet(**config['network'])
         loss = torch.nn.CrossEntropyLoss(**config['loss'])
         optimizer = torch.optim.Adam(params=network.parameters(), **config['optimizer'])
@@ -19,4 +19,4 @@ class TweetyNetModel(vak.Model):
                    'levenshtein': vak.metrics.Levenshtein(),
                    'segment_error_rate': vak.metrics.SegmentErrorRate(),
                    'loss': torch.nn.CrossEntropyLoss()}
-        return cls(network=network, optimizer=optimizer, loss=loss, metrics=metrics)
+        return cls(network=network, optimizer=optimizer, loss=loss, metrics=metrics, post_tfm=post_tfm)
